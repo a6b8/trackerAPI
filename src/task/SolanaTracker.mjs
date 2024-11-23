@@ -3,7 +3,6 @@ import { endpoints } from '../data/endpoints.mjs'
 import { findClosestString } from './helpers.mjs'
 
 import { Validation } from './Validation.mjs'
-
 import axios from 'axios'
 
 
@@ -20,7 +19,7 @@ class SolanaTracker {
 
         this.#config = config
         this.#endpoints = endpoints
-        this.#validation = new Validation( { endpoints } )
+        this.#validation = new Validation( {} )
     }
 
 

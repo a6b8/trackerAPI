@@ -1,10 +1,14 @@
+import { endpoints } from '../data/endpoints.mjs'
+import { swap } from '../data/swap.mjs'
+
+
 class Validation {
     #config
     #validMethods
 
 
-    constructor( { endpoints } ) {
-        this.#config = { endpoints }
+    constructor() {
+        this.#config = { endpoints, swap }
         this.#validMethods = Object.keys( this.#config.endpoints )
     }
 
@@ -29,6 +33,50 @@ class Validation {
         const result = { 'messages': m, status }
 
         return result
+    }
+
+
+    getTx( params ) {
+        const { messages, status } = this.#validateGetTx( params )
+        return { messages, status }
+    }
+
+
+    #validateGetTx( params ) {
+        const messages = []
+
+        if( params === undefined ) {
+            messages.push( `Params is undefined` )
+        }
+
+        if( typeof params !== 'object' ) {
+            messages.push( `Params is not an object` )
+        }
+
+        if( messages.length === 0 ) {
+            return { messages, status: true }
+        }
+
+        Object
+            .entries( this.#config['swap'] )
+            .forEach( ( [ key, values ] ) => {
+                const { required } = values
+                if( required && !params[ key ] ) {
+                    messages.push( `Missing parameter: ${key} (required)` )
+                }
+            } )
+
+        Object
+            .entries( params )
+            .forEach( ( [ key, value ] ) => {
+                if( !this.#config['swap'][ key ] ) {
+                    const suggestion = this.#findClosestString( { input: key, keys: Object.keys( this.#config['swap'] ) } )
+                    messages.push( `Invalid parameter: ${key}. Did you mean '${suggestion}'?` )
+                }
+            } )
+
+        const status = messages.length === 0 ? true : false
+        return { messages, status }
     }
 
 

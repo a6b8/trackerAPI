@@ -1,4 +1,5 @@
 import { SolanaTracker } from './task/SolanaTracker.mjs'
+import { Swap } from './task/Swap.mjs'
 import { endpoints } from './data/endpoints.mjs '
 
 const examples = Object
@@ -8,4 +9,4 @@ const examples = Object
         return acc
     }, {} )
 
-export { SolanaTracker, examples }
+export { SolanaTracker, Swap, examples }
