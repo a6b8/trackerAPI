@@ -45,6 +45,7 @@ const routes = Object
 
                 return abb
             }, '' )
+        acc += `\n> [See response here](./examples/${k}.json)`
 
         acc += `\n\n`
         return acc
@@ -70,11 +71,14 @@ let all = ''
 // all += `## Routes\n\n`
 all += 'This overview provides a list of all available methods and their descriptions.\n\n'
 all += overview
-all += `\n\n**Examples**\n\n`
-all += 'The following examples demonstrate the usage of the methods.\n\n'
-all += routes
 
 const tmp = fs.readFileSync( `./old/Template-en.md`, 'utf-8' )
 const str = tmp.replace( '<<INSERT_EXAMPLES>>', all )
 fs.writeFileSync( `README.md`, str )
 
+let ex = ''
+ex += `# Examples\n\n`
+ex += 'The following examples demonstrate the usage of the methods.\n\n'
+ex += routes
+
+const tmp2 = fs.writeFileSync( `EXAMPLES.md`, ex )
