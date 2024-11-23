@@ -1,4 +1,4 @@
-import { SolanaTracker } from './src/index.mjs'
+import { SolanaTracker } from '../src/index.mjs'
 
 const apiKey = '<<API_KEY>>'
 const st = new SolanaTracker( { apiKey } )
