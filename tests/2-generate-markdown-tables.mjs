@@ -57,10 +57,10 @@ const overview = Object
     .reduce( ( acc, [ k, vs ], index ) => {
         const { description, inserts, query, body, example, requestMethod } = vs
         if( index === 0 ) {
-            acc += `| Route | Description |\n`
-            acc += `| --- | --- |\n`
+            acc += `| Route | Example | Response | Description |\n`
+            acc += `| --- | --- |--- |--- |\n`
         }
-        acc += `| [${k}](#${k}) | ${description} |\n`
+        acc += `| ${k} | [X](./EXAMPLES.md?#${k}) | [X](./examples/${k}.json) |${description} |\n`
 
 
         // acc += `${description}\n\n`
