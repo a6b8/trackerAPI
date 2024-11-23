@@ -22,13 +22,16 @@ const routes = Object
         let vars = [ ...inserts.map( k => [ k, true ] ) ]
         if( query ) { vars = [ ...vars, ...Object.entries( query ) ] }
         if( body ) { vars = [ ...vars, ...Object.entries( body ) ] }
-        vars.sort( ( [ , a ], [ , b ] ) => a - b )
+        // vars = vars.filter( a => a[ 1 ] === true )
+
+        // vars.sort( ( [ , a ], [ , b ] ) => b - a )
         const p = { route: k, params: example }
         acc += "\n"
         acc += "```js\n"
         acc += `await st.request( ${JSON.stringify( p, null, 4)} )\n`
-        acc += "```\n"
+        acc += "```\n\n"
         acc += vars
+            .sort( ( [ ,a ], [ ,b ] ) => b - a )
             .reduce( ( abb, b, rindex ) => {
                 if( rindex === 0 ) {
                     abb += `**Parameters**\n\n`
@@ -56,7 +59,7 @@ const overview = Object
             acc += `| Route | Description |\n`
             acc += `| --- | --- |\n`
         }
-        acc += `| [${k}](#k) | ${description} |\n`
+        acc += `| [${k}](#${k}) | ${description} |\n`
 
 
         // acc += `${description}\n\n`
@@ -64,16 +67,14 @@ const overview = Object
     }, '' )
 
 let all = ''
-all += `## Routes\n\n`
+// all += `## Routes\n\n`
 all += 'This overview provides a list of all available methods and their descriptions.\n\n'
 all += overview
-all += `\n\n### Examples\n\n`
+all += `\n\n**Examples**\n\n`
 all += 'The following examples demonstrate the usage of the methods.\n\n'
 all += routes
 
-
-
 const tmp = fs.readFileSync( `./old/Template-en.md`, 'utf-8' )
-const str = tmp.replace( '<<EXAMPLES>>', all )
+const str = tmp.replace( '<<INSERT_EXAMPLES>>', all )
 fs.writeFileSync( `README.md`, str )
 

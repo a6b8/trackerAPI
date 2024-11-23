@@ -45,6 +45,11 @@ class SolanaTracker {
     }
 
 
+    health() {
+        return true
+    }
+
+
     async #request( { route, params } ) {
         const result = {
             'status': false,

@@ -32,6 +32,7 @@ console.log(response)
     - [request()](#request)
     - [setApiKey()](#setapikey)
     - [getMethods()](#getmethods)
+  - [Routes](#routes)
   - [License](#license)
 
 ## Methods
@@ -148,45 +149,44 @@ Array of Strings
 ```
 
 ## Routes
-
 This overview provides a list of all available methods and their descriptions.
 
 | Route | Description |
 | --- | --- |
-| [chartData](#k) |  |
-| [chartDataByPool](#k) | Get OLCVH (Open, Low, Close, Volume, High) data for charts. |
-| [firstBuyersOfToken](#k) | Retrieve the first 100 buyers of a token (since API started recording data) with Profit and Loss data for each wallet. |
-| [graduatedTokens](#k) | Overview of all graduated pumpfun/moonshot tokens (Pumpvision / Photon Memescope style). |
-| [latestTokens](#k) | Retrieve the latest 100 tokens. |
-| [multiPriceInformation](#k) | Get price information for multiple tokens (up to 100). |
-| [multiTokenInformation](#k) | Get an overview of latest, graduating, and graduated tokens (Pumpvision / Photon Memescope style). |
-| [paginatedTopTraders](#k) | Get the most profitable traders across all tokens, with optional pagination. |
-| [pnlForSpecificToken](#k) | Get Profit and Loss data for a specific token in a wallet. |
-| [postMultiPrice](#k) | Similar to GET /price/multi, but accepts an array of token addresses in the request body. |
-| [postPrice](#k) | Similar to GET /price, but accepts token address in the request body. |
-| [priceHistory](#k) | Get historic price information for a single token. |
-| [priceInformation](#k) | Get price information for a single token. |
-| [profitAndLossData](#k) | Get Profit and Loss data for all positions of a wallet. |
-| [search](#k) | The /search endpoint provides a flexible search interface for pools and tokens with support for multiple filtering criteria and pagination. |
-| [tokenAth](#k) | Retrieve the all time high price of a token (since data api started recording) |
-| [tokenHolders](#k) | Get the top 100 holders for a specific token. |
-| [tokenInformation](#k) | Retrieve all information for a specific token. |
-| [tokenStats](#k) | Get detailed stats for a token over various time intervals. |
-| [tokenStatsByPool](#k) | Get detailed stats for a token-pool pair over various time intervals. |
-| [tokenTrades](#k) | Get the latest trades for a token across all pools. |
-| [tokenTradesByPool](#k) | Get the latest trades for a specific token and pool pair. |
-| [tokenTradesByPoolAndOwner](#k) | Get the latest trades for a specific token, pool, and wallet address. |
-| [tokenVolume](#k) | Retrieve the top 100 tokens sorted by highest volume. |
-| [topTraders](#k) | Get the most profitable traders |
-| [topTradersForToken](#k) | Get top 100 traders by PnL for a token. |
-| [tradesByWallet](#k) | Get the latest trades for a specific token and wallet address. |
-| [trendingTokens](#k) | Get the top 100 trending tokens based on transaction volume in the past hour. |
-| [trendingTokensByTimeframe](#k) | Returns trending tokens for a specific time interval. |
-| [walletInformation](#k) | Get all tokens in a wallet with current value in USD. |
-| [walletTrades](#k) | Get the latest trades of a wallet. |
+| [chartData](#chartData) |  |
+| [chartDataByPool](#chartDataByPool) | Get OLCVH (Open, Low, Close, Volume, High) data for charts. |
+| [firstBuyersOfToken](#firstBuyersOfToken) | Retrieve the first 100 buyers of a token (since API started recording data) with Profit and Loss data for each wallet. |
+| [graduatedTokens](#graduatedTokens) | Overview of all graduated pumpfun/moonshot tokens (Pumpvision / Photon Memescope style). |
+| [latestTokens](#latestTokens) | Retrieve the latest 100 tokens. |
+| [multiPriceInformation](#multiPriceInformation) | Get price information for multiple tokens (up to 100). |
+| [multiTokenInformation](#multiTokenInformation) | Get an overview of latest, graduating, and graduated tokens (Pumpvision / Photon Memescope style). |
+| [paginatedTopTraders](#paginatedTopTraders) | Get the most profitable traders across all tokens, with optional pagination. |
+| [pnlForSpecificToken](#pnlForSpecificToken) | Get Profit and Loss data for a specific token in a wallet. |
+| [postMultiPrice](#postMultiPrice) | Similar to GET /price/multi, but accepts an array of token addresses in the request body. |
+| [postPrice](#postPrice) | Similar to GET /price, but accepts token address in the request body. |
+| [priceHistory](#priceHistory) | Get historic price information for a single token. |
+| [priceInformation](#priceInformation) | Get price information for a single token. |
+| [profitAndLossData](#profitAndLossData) | Get Profit and Loss data for all positions of a wallet. |
+| [search](#search) | The /search endpoint provides a flexible search interface for pools and tokens with support for multiple filtering criteria and pagination. |
+| [tokenAth](#tokenAth) | Retrieve the all time high price of a token (since data api started recording) |
+| [tokenHolders](#tokenHolders) | Get the top 100 holders for a specific token. |
+| [tokenInformation](#tokenInformation) | Retrieve all information for a specific token. |
+| [tokenStats](#tokenStats) | Get detailed stats for a token over various time intervals. |
+| [tokenStatsByPool](#tokenStatsByPool) | Get detailed stats for a token-pool pair over various time intervals. |
+| [tokenTrades](#tokenTrades) | Get the latest trades for a token across all pools. |
+| [tokenTradesByPool](#tokenTradesByPool) | Get the latest trades for a specific token and pool pair. |
+| [tokenTradesByPoolAndOwner](#tokenTradesByPoolAndOwner) | Get the latest trades for a specific token, pool, and wallet address. |
+| [tokenVolume](#tokenVolume) | Retrieve the top 100 tokens sorted by highest volume. |
+| [topTraders](#topTraders) | Get the most profitable traders |
+| [topTradersForToken](#topTradersForToken) | Get top 100 traders by PnL for a token. |
+| [tradesByWallet](#tradesByWallet) | Get the latest trades for a specific token and wallet address. |
+| [trendingTokens](#trendingTokens) | Get the top 100 trending tokens based on transaction volume in the past hour. |
+| [trendingTokensByTimeframe](#trendingTokensByTimeframe) | Returns trending tokens for a specific time interval. |
+| [walletInformation](#walletInformation) | Get all tokens in a wallet with current value in USD. |
+| [walletTrades](#walletTrades) | Get the latest trades of a wallet. |
 
 
-### Examples
+**Examples**
 
 The following examples demonstrate the usage of the methods.
 
@@ -203,6 +203,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -224,16 +225,17 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
+| token | Yes | string | Token address |
+| pool | Yes | string | Pool identifier |
 | type | No | string | Time interval (e.g., “1s”, “1m”, “1h”, “1d”) |
 | time_from | No | integer | Start time (Unix timestamp in seconds) |
 | time_to | No | integer | End time (Unix timestamp in seconds) |
 | marketCap | No | integer | Return chart for market cap instead of pricing |
-| token | Yes | string | Token address |
-| pool | Yes | string | Pool identifier |
 
 
 #### firstBuyersOfToken
@@ -249,6 +251,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -269,6 +272,7 @@ await st.request( {
 ```
 
 
+
 #### latestTokens
 
 Retrieve the latest 100 tokens.
@@ -280,6 +284,7 @@ await st.request( {
     "params": {}
 } )
 ```
+
 
 
 #### multiPriceInformation
@@ -297,12 +302,13 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
-| priceChanges | No | boolean | Include price change data in response |
 | tokens | Yes | array | Token addresses |
+| priceChanges | No | boolean | Include price change data in response |
 
 
 #### multiTokenInformation
@@ -318,6 +324,7 @@ await st.request( {
 ```
 
 
+
 #### paginatedTopTraders
 
 Get the most profitable traders across all tokens, with optional pagination.
@@ -331,13 +338,14 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
+| page | Yes | integer | Page number for pagination (starts with 1) |
 | expandPnl | No |  | Include detailed PnL data for each token if true |
 | sortBy | No | string | Sort results by metric (“total” or “winPercentage”) |
-| page | Yes | integer | Page number for pagination (starts with 1) |
 
 
 #### pnlForSpecificToken
@@ -354,6 +362,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -377,12 +386,13 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
-| priceChanges | No | boolean | Include price change data in response |
 | tokens | Yes | array | Token addresses |
+| priceChanges | No | boolean | Include price change data in response |
 
 
 #### postPrice
@@ -398,6 +408,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -418,6 +429,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -438,12 +450,13 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
-| priceChanges | No | boolean | Include price change data in response |
 | token | Yes | string | Token address |
+| priceChanges | No | boolean | Include price change data in response |
 
 
 #### profitAndLossData
@@ -459,12 +472,13 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
-| showHistoricPnL | No | boolean | Adds PnL data for 1d, 7d and 30d intervals (BETA) |
 | wallet | Yes | string | Wallet address |
+| showHistoricPnL | No | boolean | Adds PnL data for 1d, 7d and 30d intervals (BETA) |
 
 
 #### search
@@ -481,10 +495,12 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
+| query | Yes | string | Search term for token symbol, name, or address |
 | page | No | integer | Page number for pagination (starts with 1) |
 | limit | No | integer | Number of results per page |
 | minLiquidity | No | integer | Minimum liquidity in USD |
@@ -503,7 +519,6 @@ await st.request( {
 | mintAuthority | No | integer | Mint authority address |
 | deployer | No | string | Deployer address |
 | showPriceChanges | No | boolean | Include price change data in response |
-| query | Yes | string | Search term for token symbol, name, or address |
 
 
 #### tokenAth
@@ -519,6 +534,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -539,6 +555,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -559,6 +576,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -579,6 +597,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -600,6 +619,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -621,6 +641,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -642,6 +663,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -665,6 +687,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -687,6 +710,7 @@ await st.request( {
 ```
 
 
+
 #### topTraders
 
 Get the most profitable traders
@@ -698,6 +722,7 @@ await st.request( {
     "params": {}
 } )
 ```
+
 
 
 #### topTradersForToken
@@ -713,6 +738,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -734,16 +760,17 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
+| tokenAddress | Yes | string | Token address |
+| owner | Yes | string | Owner address |
 | cursor | No | string | Cursor for pagination |
 | showMeta | No | boolean | Set to ‘true’ to add metadata for from and to tokens |
 | parseJupiter | No | boolean | Set to ‘true’ to combine all transfers within a Jupiter swap into a single transaction. By default, each transfer is shown separately. |
 | hideArb | No | boolean | Set to ‘true’ to hide arbitrage or other transactions that don’t have both the ‘from’ and ‘to’ token addresses matching the token parameter |
-| tokenAddress | Yes | string | Token address |
-| owner | Yes | string | Owner address |
 
 
 #### trendingTokens
@@ -759,6 +786,7 @@ await st.request( {
 ```
 
 
+
 #### trendingTokensByTimeframe
 
 Returns trending tokens for a specific time interval.
@@ -772,6 +800,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -792,6 +821,7 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
@@ -812,12 +842,13 @@ await st.request( {
     }
 } )
 ```
+
 **Parameters**
 
 | Parameter | Required | Type | Description |
 | --- | --- | --- | --- |
-| cursor | No | string | Cursor for pagination |
 | owner | Yes | string | Owner address |
+| cursor | No | string | Cursor for pagination |
 
 
 
