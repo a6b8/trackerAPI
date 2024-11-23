@@ -1,6 +1,6 @@
 [![CircleCI](https://img.shields.io/circleci/build/github/a6b8/SolanaTracker/main)]() ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-# SolanaTracker
+# Solana Tracker API
 
 This module enables efficient and easy usage of the `SolanaTracker API`.
 
@@ -23,7 +23,7 @@ console.log(response)
 ```
 
 ## Table of Contents
-- [SolanaTracker](#solanatracker)
+- [Solana Tracker API](#solana-tracker-api)
   - [Features](#features)
   - [Quickstart](#quickstart)
   - [Table of Contents](#table-of-contents)
