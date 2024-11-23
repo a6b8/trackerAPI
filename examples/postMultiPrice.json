@@ -1,0 +1,23 @@
+{
+    "request": {
+        "method": "postMultiPrice",
+        "params": {
+            "tokens": [
+                "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+            ]
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump": {
+                "price": 0.9256150660685841,
+                "priceQuote": 0.003630468958311371,
+                "liquidity": 13872323.30470283,
+                "marketCap": 925612000.1581049,
+                "lastUpdated": 1732295528463
+            }
+        }
+    }
+}

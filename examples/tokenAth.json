@@ -1,0 +1,15 @@
+{
+    "request": {
+        "method": "tokenAth",
+        "params": {
+            "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "highest_price": 1.7336637123960286
+        }
+    }
+}

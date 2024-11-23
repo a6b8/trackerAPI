@@ -1,0 +1,599 @@
+{
+    "request": {
+        "method": "tradesByWallet",
+        "params": {
+            "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
+            "owner": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "trades": [
+                {
+                    "tx": "3qzkSaVLPzAsQB5CJGRjevGda5teNQCneFffaK2ikyEaRx3RepMjynrjPw75MMq77fskURTWjLxKE8CVFRE7iz5x",
+                    "amount": 1000,
+                    "priceUsd": 0.9843071800694736,
+                    "volume": 984.3071800694736,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1732234758721,
+                    "program": "jupiter",
+                    "pools": [
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "5c79hwwGxc75k7FyPwuLMBG8X7MkNtemwXkFbdaYscLBcNrch2zWoa66sCBY1euuC4WhGnbScwSSk6PqG7Xo4Uzy",
+                    "amount": 5000,
+                    "priceUsd": 0.9840907266018428,
+                    "volume": 4920.453633009214,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1732234743185,
+                    "program": "jupiter",
+                    "pools": []
+                },
+                {
+                    "tx": "4FT6on1HxSsrGTsawi9AtGBEEQ8xA5skhvj7NzBjjjoC72JDuSFR5CW759XkvGU1xdy2Vyg9qbmBNCzvkgsVcUsm",
+                    "amount": 2500,
+                    "priceUsd": 0.9952028779838834,
+                    "volume": 2488.0071949597086,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1732234047951,
+                    "program": "jupiter",
+                    "pools": [
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW",
+                        "3sjNoCnkkhWPVXYGDtem8rCciHSGc9jSFZuUAzKbvRVp"
+                    ]
+                },
+                {
+                    "tx": "5EMvKvoChFDaz69YQEsVcmRuugGMgeFCUpfj8xWi9rPEvcwspLnjYhQpsB4iYaxgxEDoz2Wj7xQer1wdpwLCnHhc",
+                    "amount": 10000,
+                    "priceUsd": 0.7781013444487365,
+                    "volume": 7781.013444487365,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1731392589661,
+                    "program": "jupiter",
+                    "pools": []
+                },
+                {
+                    "tx": "Z6YyxUPMvFDzWyqkBeEgnAmh1T8P6gCnPv6hQj15HVbRzp2i33iECX1JXZxWPJaudjkXKrQXeNGkHW99uBWabze",
+                    "amount": 3500.006104,
+                    "priceUsd": 0.7694687152772692,
+                    "volume": 2693.1452003074805,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1731391591553,
+                    "program": "jupiter",
+                    "pools": [
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW",
+                        "BHdhmprkGkBqRjo4cWLGanBZTfdtPRk8dXFaLsqZdXij"
+                    ]
+                },
+                {
+                    "tx": "QCBmtCN98g2vAmy9ASBWEkDELnm9zb2nZ195mnnXsBVPp3fNgtfUeWxxWjFfr6biANNkShVJBxepNZoojnbi33k",
+                    "amount": 5000,
+                    "priceUsd": 0.7687939550124618,
+                    "volume": 3843.969775062309,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1731143727429,
+                    "program": "jupiter",
+                    "pools": []
+                },
+                {
+                    "tx": "2GuPQcCVYAzBhDSjSjjKc6roqV12zA7xNeVx2kakkumErw4rXYpjMUgCGrSrxqRUHGaTNsQbpTkUMfXyAkW4pdY8",
+                    "amount": 694.88872,
+                    "priceUsd": 0.6381325329327551,
+                    "volume": 443.431099,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1730270641434,
+                    "program": "jupiter",
+                    "pools": []
+                },
+                {
+                    "tx": "48a4xAr3y4HmfZ2pwvTjTfL9QYemoGmmcJWptXuuon6Buay1w3M1RRGVsabaeiMuYsC3eeNYuLr539o5B3KfbmG7",
+                    "amount": 14614.017363,
+                    "priceUsd": 0.6400725782042059,
+                    "volume": 9354.03177145644,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1730270480067,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6"
+                    ]
+                },
+                {
+                    "tx": "56DRCqcyXKKjHkRXMX5ow5AAg64TwtpLyA4Q64mhWzwVxMWvDdN6eeegt6wAfTZYe7uuk2sPMvd6qcd6yozvEtZc",
+                    "amount": 7480,
+                    "priceUsd": 0.668288135457179,
+                    "volume": 4998.795253219699,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1730180112327,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD"
+                    ]
+                },
+                {
+                    "tx": "4J44TC1CQ87XJsMQALRLkVDyFtGqnCqckA8zky7vWDVbqRMKNVAEQoLAP3WZbc2soDZzwSVFG2jLrHxQy5UWAJxW",
+                    "amount": 4165.197536,
+                    "priceUsd": 0.664841539718785,
+                    "volume": 2769.1963430671294,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1730179998353,
+                    "program": "jupiter",
+                    "pools": [
+                        "5UAbsvd6ytaumjGEi1MqtbSVvx2AY3c9Gsxnir5Uvbsz",
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD"
+                    ]
+                },
+                {
+                    "tx": "G4zuFDSJPtK3TRMAKBzEy7SphiSwZoG3q6GAY5JFouvtQCYbMgAEhn6cjtCwkPtbBetLnkFrR8Ljy4cUJ74VjmV",
+                    "amount": 2245.84,
+                    "priceUsd": 0.660511808054002,
+                    "volume": 1483.403839,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1730179903323,
+                    "program": "jupiter",
+                    "pools": [
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "5QmFjUBj658RfpatjwRcyY3zcb5CKdnpe5siG2ZKYUii2HF8Pa5KcxB9rsLJsgGjRkAuGEz4DguXKahoxkkCkyfB",
+                    "amount": 25000,
+                    "priceUsd": 0.5517975610464987,
+                    "volume": 13794.939026162467,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1730093174770,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "3ac5Gamm3HutUrDN4Szgi9XM4PsdhAGdBe1WZ453mpF5tcoKjC4VQHQWbusr6EuQSzo3x73WX2Y4ZUQLnhPjX5T7",
+                    "amount": 35000,
+                    "priceUsd": 0.5606390718857143,
+                    "volume": 19622.367516,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1730092848049,
+                    "program": "jupiter",
+                    "pools": [
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "3PDWkbkZ7PwG1jRhcRkS7D7MqZHptYJwXLQ7F5t6XDDAf1Kia75GFdu7EHSRXSBx5gw4iXsBAMDWa1GTqJGK9eDP",
+                    "amount": 21000,
+                    "priceUsd": 0.5665028755238095,
+                    "volume": 11896.560386,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1730092745030,
+                    "program": "jupiter",
+                    "pools": [
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "36Z9SvRVoShwniQWn8Tm8U6nVsvuDfpuNs7qqysQvEukD5FcDMWUj2DbPXSHuzDTbVuBLbuRpfcRJG7j3k91ZddP",
+                    "amount": 10000,
+                    "priceUsd": 0.35571107680922914,
+                    "volume": 3557.1107680922914,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729496892338,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "6QVQKPE5JeWTwsSumYJkJHPHoukW23D8XeRLzk7oAnqg"
+                    ]
+                },
+                {
+                    "tx": "2CfNrpNUzoa3htYrziqzHiqbv2Az2HSEZ8DuHzt63esrviCim1KYukmi3Y9aWhqik3wq8pfiCSnCMT52rpSKJoub",
+                    "amount": 10000,
+                    "priceUsd": 0.3549378031606112,
+                    "volume": 3549.378031606112,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729496769959,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "6QVQKPE5JeWTwsSumYJkJHPHoukW23D8XeRLzk7oAnqg"
+                    ]
+                },
+                {
+                    "tx": "21WQivmWQyQQCBqCPGJbGGRUtig1ezLDqcTHMRTL8uX9wmVThV8QNL8bCZxPRroNc79iZkuFnk7Wqu2FfXwcXbAL",
+                    "amount": 19044.737963,
+                    "priceUsd": 0.27891590742234,
+                    "volume": 5311.880370570832,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729464907874,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6"
+                    ]
+                },
+                {
+                    "tx": "664kUJCCFjMvDBEFVAvRTGV4G4b6j47ybYus3WGahP3qE9CABrXn3DuFeKn8DtGhcZVsUa45Zijbj1WBwszvtteG",
+                    "amount": 11661.061742,
+                    "priceUsd": 0.2849599687911562,
+                    "volume": 3322.9357900720656,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729464809034,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "4TQu88kbVPPBi8bzJ98Gq56VLpcMgyKLXQUPLzo7mbmk",
+                        "B4PHSkL6CeZbxVqm1aUPQuVpc5ERFcaZj7u9dhtphmVX"
+                    ]
+                },
+                {
+                    "tx": "4bDc44sFKqRo1Af5kpiYsAt14db6NEitCkZa4J4Pp3S6QtxchLypLfq2xFwBWWJqPwMMf7rSW4o6RpbaPcub2aSs",
+                    "amount": 18338.938258,
+                    "priceUsd": 0.2896956258886796,
+                    "volume": 5312.71019678516,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729464644819,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "5UAbsvd6ytaumjGEi1MqtbSVvx2AY3c9Gsxnir5Uvbsz"
+                    ]
+                },
+                {
+                    "tx": "5WgjHWzxYTFYL88USPz8h7zUf5XDKxwo8CZ5BXQRxvFrWhNbj6g24ikn4BUSpzmZf1YpWkRxBFyKd3eHAqFwSag2",
+                    "amount": 2000,
+                    "priceUsd": 0.3645317636740419,
+                    "volume": 729.0635273480838,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729411161185,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "3B3PENkuW7uJQATKAcQz77pSZgys1MGVhTTAw3u5NVN1TiSmDsDqA1dWaosoCEb67Unpx4jy9F6x8aCMrgDZUebk",
+                    "amount": 1493.931483,
+                    "priceUsd": 0.37640802539216267,
+                    "volume": 562.3277995872153,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729410542422,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD"
+                    ]
+                },
+                {
+                    "tx": "28xx7rWd77N2S2TufT6QFkoD6ofvFxmcxNM79JWdMQo4PBe5UoiNgaHK6jC4r4Byysu5ou8vvrFjfGgUuZHgj6wL",
+                    "amount": 8442.085037,
+                    "priceUsd": 0.35178121974344245,
+                    "volume": 2969.7669714937247,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729385849891,
+                    "program": "jupiter",
+                    "pools": [
+                        "9m5aXEqi6cADLerHR6zDuPt6buxjK1BTxmZGvUQ96sT7",
+                        "2ur2GZKShAp8xJ33QSs7C5ZUTD9mRjVrgwoHR2Q7T1Sv",
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD"
+                    ]
+                },
+                {
+                    "tx": "5sGhnagPZ2Xuoggtu8g43QqJYkca9JomJSb73fGwUDN8JruKBfDA923TwMvf4EvWNHwN7mmbcAxUG6FdQbai8q9t",
+                    "amount": 338.99571100000003,
+                    "priceUsd": 0.38231246068052244,
+                    "volume": 129.60228443255326,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729385779664,
+                    "program": "jupiter",
+                    "pools": [
+                        "2ur2GZKShAp8xJ33QSs7C5ZUTD9mRjVrgwoHR2Q7T1Sv",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW",
+                        "28YAyJ3NhnjxuvdsN4iYMc9L2CEfumMkLYxr5iurUYPn"
+                    ]
+                },
+                {
+                    "tx": "3uor8bhhZS3v54pYThS23efyfnjb5mKnSVdTj1pvL9ZMB3EUQt3vVLASiEGgBG5Pi8kKiyf8D3QmthdMxMVubNLu",
+                    "amount": 10647.940666,
+                    "priceUsd": 0.3867734945489811,
+                    "volume": 4118.341221139025,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729385729786,
+                    "program": "jupiter",
+                    "pools": [
+                        "2ur2GZKShAp8xJ33QSs7C5ZUTD9mRjVrgwoHR2Q7T1Sv",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW",
+                        "9m5aXEqi6cADLerHR6zDuPt6buxjK1BTxmZGvUQ96sT7"
+                    ]
+                },
+                {
+                    "tx": "5urT1HyZEntgxR7zJptncnA7TNvQTkM2HDDJgXd5c6eMLawKNjan4U3TLCP4Utvo5HTjftdEPaf2hBsz1Eu39whz",
+                    "amount": 1817.879412,
+                    "priceUsd": 0.38276551571050677,
+                    "volume": 695.8215506336928,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729378515787,
+                    "program": "jupiter",
+                    "pools": [
+                        "5cBUK5Vr3UN8BhKkZixx4UgmJNEpWVw9JdfZXsVRWJS7",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW",
+                        "9m5aXEqi6cADLerHR6zDuPt6buxjK1BTxmZGvUQ96sT7"
+                    ]
+                },
+                {
+                    "tx": "52HfNzJYqVe1ij7jsvVb1CbByZiAofcWLDDHccYQB8KthxEtJnjp9UHoerpqUh3NY4NKPwj3WeoXFtxjr8Juofs9",
+                    "amount": 2346.424096,
+                    "priceUsd": 0.3988934031143892,
+                    "volume": 935.9730928030443,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729312694923,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW",
+                        "5cBUK5Vr3UN8BhKkZixx4UgmJNEpWVw9JdfZXsVRWJS7"
+                    ]
+                },
+                {
+                    "tx": "1ve41pFjWaRL6YdgUoU4jacaDXVQZXfYjiuLAKxZdedykkWrhdUsfiP8LdfDTdLwLtg2hXLjhk1EHd3qaLbw6jg",
+                    "amount": 33952.258907,
+                    "priceUsd": 0.24361540952698432,
+                    "volume": 8271.293457995007,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729116368255,
+                    "program": "jupiter",
+                    "pools": [
+                        "4kKFykZkVqE5wbBgj6o8ddnj5TmA6UQgXJLYzAasgKdD",
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6"
+                    ]
+                },
+                {
+                    "tx": "5V9kNBYh8YhNMUr3e2icAZh8QSniQikKGaGsxERaXWiSbAicnHQZKUQdTY94C5cqhnbmQupU6xdUVhFzheb8G5mw",
+                    "amount": 4199.880849,
+                    "priceUsd": 0.23682736665719895,
+                    "volume": 994.646721742671,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729061382221,
+                    "program": "jupiter",
+                    "pools": [
+                        "8jkY8G6RpdVfHiBBM5y5Qzb9dL5mhsk5xQxtYN8HVf3i",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "4DrGFu9Sw2X7yDzCoQ3xd2Mep3Ce17QmEsnPSxfyikxA7oNZUSVsJGAAvhYHGEikTHww8JNBUGC8XKdZAhRC9R6F",
+                    "amount": 5603.550924,
+                    "priceUsd": 0.24861148605238212,
+                    "volume": 1393.107122385839,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729057072848,
+                    "program": "jupiter",
+                    "pools": [
+                        "9t1H1uDJ558iMPNkEPSN1fqkpC4XSPQ6cqSf6uEsTfTR",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "1t3CNpZFUNcijDW3cGoqGbb9E6nmdQmtRwcCpboDKmaQtEUkjYpbAhZfipkdjQWAfCeiHj74BYJMRdDpfJpscpN",
+                    "amount": 14593.464318,
+                    "priceUsd": 0.24620437330912714,
+                    "volume": 3592.974736822299,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729057035001,
+                    "program": "jupiter",
+                    "pools": [
+                        "9t1H1uDJ558iMPNkEPSN1fqkpC4XSPQ6cqSf6uEsTfTR",
+                        "AgeSxtVWWMojFWYNrXKnVp9cFuC5CQ7M4rzmrseLxfUj",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "63EjreRB6u1hURV1LPTCGrBpPVePzoDXLJ6238ups7WqKQcF8ZdFnxXWPwBBtCLXEn5RDz8vYZyijLj3kKGpyUKN",
+                    "amount": 2058.921388,
+                    "priceUsd": 0.2490015521239986,
+                    "volume": 512.6746213132976,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1729055566400,
+                    "program": "jupiter",
+                    "pools": [
+                        "73wLBbQ3FnVx9GEEyTDaKEuVbau5KWP47aaYsPbsZuEc",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "49FKEjXqMKvC9s4mBUMoQbXgPGNGvshkbmDVQsD5npfRc4v3ZLHbaCCqk2opUVkY7xUFg6HVAteqHnVGHZHwwiBi",
+                    "amount": 12561.290501,
+                    "priceUsd": 0.11846595794343019,
+                    "volume": 1488.085312206675,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728883024971,
+                    "program": "jupiter",
+                    "pools": [
+                        "Dx3vvHtC5DCjjLWeEM7gagqXmYhaLV2FpuyZu6TJntft",
+                        "5UAbsvd6ytaumjGEi1MqtbSVvx2AY3c9Gsxnir5Uvbsz",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "2MabQ8ud83SK51NVHbxffmeW4PXej5fXWqPSukw6XKc4twJ4ShHQa1t1SbWFpsKmnyJtrSa6rD22QtJbt1NKS6Cp",
+                    "amount": 7462.886213,
+                    "priceUsd": 0.11889109862260695,
+                    "volume": 887.2707407590767,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728882898058,
+                    "program": "jupiter",
+                    "pools": [
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "K67AuLuvez1fK2cLKT3t7PrC6XMx7vBwa5bmvGa524SYWkTveo9KYGrRjjteu1QJLDY5SLnFW9H8YKMt6Duz8an",
+                    "amount": 11408.69069,
+                    "priceUsd": 0.10956959144291938,
+                    "volume": 1250.045577801938,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728882679790,
+                    "program": "jupiter",
+                    "pools": [
+                        "2cZQ71uDTBwFZT456koEwfZDLSV736hT688A18sD3n4M",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "2Dh85wDpN5aAWqcaQpmB7x6gXWb9ZTD3rkqFPFi42tgGoQX2AEuWtvWUZCrGQtSSVF4cgNDLpBitpt7ujvChMjs9",
+                    "amount": 19443.836359,
+                    "priceUsd": 0.13245721573029803,
+                    "volume": 2575.4764272286757,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728881816544,
+                    "program": "jupiter",
+                    "pools": [
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "2Q2JxH7s6TrqPHrRkMWbeF9E9Rka6vJoj9Mwf24vbwUxrAHbo6HTyYgLfn72Zv73igYSjaoegpxEUGsSz4VA5To6",
+                    "amount": 19558.664458,
+                    "priceUsd": 0.13165383863334595,
+                    "volume": 2574.973254437291,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728881759255,
+                    "program": "jupiter",
+                    "pools": [
+                        "CATK9eqtn8Qwv95JF6JS4xdC4AYRFqPiuswG7fwsnVN1",
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "zx8SF3MoD9YYWSGJXY3LnMzbf6jCAiTSxDHhkRGs1eQrp8ihN5g3LtxCeF4G75Ztw4C2tZEVjuw2jEdgxohG5Cf",
+                    "amount": 1058.07692,
+                    "priceUsd": 0.12932272010602028,
+                    "volume": 136.83338537580002,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728880933163,
+                    "program": "jupiter",
+                    "pools": [
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "2J3VZFa73i741k8gwEAU6NPDcCDHgkyKTjQ6LknZqvekbw32WC2mbo2A5Qc1Q6w786KeNfHZLK6VtZLJE73zF1gv",
+                    "amount": 12191.46309,
+                    "priceUsd": 0.12419541288706802,
+                    "volume": 1514.12379216,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728880807670,
+                    "program": "jupiter",
+                    "pools": [
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "qtMv4gvLPmSPVjCHrwbrc7LcrifmQyJqtQ7NyD2oRgzKpS7xvpbQ4ddG9VRqVanzPhLSLP9CvHZX7qDnCt8C5Pn",
+                    "amount": 26646.653177,
+                    "priceUsd": 0.048332819055900235,
+                    "volume": 1287.9078664492702,
+                    "type": "sell",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728799569868,
+                    "program": "jupiter",
+                    "pools": [
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW",
+                        "9t1H1uDJ558iMPNkEPSN1fqkpC4XSPQ6cqSf6uEsTfTR"
+                    ]
+                },
+                {
+                    "tx": "2SeU8KyqymttjmwnNuvmJGbJXu4uJKeKTfU8MLxk9PW1BwqadaWPjEajCx2xcNe3MSoVVYxYRWrxwx79LW6APuyk",
+                    "amount": 12939.764953,
+                    "priceUsd": 0.0554234075093908,
+                    "volume": 717.1658660658521,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728798423662,
+                    "program": "jupiter",
+                    "pools": [
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "4rshwTzxFFocdbiJydF9eYqAvU198td2LF4eZmDFa2AmrrAyybRBJwFzJkV7HBuE59DeMwRcs3wBRB4RHcUYmeZb",
+                    "amount": 45305.791223,
+                    "priceUsd": 0.05506908811853131,
+                    "volume": 2494.9486091391695,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728797542023,
+                    "program": "jupiter",
+                    "pools": [
+                        "CATK9eqtn8Qwv95JF6JS4xdC4AYRFqPiuswG7fwsnVN1",
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                },
+                {
+                    "tx": "331zku18nmkd1q5kKQB1o5ddmJDvJXKNAs2pYGoT3hLNTzoApYDvHNDisixXWeRFCqoj3YawNMNUTmHjHgeyqxVE",
+                    "amount": 44400.383115,
+                    "priceUsd": 0.0563021305587892,
+                    "volume": 2499.8361670009895,
+                    "type": "buy",
+                    "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6",
+                    "time": 1728797509731,
+                    "program": "jupiter",
+                    "pools": [
+                        "CATK9eqtn8Qwv95JF6JS4xdC4AYRFqPiuswG7fwsnVN1",
+                        "GH8Ers4yzKR3UKDvgVu8cqJfGzU4cU62mTeg9bcJ7ug6",
+                        "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW"
+                    ]
+                }
+            ],
+            "nextCursor": null,
+            "hasNextPage": false
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "request": {
+        "params": {
+            "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+        }
+    },
+    "response": {
+        "status": false,
+        "messages": [
+            "route is undefined"
+        ],
+        "data": null
+    }
+}

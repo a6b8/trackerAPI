@@ -1,0 +1,390 @@
+{
+    "request": {
+        "method": "topTraders",
+        "params": {}
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "wallets": [
+                {
+                    "wallet": "2JrTudNHthFHtgHBoJdx9xKgGRAYrir7AUw7shvdW5uR",
+                    "summary": {
+                        "realized": 6159245.65998346,
+                        "unrealized": 486523.35100059,
+                        "total": 6645769.01098405,
+                        "totalInvested": 35027527.15103882,
+                        "totalWins": 20,
+                        "totalLosses": 13,
+                        "averageBuyAmount": 9905.97044589,
+                        "winPercentage": 40.82,
+                        "lossPercentage": 26.53,
+                        "neutralPercentage": 32.65
+                    }
+                },
+                {
+                    "wallet": "3AWDTDGZiW8joyfA52LKL7GUWLoKBCBUBLUE5JoWgBCu",
+                    "summary": {
+                        "realized": 6821303.59819084,
+                        "unrealized": -695282.55503147,
+                        "total": 6126021.04315937,
+                        "totalInvested": 2239273.81992009,
+                        "totalWins": 7,
+                        "totalLosses": 32,
+                        "averageBuyAmount": 12740.34833637,
+                        "winPercentage": 14.89,
+                        "lossPercentage": 68.09,
+                        "neutralPercentage": 17.02
+                    }
+                },
+                {
+                    "wallet": "8zFZHuSRuDpuAR7J6FzwyF3vKNx4CVW3DFHJerQhc7Zd",
+                    "summary": {
+                        "realized": 2719340.0761943,
+                        "unrealized": 2676285.41644166,
+                        "total": 5395625.49263597,
+                        "totalInvested": 9706678.24266928,
+                        "totalWins": 157,
+                        "totalLosses": 267,
+                        "averageBuyAmount": 5268.06908882,
+                        "winPercentage": 31.46,
+                        "lossPercentage": 53.51,
+                        "neutralPercentage": 15.03
+                    }
+                },
+                {
+                    "wallet": "3XcHbc5Z7GfM3nXkP7NE8GT7ZawVsekxEfmPCofD1kcc",
+                    "summary": {
+                        "realized": 5790137.32882862,
+                        "unrealized": -400418.72504007,
+                        "total": 5389718.60378855,
+                        "totalInvested": 28345526.84641992,
+                        "totalWins": 39,
+                        "totalLosses": 66,
+                        "averageBuyAmount": 13136.52978355,
+                        "winPercentage": 20.42,
+                        "lossPercentage": 34.55,
+                        "neutralPercentage": 45.03
+                    }
+                },
+                {
+                    "wallet": "HdxkiXqeN6qpK2YbG51W23QSWj3Yygc1eEk2zwmKJExp",
+                    "summary": {
+                        "realized": 5992278.28657996,
+                        "unrealized": -1217294.08466535,
+                        "total": 4774984.20191463,
+                        "totalInvested": 8834795.31550923,
+                        "totalWins": 743,
+                        "totalLosses": 1619,
+                        "averageBuyAmount": 1932.22150291,
+                        "winPercentage": 28.91,
+                        "lossPercentage": 63,
+                        "neutralPercentage": 8.09
+                    }
+                },
+                {
+                    "wallet": "2dTytXLH6HZsjbsjYinqgg8kmgQWypHAgbquZ1pcQipF",
+                    "summary": {
+                        "realized": 2865229.69515266,
+                        "unrealized": 1724298.91605899,
+                        "total": 4589528.61121165,
+                        "totalInvested": 26238082.61531635,
+                        "totalWins": 8,
+                        "totalLosses": 6,
+                        "averageBuyAmount": 64211.62013994,
+                        "winPercentage": 38.1,
+                        "lossPercentage": 28.57,
+                        "neutralPercentage": 33.33
+                    }
+                },
+                {
+                    "wallet": "HgF5ZtoDXqGH3exoFKZpUKyRQGgabGNwGC8aVztoXhfL",
+                    "summary": {
+                        "realized": 1698242.96743369,
+                        "unrealized": 2676255.39736178,
+                        "total": 4435958.71018847,
+                        "totalInvested": 5191906.18820416,
+                        "totalWins": 34,
+                        "totalLosses": 54,
+                        "averageBuyAmount": 11373.0573446,
+                        "winPercentage": 35.79,
+                        "lossPercentage": 56.84,
+                        "neutralPercentage": 7.37
+                    }
+                },
+                {
+                    "wallet": "71CPXu3TvH3iUKaY1bNkAAow24k6tjH473SsKprQBABC",
+                    "summary": {
+                        "realized": 3446370.04747365,
+                        "unrealized": -434520.70131273,
+                        "total": 3010986.05688762,
+                        "totalInvested": 6876065.79299336,
+                        "totalWins": 224,
+                        "totalLosses": 458,
+                        "averageBuyAmount": 2940.66177619,
+                        "winPercentage": 31.68,
+                        "lossPercentage": 64.78,
+                        "neutralPercentage": 3.54
+                    }
+                },
+                {
+                    "wallet": "E57hYjjwNAnvXe67C1q7nKRdC2jWMRGLWAJsBJAJrgzR",
+                    "summary": {
+                        "realized": 2993346.45242598,
+                        "unrealized": -6286.80328953,
+                        "total": 2981198.92819827,
+                        "totalInvested": 11235582.55009376,
+                        "totalWins": 190,
+                        "totalLosses": 336,
+                        "averageBuyAmount": 3356.89671289,
+                        "winPercentage": 34.05,
+                        "lossPercentage": 60.22,
+                        "neutralPercentage": 5.73
+                    }
+                },
+                {
+                    "wallet": "5q7Xwc2T57sK1DKU6zuwVXvMPsxqB2xrJ3T5AonFYtcY",
+                    "summary": {
+                        "realized": 2562437.05097466,
+                        "unrealized": 160726.43022327,
+                        "total": 2723163.4811979,
+                        "totalInvested": 3062747.66957189,
+                        "totalWins": 965,
+                        "totalLosses": 118,
+                        "averageBuyAmount": 745.49133004,
+                        "winPercentage": 34.63,
+                        "lossPercentage": 4.23,
+                        "neutralPercentage": 61.14
+                    }
+                },
+                {
+                    "wallet": "3JPYL9xEPFjefV3tccrUwhLzME1mMq2dQSDeDebgzQi6",
+                    "summary": {
+                        "realized": 1637878.30309494,
+                        "unrealized": 1075834.31811948,
+                        "total": 2713712.62121442,
+                        "totalInvested": 6042366.49134607,
+                        "totalWins": 118,
+                        "totalLosses": 303,
+                        "averageBuyAmount": 1063.32664782,
+                        "winPercentage": 24.43,
+                        "lossPercentage": 62.73,
+                        "neutralPercentage": 12.84
+                    }
+                },
+                {
+                    "wallet": "DxjmHXm1p7cs8Tezdf2EJm5xnwp9QC2E8CbfD1aXeH1j",
+                    "summary": {
+                        "realized": 1343580.71280498,
+                        "unrealized": 1219408.98327592,
+                        "total": 2562989.6960809,
+                        "totalInvested": 2145841.9067093,
+                        "totalWins": 21,
+                        "totalLosses": 18,
+                        "averageBuyAmount": 12760.04889673,
+                        "winPercentage": 51.22,
+                        "lossPercentage": 43.9,
+                        "neutralPercentage": 4.88
+                    }
+                },
+                {
+                    "wallet": "4mouYks3478R7mKibRQmeEmtKVruZRwxdzs6FKQrdDAa",
+                    "summary": {
+                        "realized": 2344195.73384181,
+                        "unrealized": 202080.90664206,
+                        "total": 2552685.29246616,
+                        "totalInvested": 16141991.8093299,
+                        "totalWins": 19,
+                        "totalLosses": 32,
+                        "averageBuyAmount": 8372.86798112,
+                        "winPercentage": 35.19,
+                        "lossPercentage": 59.26,
+                        "neutralPercentage": 5.55
+                    }
+                },
+                {
+                    "wallet": "ASxMiMb1AJGTU4AduPNB2CGqT1TiDqWkLvy7oCUnzw5x",
+                    "summary": {
+                        "realized": 2465288.15144813,
+                        "unrealized": 84584.70629089,
+                        "total": 2549872.85773897,
+                        "totalInvested": 12217390.20384101,
+                        "totalWins": 11019,
+                        "totalLosses": 19967,
+                        "averageBuyAmount": 320.40396708,
+                        "winPercentage": 33.44,
+                        "lossPercentage": 60.59,
+                        "neutralPercentage": 5.97
+                    }
+                },
+                {
+                    "wallet": "14DRqqWwGckgju11crFXtiagMEsESMkW12DFkMKT2sAV",
+                    "summary": {
+                        "realized": 1382098.56775673,
+                        "unrealized": 1151762.96982718,
+                        "total": 2533861.5375839,
+                        "totalInvested": 7250398.13791428,
+                        "totalWins": 13,
+                        "totalLosses": 18,
+                        "averageBuyAmount": 9951.70355047,
+                        "winPercentage": 36.11,
+                        "lossPercentage": 50,
+                        "neutralPercentage": 13.89
+                    }
+                },
+                {
+                    "wallet": "4Be9CvxqHW6BYiRAxW9Q3xu1ycTMWaL5z8NX4HR3ha7t",
+                    "summary": {
+                        "realized": 688839.29950176,
+                        "unrealized": 1835392.00566214,
+                        "total": 2519171.54472556,
+                        "totalInvested": 2933664.15357389,
+                        "totalWins": 130,
+                        "totalLosses": 55,
+                        "averageBuyAmount": 5819.2774993,
+                        "winPercentage": 55.56,
+                        "lossPercentage": 23.5,
+                        "neutralPercentage": 20.94
+                    }
+                },
+                {
+                    "wallet": "694X5Cuvx6xs4y2aDBu5U1RkZS4RTbcUCZ8qLbH7bVPc",
+                    "summary": {
+                        "realized": 980924.19502018,
+                        "unrealized": 1387186.83719275,
+                        "total": 2368890.49034949,
+                        "totalInvested": 4042024.80286153,
+                        "totalWins": 196,
+                        "totalLosses": 475,
+                        "averageBuyAmount": 1091.9090039,
+                        "winPercentage": 25.79,
+                        "lossPercentage": 62.5,
+                        "neutralPercentage": 11.71
+                    }
+                },
+                {
+                    "wallet": "7HGwBPjoGBqHnSPqv2JF9QnySKuojmUKgH8hiHYGesQA",
+                    "summary": {
+                        "realized": 2460755.27522004,
+                        "unrealized": -112194.843266,
+                        "total": 2348560.43195405,
+                        "totalInvested": 17524473.43992415,
+                        "totalWins": 249,
+                        "totalLosses": 482,
+                        "averageBuyAmount": 4323.95354377,
+                        "winPercentage": 30.97,
+                        "lossPercentage": 59.95,
+                        "neutralPercentage": 9.08
+                    }
+                },
+                {
+                    "wallet": "ERjCjBRinnL5zGgURC2DneErtqzojV7oNHhqiGnHcXW1",
+                    "summary": {
+                        "realized": 2082206.01868588,
+                        "unrealized": 42964.71892661,
+                        "total": 2126882.07210236,
+                        "totalInvested": 17134141.40012954,
+                        "totalWins": 108,
+                        "totalLosses": 335,
+                        "averageBuyAmount": 5605.43092155,
+                        "winPercentage": 21.47,
+                        "lossPercentage": 66.6,
+                        "neutralPercentage": 11.93
+                    }
+                },
+                {
+                    "wallet": "CJhpTiUXqcBJQZVr5TT6kyu8WXg6QdQuykfqygDyBtEB",
+                    "summary": {
+                        "realized": 129561.17577584,
+                        "unrealized": 1843388.76514113,
+                        "total": 2068433.78233848,
+                        "totalInvested": 2628444.07732799,
+                        "totalWins": 5,
+                        "totalLosses": 4,
+                        "averageBuyAmount": 37221.35684034,
+                        "winPercentage": 45.45,
+                        "lossPercentage": 36.36,
+                        "neutralPercentage": 18.19
+                    }
+                },
+                {
+                    "wallet": "H72yLkhTnoBfhBTXXaj1RBXuirm8s8G5fcVh2XpQLggM",
+                    "summary": {
+                        "realized": 1653815.6759573,
+                        "unrealized": 315563.23687172,
+                        "total": 1969378.91282903,
+                        "totalInvested": 3157290.79765145,
+                        "totalWins": 66,
+                        "totalLosses": 184,
+                        "averageBuyAmount": 2433.28652361,
+                        "winPercentage": 20.25,
+                        "lossPercentage": 56.44,
+                        "neutralPercentage": 23.31
+                    }
+                },
+                {
+                    "wallet": "FdvYZ99wuATUdd6fuSqyAMJRoGLrcHivnuWHxgst475p",
+                    "summary": {
+                        "realized": 1906911.94716554,
+                        "unrealized": -2763.66134427,
+                        "total": 1904148.28582125,
+                        "totalInvested": 5615122.71083186,
+                        "totalWins": 761,
+                        "totalLosses": 1639,
+                        "averageBuyAmount": 920.00681859,
+                        "winPercentage": 27.61,
+                        "lossPercentage": 59.47,
+                        "neutralPercentage": 12.92
+                    }
+                },
+                {
+                    "wallet": "73LnJ7G9ffBDjEBGgJDdgvLUhD5APLonKrNiHsKDCw5B",
+                    "summary": {
+                        "realized": 1913986.31321367,
+                        "unrealized": -14903.08881467,
+                        "total": 1899083.22439896,
+                        "totalInvested": 6173667.70074532,
+                        "totalWins": 6579,
+                        "totalLosses": 3556,
+                        "averageBuyAmount": 477.8377116,
+                        "winPercentage": 59.26,
+                        "lossPercentage": 32.03,
+                        "neutralPercentage": 8.71
+                    }
+                },
+                {
+                    "wallet": "CLegS2MSiCsBksVazCg4Y7Gz3NqeBK21QyvzK4Q7S168",
+                    "summary": {
+                        "realized": 434050.45247312,
+                        "unrealized": 1446106.00740543,
+                        "total": 1880156.45987855,
+                        "totalInvested": 2001940.11178603,
+                        "totalWins": 38,
+                        "totalLosses": 119,
+                        "averageBuyAmount": 2103.61226032,
+                        "winPercentage": 22.09,
+                        "lossPercentage": 69.19,
+                        "neutralPercentage": 8.72
+                    }
+                },
+                {
+                    "wallet": "9H7nQxF1vmrr9fjcE55Y9RoTb1uhKtE7934y8Ww8oijr",
+                    "summary": {
+                        "realized": 792413.93271696,
+                        "unrealized": 1054539.26759234,
+                        "total": 1849107.94192068,
+                        "totalInvested": 3932255.72175979,
+                        "totalWins": 148,
+                        "totalLosses": 247,
+                        "averageBuyAmount": 2258.42675672,
+                        "winPercentage": 29.42,
+                        "lossPercentage": 49.11,
+                        "neutralPercentage": 21.47
+                    }
+                }
+            ],
+            "hasNext": true
+        }
+    }
+}

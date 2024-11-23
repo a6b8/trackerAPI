@@ -1,0 +1,140 @@
+{
+    "request": {
+        "method": "tokenInformation",
+        "params": {
+            "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "token": {
+                "name": "Goatseus Maximus",
+                "symbol": "GOAT",
+                "mint": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
+                "uri": "https://ipfs.io/ipfs/QmcGmF4tQxsQKdF3s1mSqYyg1vNqAXou32tbWztnsnEzth",
+                "decimals": 6,
+                "hasFileMetaData": true,
+                "createdOn": "https://pump.fun",
+                "description": "First meme created by @truth_terminal. Goatseus Maximus will fulfill the prophecies of the ancient memeers.",
+                "image": "https://image.solanatracker.io/proxy?url=https%3A%2F%2Fipfs-forward.solanatracker.io%2Fipfs%2FQmapAq9WtNrtyaDtjZPAHHNYmpSZAQU6HywwvfSWq4dQVV",
+                "showName": true,
+                "twitter": "https://x.com/truth_terminal/status/1844470764583424360?s=46",
+                "telegram": "https://x.com/truth_terminal/status/1844473008330768773?s=46",
+                "website": "https://x.com/andyayrey?s=21"
+            },
+            "pools": [
+                {
+                    "poolId": "9Tb2ohu5P16BpBarqd3N27WnkF51Ukfs8Z1GzzLDxVZW",
+                    "liquidity": {
+                        "quote": 54410.349381296,
+                        "usd": 13897009.757487552
+                    },
+                    "price": {
+                        "quote": 0.003630468958311371,
+                        "usd": 0.9272622416802989
+                    },
+                    "tokenSupply": 999996687.70465,
+                    "lpBurn": 88,
+                    "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
+                    "marketCap": {
+                        "quote": 3630456.9331259225,
+                        "usd": 927259170.3138877
+                    },
+                    "market": "raydium",
+                    "quoteToken": "So11111111111111111111111111111111111111112",
+                    "decimals": 6,
+                    "security": {
+                        "freezeAuthority": null,
+                        "mintAuthority": null
+                    },
+                    "deployer": "39azUYFWPz3VHgKCf3VChUwbpURdCHRxjWVowf5jUJjg",
+                    "lastUpdated": 1732295494367,
+                    "createdAt": 1728595146032,
+                    "txns": {
+                        "buys": 825772,
+                        "total": 1682431,
+                        "volume": 2378868158,
+                        "sells": 856659
+                    }
+                },
+                {
+                    "poolId": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
+                    "liquidity": {
+                        "quote": 0,
+                        "usd": 0
+                    },
+                    "price": {
+                        "quote": null,
+                        "usd": null
+                    },
+                    "tokenSupply": 1000000000,
+                    "lpBurn": 100,
+                    "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
+                    "marketCap": {
+                        "quote": 0,
+                        "usd": 0
+                    },
+                    "decimals": 6,
+                    "security": {
+                        "freezeAuthority": null,
+                        "mintAuthority": null
+                    },
+                    "quoteToken": "So11111111111111111111111111111111111111112",
+                    "market": "pumpfun",
+                    "deployer": "EZX7c1hARBCiVTY62EJLEPwVsUaZWhmvKkuW3nxexidY",
+                    "lastUpdated": 1732209802644,
+                    "createdAt": 1728594508500,
+                    "curve": "5JH9u8yJ9WBcH8PfoMLxo6JKafJ1J44n3zQqGz9Ti5ET"
+                }
+            ],
+            "events": {
+                "1m": {
+                    "priceChangePercentage": 0.6890912336558467
+                },
+                "5m": {
+                    "priceChangePercentage": 1.6826728302295753
+                },
+                "15m": {
+                    "priceChangePercentage": 1.3558657658554911
+                },
+                "30m": {
+                    "priceChangePercentage": 1.4666667834318192
+                },
+                "1h": {
+                    "priceChangePercentage": 2.9631130905704666
+                },
+                "2h": {
+                    "priceChangePercentage": 7.6186722583020545
+                },
+                "3h": {
+                    "priceChangePercentage": 6.164161612976655
+                },
+                "4h": {
+                    "priceChangePercentage": 2.032924373906276
+                },
+                "5h": {
+                    "priceChangePercentage": 2.1449059736805696
+                },
+                "6h": {
+                    "priceChangePercentage": 1.9017760115187452
+                },
+                "12h": {
+                    "priceChangePercentage": -5.537380647897934
+                },
+                "24h": {
+                    "priceChangePercentage": -12.75086777099986
+                }
+            },
+            "risk": {
+                "rugged": false,
+                "risks": [],
+                "score": 0
+            },
+            "buys": 0,
+            "sells": 0,
+            "txns": 0
+        }
+    }
+}

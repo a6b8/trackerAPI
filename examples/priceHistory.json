@@ -1,0 +1,20 @@
+{
+    "request": {
+        "method": "priceHistory",
+        "params": {
+            "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "current": 0.9259259130902627,
+            "3d": 1.0421391120635817,
+            "5d": 1.224586535987607,
+            "7d": 0.877103102764906,
+            "14d": 0.842846850025829,
+            "30d": 0.4864488831485816
+        }
+    }
+}

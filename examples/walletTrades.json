@@ -1,0 +1,15 @@
+{
+    "request": {
+        "method": "walletTrades",
+        "params": {
+            "owner": "95z7osZ7LcAoFkhf1ka3hWdWU8Fk8Fap69ymeeaaMruV"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "error": "Internal server error"
+        }
+    }
+}

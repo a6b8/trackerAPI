@@ -1,0 +1,194 @@
+{
+    "request": {
+        "method": "tokenStats",
+        "params": {
+            "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "1m": {
+                "buyers": 4,
+                "sellers": 8,
+                "volume": {
+                    "buys": 2693.4356993108545,
+                    "sells": 10391.076289467668,
+                    "total": 13084.511988778524
+                },
+                "transactions": 18,
+                "buys": 5,
+                "sells": 13,
+                "wallets": 9,
+                "price": 0.6115320508828437,
+                "priceChangePercentage": -0.022634914604003686
+            },
+            "5m": {
+                "buyers": 32,
+                "sellers": 20,
+                "volume": {
+                    "buys": 118676.11329898796,
+                    "sells": 13766.870716780984,
+                    "total": 132442.98401576895
+                },
+                "transactions": 101,
+                "buys": 70,
+                "sells": 31,
+                "wallets": 35,
+                "price": 0.4602624418592096,
+                "priceChangePercentage": 0.12912098327432253
+            },
+            "15m": {
+                "buyers": 58,
+                "sellers": 47,
+                "volume": {
+                    "buys": 259661.57324279545,
+                    "sells": 37467.30990362532,
+                    "total": 297128.8831464208
+                },
+                "transactions": 323,
+                "buys": 255,
+                "sells": 68,
+                "wallets": 70,
+                "price": 0.6877309319296756,
+                "priceChangePercentage": 0.2809053270557084
+            },
+            "30m": {
+                "buyers": 124,
+                "sellers": 119,
+                "volume": {
+                    "buys": 420338.3237214985,
+                    "sells": 247717.8759955919,
+                    "total": 668056.1997170899
+                },
+                "transactions": 981,
+                "buys": 577,
+                "sells": 404,
+                "wallets": 146,
+                "price": 0.6877309319296756,
+                "priceChangePercentage": 0.3170032248416302
+            },
+            "1h": {
+                "buyers": 236,
+                "sellers": 220,
+                "volume": {
+                    "buys": 950435.4715917334,
+                    "sells": 717036.5921822513,
+                    "total": 1667472.0637739832
+                },
+                "transactions": 1789,
+                "buys": 978,
+                "sells": 811,
+                "wallets": 278,
+                "price": 0.6194343657731278,
+                "priceChangePercentage": 0.5799223575677294
+            },
+            "2h": {
+                "buyers": 391,
+                "sellers": 324,
+                "volume": {
+                    "buys": 1730476.349551599,
+                    "sells": 1273673.4984114866,
+                    "total": 3004149.8479630854
+                },
+                "transactions": 3183,
+                "buys": 1829,
+                "sells": 1354,
+                "wallets": 453,
+                "price": 0.3577939691674557,
+                "priceChangePercentage": 1.2562993361245183
+            },
+            "3h": {
+                "buyers": 494,
+                "sellers": 430,
+                "volume": {
+                    "buys": 2253561.7068325942,
+                    "sells": 2024053.2937981584,
+                    "total": 4277615.000630765
+                },
+                "transactions": 4291,
+                "buys": 2333,
+                "sells": 1958,
+                "wallets": 604,
+                "price": 0.35779434500309787,
+                "priceChangePercentage": 1.0330916079986
+            },
+            "4h": {
+                "buyers": 693,
+                "sellers": 597,
+                "volume": {
+                    "buys": 5605708.54691639,
+                    "sells": 5426703.206632911,
+                    "total": 11032411.753549317
+                },
+                "transactions": 7114,
+                "buys": 4125,
+                "sells": 2989,
+                "wallets": 844,
+                "price": 0.5640011819983349,
+                "priceChangePercentage": -0.15548580437687898
+            },
+            "5h": {
+                "buyers": 759,
+                "sellers": 671,
+                "volume": {
+                    "buys": 6182617.446711203,
+                    "sells": 5805453.21084552,
+                    "total": 11988070.657556714
+                },
+                "transactions": 8425,
+                "buys": 5030,
+                "sells": 3395,
+                "wallets": 944,
+                "price": 0.5640011819983349,
+                "priceChangePercentage": -0.19541012998339607
+            },
+            "6h": {
+                "buyers": 831,
+                "sellers": 759,
+                "volume": {
+                    "buys": 7089999.234121809,
+                    "sells": 6439606.029143698,
+                    "total": 13529605.26326555
+                },
+                "transactions": 10293,
+                "buys": 6317,
+                "sells": 3976,
+                "wallets": 1048,
+                "price": 0.5047338899251266,
+                "priceChangePercentage": -0.7255678385022957
+            },
+            "12h": {
+                "buyers": 1075,
+                "sellers": 1048,
+                "volume": {
+                    "buys": 9414838.53110557,
+                    "sells": 9041040.131655082,
+                    "total": 18455878.662760686
+                },
+                "transactions": 16293,
+                "buys": 10268,
+                "sells": 6025,
+                "wallets": 1430,
+                "price": 0.5800886919693964,
+                "priceChangePercentage": -2.7979525725416337
+            },
+            "24h": {
+                "buyers": 1691,
+                "sellers": 1599,
+                "volume": {
+                    "buys": 16769290.957733974,
+                    "sells": 17056160.374496475,
+                    "total": 33825451.332230516
+                },
+                "transactions": 30266,
+                "buys": 18221,
+                "sells": 12045,
+                "wallets": 2315,
+                "price": 0.4872715521408665,
+                "priceChangePercentage": -4.943547627505677
+            }
+        }
+    }
+}

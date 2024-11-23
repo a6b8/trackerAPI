@@ -1,0 +1,108 @@
+{
+    "request": {
+        "method": "walletInformation",
+        "params": {
+            "owner": "95z7osZ7LcAoFkhf1ka3hWdWU8Fk8Fap69ymeeaaMruV"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "tokens": [
+                {
+                    "token": {
+                        "name": "Wrapped SOL",
+                        "symbol": "SOL",
+                        "mint": "So11111111111111111111111111111111111111112",
+                        "uri": "",
+                        "decimals": 9,
+                        "image": "https://image.solanatracker.io/proxy?url=https%3A%2F%2Fcoin-images.coingecko.com%2Fcoins%2Fimages%2F21629%2Flarge%2Fsolana.jpg%3F1696520989",
+                        "hasFileMetaData": true
+                    },
+                    "pools": [
+                        {
+                            "liquidity": {
+                                "quote": 78044.580294206,
+                                "usd": 19960668.369303223
+                            },
+                            "price": {
+                                "quote": 1,
+                                "usd": 255.71630588646454
+                            },
+                            "tokenSupply": 3784419850.656482,
+                            "lpBurn": 0,
+                            "tokenAddress": "So11111111111111111111111111111111111111112",
+                            "marketCap": {
+                                "quote": 14794254.114765214,
+                                "usd": 3783775875.824029
+                            },
+                            "market": "orca",
+                            "quoteToken": "So11111111111111111111111111111111111111112",
+                            "decimals": 6,
+                            "security": {
+                                "freezeAuthority": "7dGbd2QZcCKcTndnHcTL8q7SMVXAkp688NTQYwrRCrar",
+                                "mintAuthority": "BJE5MMbqXjVwjAF7oxwPYXnTXDyspzZyt4vwenNw5ruG"
+                            },
+                            "lastUpdated": 1732294198933,
+                            "createdAt": 1721811041043,
+                            "poolId": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE"
+                        }
+                    ],
+                    "events": {
+                        "1m": {
+                            "priceChangePercentage": 0.246288140683934
+                        },
+                        "5m": {
+                            "priceChangePercentage": 0.246288140683934
+                        },
+                        "15m": {
+                            "priceChangePercentage": 0.246288140683934
+                        },
+                        "30m": {
+                            "priceChangePercentage": 0.246288140683934
+                        },
+                        "1h": {
+                            "priceChangePercentage": 0.23543392702320506
+                        },
+                        "2h": {
+                            "priceChangePercentage": -0.3811842220716315
+                        },
+                        "3h": {
+                            "priceChangePercentage": -1.2538317049200076
+                        },
+                        "4h": {
+                            "priceChangePercentage": -1.1088451521426501
+                        },
+                        "5h": {
+                            "priceChangePercentage": -1.5383548619633742
+                        },
+                        "6h": {
+                            "priceChangePercentage": -1.7299892424983472
+                        },
+                        "12h": {
+                            "priceChangePercentage": -0.9587372376355539
+                        },
+                        "24h": {
+                            "priceChangePercentage": 2.0262678437345567
+                        }
+                    },
+                    "risk": {
+                        "rugged": false,
+                        "risks": [],
+                        "score": 0,
+                        "jupiterVerified": true
+                    },
+                    "buys": 0,
+                    "sells": 0,
+                    "txns": 0,
+                    "balance": 0.00203928,
+                    "value": 0.5214771482681494
+                }
+            ],
+            "total": 0.52147716,
+            "totalSol": 0.00203928,
+            "timestamp": 1732294199000
+        }
+    }
+}

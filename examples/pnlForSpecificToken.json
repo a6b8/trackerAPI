@@ -1,0 +1,30 @@
+{
+    "request": {
+        "method": "pnlForSpecificToken",
+        "params": {
+            "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
+            "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "holding": 125000,
+            "held": 473699.716522,
+            "sold": 348699.725242,
+            "realized": 100958.86648367,
+            "unrealized": 91605.3895934,
+            "total": 192564.25607708,
+            "total_invested": 91174.29360978,
+            "sold_usd": 168074.0663075,
+            "total_transactions": 76,
+            "buy_transactions": 44,
+            "sell_transactions": 32,
+            "first_buy_time": 1728797509695,
+            "average_buy_amount": 2072.14303659,
+            "current_value": 115664.48505772,
+            "cost_basis": 0.19247276
+        }
+    }
+}

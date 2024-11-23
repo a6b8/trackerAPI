@@ -1,0 +1,21 @@
+{
+    "request": {
+        "method": "postPrice",
+        "params": {
+            "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
+        }
+    },
+    "response": {
+        "status": true,
+        "message": null,
+        "data": {
+            "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump": {
+                "price": 0.9259259130902627,
+                "priceQuote": 0.003630468958311371,
+                "liquidity": 13876982.012778256,
+                "marketCap": 925922846.1501664,
+                "lastUpdated": 1732295525935
+            }
+        }
+    }
+}
