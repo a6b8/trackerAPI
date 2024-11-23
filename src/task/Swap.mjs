@@ -1,7 +1,7 @@
 import { Validation } from './Validation.mjs'
 import axios from 'axios'
 
-import { Transaction } from '@solana/web3.js'
+import { Transaction, Keypair, connection } from '@solana/web3.js'
 
 
 class Swap {
@@ -26,11 +26,36 @@ class Swap {
     }
 
 
+    async send( { response, privateKey } ) {
+        const privateKey = ''
+        const keypair = Keypair.fromSecretKey(bs58.decode( privateKey ) )
+
+        const { data } = response
+        const { txn, type } = data
+
+        let txid
+        if ( type === 'v0' ) {
+            const txn = VersionedTransaction.deserialize(serializedTransactionBuffer)
+            txn.sign( [ keypair ] )
+        
+            txid = await connection.sendRawTransaction(
+                txn.serialize(), { 'skipPreflight': true } 
+            )
+        } else {
+            const txn = Transaction.from(serializedTransactionBuffer);
+            txn.sign( keypair )
+            const rawTransaction = txn.serialize();
+            txid = await connection.sendRawTransaction(rawTransaction, {
+                'skipPreflight': true
+            } )
+        }
+    }
+
+
     parseTx( { response } ) {
         const { data } = response
         const { txn, type } = data
 
-// check 
         const serializedTransactionBuffer = Buffer.from( txn, 'base64')
         let txnMod
         if( type === 'v0' ) {
@@ -60,7 +85,6 @@ class Swap {
             const response = await axios.post( swapUrl, params, { headers } )
             result['status'] = true
             result['data'] = response['data']
-        
         } catch( error ) {
             result['message'] = `Request: ${error['message']}`
             result['status'] = false
