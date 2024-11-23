@@ -33,38 +33,8 @@ console.log(response)
     - [setApiKey()](#setapikey)
     - [getMethods()](#getmethods)
   - [Routes](#routes)
-      - [chartData](#chartdata)
-      - [chartDataByPool](#chartdatabypool)
-      - [firstBuyersOfToken](#firstbuyersoftoken)
-      - [graduatedTokens](#graduatedtokens)
-      - [latestTokens](#latesttokens)
-      - [multiPriceInformation](#multipriceinformation)
-      - [multiTokenInformation](#multitokeninformation)
-      - [paginatedTopTraders](#paginatedtoptraders)
-      - [pnlForSpecificToken](#pnlforspecifictoken)
-      - [postMultiPrice](#postmultiprice)
-      - [postPrice](#postprice)
-      - [priceHistory](#pricehistory)
-      - [priceInformation](#priceinformation)
-      - [profitAndLossData](#profitandlossdata)
-      - [search](#search)
-      - [tokenAth](#tokenath)
-      - [tokenHolders](#tokenholders)
-      - [tokenInformation](#tokeninformation)
-      - [tokenStats](#tokenstats)
-      - [tokenStatsByPool](#tokenstatsbypool)
-      - [tokenTrades](#tokentrades)
-      - [tokenTradesByPool](#tokentradesbypool)
-      - [tokenTradesByPoolAndOwner](#tokentradesbypoolandowner)
-      - [tokenVolume](#tokenvolume)
-      - [topTraders](#toptraders)
-      - [topTradersForToken](#toptradersfortoken)
-      - [tradesByWallet](#tradesbywallet)
-      - [trendingTokens](#trendingtokens)
-      - [trendingTokensByTimeframe](#trendingtokensbytimeframe)
-      - [walletInformation](#walletinformation)
-      - [walletTrades](#wallettrades)
   - [License](#license)
+  - [Disclaimer](#disclaimer)
 
 ## Methods
 
@@ -887,3 +857,7 @@ await st.request( {
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+## Disclaimer
+This project is provided "as is" without any warranties or guarantees. While every effort has been made to ensure the accuracy and reliability of the information and functionality within this project, the authors and contributors are not responsible for any errors, lost, omissions, or damages arising from its use. Users are advised to thoroughly test and validate the code and functionality in their own environment before deploying it to production. By using this project, you agree to take full responsibility for any outcomes or risks associated with its use.
