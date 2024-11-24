@@ -13,7 +13,7 @@ const examples = Object
     }, {} )
 
 
-class API extends EventEmitter {
+class EventWrapper extends EventEmitter {
     #state
 
 
@@ -21,44 +21,46 @@ class API extends EventEmitter {
         super()
 
         this.#state = {
-            'count': 0,
+            'id': -1,
             apiKey
         }
-
     }
 
 
     async request( { route, params={} } ) {
-        this.#plusOne()
         // Wrapper for SolanaTracker.request
+        const event = 'request'
+        const { id } = this.#getId()
 
-        this.#sendEvent( { 'event': 'request', 'data': {} } )
-        return true
+        const data = {}
+        this.#sendEvent( { event, id, data } )
+        return id
     }
 
 
     async getTx( params={} ) {
-        this.#plusOne()
         // Wrapper for Swap.getTx
+        const event = 'getTx'
+        const { id } = this.#getId()
 
-        this.#sendEvent( { 'event': 'getTx', 'data': {} } )
-        this.
+        const data = {}
+        this.#sendEvent( { event, id, data } )
+        return id
     }
 
 
-    #plusOne() { 
-        this.#state['count'] += 1 
-        return true
+    #getId() { 
+        this.#state['id'] += 1 
+        return { 'id': this.#state['id'] }
     }
 
 
-    #sendEvent( { event, data } ) {
-        const { count } = this.#state
-        const payload = { count, ...data }
+    #sendEvent( { event, id, data } ) {
+        const payload = { id, ...data }
         this.emit( event, payload )
         return true
     }
 }
 
 
-export { SolanaTracker, Swap, examples }
+export { SolanaTracker, Swap, examples, EventWrapper }
