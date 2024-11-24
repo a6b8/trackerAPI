@@ -1,7 +1,7 @@
 import { Validation } from './Validation.mjs'
 import axios from 'axios'
 
-import { Transaction, Keypair, connection } from '@solana/web3.js'
+import { Transaction, Keypair } from '@solana/web3.js'
 
 
 class Swap {
@@ -27,8 +27,8 @@ class Swap {
 
 
     async send( { response, privateKey } ) {
-        const privateKey = ''
-        const keypair = Keypair.fromSecretKey(bs58.decode( privateKey ) )
+        const keypair = Keypair
+            .fromSecretKey( bs58.decode( privateKey ) )
 
         const { data } = response
         const { txn, type } = data
