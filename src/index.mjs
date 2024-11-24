@@ -29,12 +29,34 @@ class API extends EventEmitter {
 
 
     async request( { route, params={} } ) {
+        this.#plusOne()
         // Wrapper for SolanaTracker.request
+
+        this.#sendEvent( { 'event': 'request', 'data': {} } )
+        return true
     }
 
 
     async getTx( params={} ) {
+        this.#plusOne()
         // Wrapper for Swap.getTx
+
+        this.#sendEvent( { 'event': 'getTx', 'data': {} } )
+        this.
+    }
+
+
+    #plusOne() { 
+        this.#state['count'] += 1 
+        return true
+    }
+
+
+    #sendEvent( { event, data } ) {
+        const { count } = this.#state
+        const payload = { count, ...data }
+        this.emit( event, payload )
+        return true
     }
 }
 
