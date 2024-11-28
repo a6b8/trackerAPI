@@ -93,6 +93,11 @@ class TrackerAPI extends EventEmitter {
     }
 
 
+    health() {
+        return true
+    }
+
+
     #getId() { 
         this.#state['id'] += 1
         const { id } = this.#state
