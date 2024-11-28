@@ -1,12 +1,12 @@
 import { config } from '../data/config.mjs'
 import { endpoints } from '../data/endpoints.mjs'
-import { findClosestString } from './helpers.mjs'
+// import { findClosestString } from './helpers.mjs'
 
 import { Validation } from './Validation.mjs'
 import axios from 'axios'
 
 
-class SolanaTracker {
+class Data {
     #config
     #endpoints
     #state
@@ -23,10 +23,10 @@ class SolanaTracker {
     }
 
 
-    async request( { route, params={} } ) {
-        const { messages, status } = this.#validation.request( { route, params } )
+    async getData( { route, params={} } ) {
+        const { messages, status } = this.#validation.getData( { route, params } )
         if( !status ) { return { 'status': false, messages, 'data': null } }
-        const response = await this.#request( { route, params } )
+        const response = await this.#getData( { route, params } )
 
         return response
     }
@@ -34,12 +34,11 @@ class SolanaTracker {
 
     setApiKey( { apiKey } ) {
         this.#state['apiKey'] = apiKey
-
         return true
     }
 
 
-    getMethods() {
+    getEndpoints() {
         return Object.keys( this.#endpoints )
     }
 
@@ -49,15 +48,15 @@ class SolanaTracker {
     }
 
 
-    async #request( { route, params } ) {
+    async #getData( { route, params } ) {
         const result = {
             'status': false,
-            'message': null,
+            'messages': [],
             'data': {}
         }
 
         const endpoint = this.#endpoints[ route ]
-        const { baseUrl } = this.#config['solanaTracker']
+        const { dataUrl } = this.#config
         const { route: r, query, requestMethod, body } = endpoint
 
         let queryStr = ''
@@ -80,7 +79,7 @@ class SolanaTracker {
             .reduce( ( acc, key ) => {
                 acc = acc.replace( `{${key}}`, params[ key ] )
                 return acc
-            }, `${baseUrl}${r}${queryStr}` )
+            }, `${dataUrl}${r}${queryStr}` )
         const headers = { 'x-api-key': apiKey }
 
         try {
@@ -104,7 +103,7 @@ class SolanaTracker {
             result['status'] = true
             result['data'] = response['data']
         } catch( error ) {
-            result['message'] = `Request: ${error['message']}`
+            result['messages'].push( `Request: ${error['message']}` )
             result['status'] = false
         }
 
@@ -113,4 +112,4 @@ class SolanaTracker {
 }
 
 
-export { SolanaTracker}
+export { Data }

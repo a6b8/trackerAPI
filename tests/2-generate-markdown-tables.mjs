@@ -1,14 +1,19 @@
-import { SolanaTracker, examples } from '../src/index.mjs'
-import fs from 'fs'
+import { Data, examples } from '../src/index.mjs'
 import { endpoints } from '../src/data/endpoints.mjs'
 import { paramMetadata } from '../src/data/paramMetadata.mjs'
+import { swap } from '../src/data/swap.mjs'
 
-const apiKey = fs.readFileSync( '../../../.env', 'utf-8' )
-    .split( "\n" )
-    .map( line => line.split( '=' ) )
-    .find( ( [ key, value ] ) => key === 'SOLANA_TRACKER_API_KEY' )[ 1 ]
+import { getEnv } from './helpers/utils.mjs'
+import fs from 'fs'
 
-const st = new SolanaTracker( { apiKey } )
+const { apiKey } = getEnv( {
+    'path': '../../../.env',
+    'selection': [
+        [ 'apiKey', 'SOLANA_TRACKER_API_KEY' ]
+    ]
+} )
+
+const data = new Data( { apiKey } )
 const exampleKeys = Object.keys( examples )
 
 const routes = Object
@@ -28,7 +33,7 @@ const routes = Object
         const p = { route: k, params: example }
         acc += "\n"
         acc += "```js\n"
-        acc += `await st.request( ${JSON.stringify( p, null, 4)} )\n`
+        acc += `await data.getData( ${JSON.stringify( p, null, 4)} )\n`
         acc += "```\n\n"
         acc += vars
             .sort( ( [ ,a ], [ ,b ] ) => b - a )
@@ -55,15 +60,13 @@ const overview = Object
     .entries( endpoints )
     .sort( ( [ a, ], [ b, ] ) => a.localeCompare( b ) )
     .reduce( ( acc, [ k, vs ], index ) => {
-        const { description, inserts, query, body, example, requestMethod } = vs
+        const { description, inserts, query, body, example, requestMethod, route } = vs
         if( index === 0 ) {
-            acc += `| Route | Description | Example | Response |\n`
-            acc += `| --- | --- |--- |--- |\n`
+           acc += `| Key | Route | Description | Example | Response |\n`
+           acc += `| --- | --- | --- |--- |--- |\n`
         }
-        acc += `| ${k} | ${description} | [X](./EXAMPLES.md?#${k}) | [X](./examples/${k}.json) |\n`
-
-
-        // acc += `${description}\n\n`
+        const routeStr = `${requestMethod} ${route}`
+        acc += `| ${k} | ${routeStr} | ${description} | [X](./EXAMPLES.md?#${k}) | [X](./examples/${k}.json) |\n`
         return acc
     }, '' )
 
@@ -72,8 +75,23 @@ let all = ''
 all += 'This overview provides a list of all available methods and their descriptions.\n\n'
 all += overview
 
-const tmp = fs.readFileSync( `./old/Template-en.md`, 'utf-8' )
-const str = tmp.replace( '<<INSERT_EXAMPLES>>', all )
+const swapParams = Object
+    .entries( swap )
+    .reduce( ( acc, [ k, v ], i ) => {
+        if( i === 0 ) {
+            acc += `| Key | Description | Required | Example |\n`
+            acc += `| --- | --- | --- | --- |\n`
+        }
+        const { description, required, example } = v
+        acc += `| ${k} | ${description} | ${required} | ${example} |\n`
+
+        return acc
+    }, '' )
+
+let str = fs.readFileSync( `./old/Template-en.md`, 'utf-8' )
+str = str
+    .replace( '<<INSERT_ROUTES>>', all )
+    .replace( '<<INSERT_SWAP_QUOTE>>',swapParams )
 fs.writeFileSync( `README.md`, str )
 
 let ex = ''
@@ -82,3 +100,10 @@ ex += 'The following examples demonstrate the usage of the methods.\n\n'
 ex += routes
 
 const tmp2 = fs.writeFileSync( `EXAMPLES.md`, ex )
+
+
+
+//         'required': true,
+// 'description': 'The base token address',
+// 'example':
+

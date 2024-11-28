@@ -1,23 +1,34 @@
-import { Swap } from '../src/index.mjs'
-import { config } from '../src/data/config.mjs'
+import { TrackerAPI } from '../src/index.mjs'
+import { getEnv } from './helpers/utils.mjs'
 
 
-const { solanaTracker } = config
-const swap = new Swap( { solanaTracker } )
-
-
-const response = await swap.getTx( {
-    'from': "So11111111111111111111111111111111111111112",
-    'to': "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
-    'amount': 1,
-    'slippage': 15,
-    'payer': "arsc4jbDnzaqcCLByyGo7fg7S2SmcFsWUzQuDtLZh2y",
-    'priorityFee': 0.0005,
-    'feeType': "add",
-    'fee': "arsc4jbDnzaqcCLByyGo7fg7S2SmcFsWUzQuDtLZh2y:0.1"
+const { privateKey, publicKey, apiKey, nodeUrl } = getEnv( {
+    'path': '../../../.env',
+    'selection': [
+        [ 'privateKey', 'SOLANA_PRIVATE_KEY'     ],
+        [ 'publicKey',  'SOLANA_PUBLIC_KEY'      ],
+        [ 'apiKey',     'SOLANA_TRACKER_API_KEY' ],
+        [ 'nodeUrl',    'SOLANA_MAINNET_HTTPS'   ]
+    ]
 } )
 
-console.log( response )
+const st = new TrackerAPI( { apiKey, nodeUrl } )
+let quote = await st.getQuote( {
+    'from': 'So11111111111111111111111111111111111111112',
+    'to': 'UEPp8H46WkPiBmi7nw35nyfFDNpxp9LWRPxSMHXpump',
+    'amount': 0.0001,
+    'slippage': 15,
+    'payer': publicKey,
+    'priorityFee': 0.0005,
+    'feeType': 'add',
+    'fee': `${publicKey}:0.0001`
+} )
+console.log( 'get tx', quote  )
 
-const test = swap.parseTx( { response } )
-console.log( test)
+const txid = await st.sendSwap( { quote, privateKey, areYouSure: false } )
+console.log( 'tx', txid )
+
+/*
+    const test = swap.parseTx( { response } )
+    console.log( test)
+*/

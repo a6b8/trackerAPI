@@ -1,4 +1,4 @@
-import { SolanaTracker } from './task/SolanaTracker.mjs'
+import { Data } from './task/Data.mjs'
 import { Swap } from './task/Swap.mjs'
 import { endpoints } from './data/endpoints.mjs '
 
@@ -13,45 +13,90 @@ const examples = Object
     }, {} )
 
 
-class EventWrapper extends EventEmitter {
+class TrackerAPI extends EventEmitter {
     #state
+    #data
+    #swap
 
 
-    constructor( { apiKey } ) {
+    constructor( { apiKey, nodeUrl } ) {
         super()
 
         this.#state = {
             'id': -1,
-            apiKey
+            apiKey,
+            nodeUrl
+        }
+
+        if( apiKey !== undefined ) {
+            this.#data = new Data( { apiKey } ) 
+        }
+        if( nodeUrl !== undefined ) { 
+            this.#swap = new Swap( { nodeUrl } ) 
         }
     }
 
-
-    async request( { route, params={} } ) {
-        // Wrapper for SolanaTracker.request
-        const event = 'request'
+/*
+    batchGetData( { route, params={}, isAsync=true } ) {
+        const event = 'gD'
         const { id } = this.#getId()
 
-        const data = {}
-        this.#sendEvent( { event, id, data } )
-        return id
+        if( !isAsync ) {
+            ( async () => {
+                const data = await this.#data.getData( { route, params } )
+                this.#sendEvent({ event, id, data } )
+            } )()
+            return { id }
+        }
+
+        return ( async () => {
+            const data = await this.#data.getData( { route, params } )
+            this.#sendEvent( { event, id, data } )
+            return { ...data, id }
+        } )()
+    }
+*/
+
+    async getData( { route, params={}} ) {
+        this.#validateModule( { 'key': 'data' } )
+        const event = 'request'
+        const { id } = this.#getId()
+        const data = await this.#data.getData( { route, params } )
+        // this.#sendEvent( { event, id, data } )
+        return { ...data, id }
     }
 
 
-    async getTx( params={} ) {
-        // Wrapper for Swap.getTx
+    getRoutes() {
+        this.#validateModule( { 'key': 'data' } )
+        return this.#data.getRoutes()
+    }
+
+
+    async getSwapQuote( params ) {
+        this.#validateModule( { 'key': 'swap' } )
         const event = 'getTx'
         const { id } = this.#getId()
+        const data = await this.#swap.getSwapQuote( params )
+        // this.#sendEvent( { event, id, data } )
+        return { ...data, id }
+    }
 
-        const data = {}
+
+    async postSwap( { quote, privateKey, skipConfirmation=false } ) {
+        this.#validateModule( { 'key': 'swap' } )
+        const event = 'sendTx'
+        const { id } = this.#getId()
+        const data = await this.#swap.postSwap( { quote, privateKey, skipConfirmation } )
         this.#sendEvent( { event, id, data } )
-        return id
+        return { ...data, id }
     }
 
 
     #getId() { 
-        this.#state['id'] += 1 
-        return { 'id': this.#state['id'] }
+        this.#state['id'] += 1
+        const { id } = this.#state
+        return { id }
     }
 
 
@@ -60,7 +105,22 @@ class EventWrapper extends EventEmitter {
         this.emit( event, payload )
         return true
     }
+
+
+    #validateModule( { key } ) {
+        const [ , value, initKey ] = [
+            [ 'data', this.#data, 'apiKey' ],
+            [ 'swap', this.#swap, 'nodeUrl' ]
+        ]
+            .find( ( [ k, ] ) => k === key )
+
+        if( value === undefined ) {
+            throw new Error( `Key ${initKey} is not defined` )
+        } 
+
+        return true
+    }
 }
 
 
-export { SolanaTracker, Swap, examples, EventWrapper }
+export { TrackerAPI, Data, Swap, examples }

@@ -1,5 +1,5 @@
 {
-  "name": "3-solanatracker",
+  "name": "solanatracker",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,10 +10,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "a6b8",
+  "license": "MIT",
   "dependencies": {
     "@solana/web3.js": "^1.95.5",
-    "axios": "^1.7.7"
+    "axios": "^1.7.7",
+    "bs58": "^6.0.0",
+    "inquirer": "^12.1.0"
   }
 }

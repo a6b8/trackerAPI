@@ -8,7 +8,7 @@ The following examples demonstrate the usage of the methods.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "chartData",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -30,7 +30,7 @@ Get OLCVH (Open, Low, Close, Volume, High) data for charts.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "chartDataByPool",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
@@ -58,7 +58,7 @@ Retrieve the first 100 buyers of a token (since API started recording data) with
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "firstBuyersOfToken",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -80,7 +80,7 @@ Overview of all graduated pumpfun/moonshot tokens (Pumpvision / Photon Memescope
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "graduatedTokens",
     "params": {}
 } )
@@ -95,7 +95,7 @@ Retrieve the latest 100 tokens.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "latestTokens",
     "params": {}
 } )
@@ -110,7 +110,7 @@ Get price information for multiple tokens (up to 100).
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "multiPriceInformation",
     "params": {
         "tokens": [
@@ -135,7 +135,7 @@ Get an overview of latest, graduating, and graduated tokens (Pumpvision / Photon
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "multiTokenInformation",
     "params": {}
 } )
@@ -150,7 +150,7 @@ Get the most profitable traders across all tokens, with optional pagination.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "paginatedTopTraders",
     "params": {
         "page": 1
@@ -174,7 +174,7 @@ Get Profit and Loss data for a specific token in a wallet.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "pnlForSpecificToken",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
@@ -198,7 +198,7 @@ Similar to GET /price/multi, but accepts an array of token addresses in the requ
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "postMultiPrice",
     "params": {
         "tokens": [
@@ -223,7 +223,7 @@ Similar to GET /price, but accepts token address in the request body.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "postPrice",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -245,7 +245,7 @@ Get historic price information for a single token.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "priceHistory",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -267,7 +267,7 @@ Get price information for a single token.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "priceInformation",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -290,7 +290,7 @@ Get Profit and Loss data for all positions of a wallet.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "profitAndLossData",
     "params": {
         "wallet": "8bHMVvpApEQS6M2qRv4eJUDptoW919NFrBSbeDGmoGJ6"
@@ -313,7 +313,7 @@ The /search endpoint provides a flexible search interface for pools and tokens w
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "search",
     "params": {
         "query": "soybean",
@@ -354,7 +354,7 @@ Retrieve the all time high price of a token (since data api started recording)
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenAth",
     "params": {
         "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -376,7 +376,7 @@ Get the top 100 holders for a specific token.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenHolders",
     "params": {
         "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -398,7 +398,7 @@ Retrieve all information for a specific token.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenInformation",
     "params": {
         "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -420,7 +420,7 @@ Get detailed stats for a token over various time intervals.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenStats",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -442,7 +442,7 @@ Get detailed stats for a token-pool pair over various time intervals.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenStatsByPool",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
@@ -466,7 +466,7 @@ Get the latest trades for a token across all pools.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenTrades",
     "params": {
         "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -488,7 +488,7 @@ Get the latest trades for a specific token and pool pair.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenTradesByPool",
     "params": {
         "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
@@ -512,7 +512,7 @@ Get the latest trades for a specific token, pool, and wallet address.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenTradesByPoolAndOwner",
     "params": {
         "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
@@ -538,7 +538,7 @@ Retrieve the top 100 tokens sorted by highest volume.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tokenVolume",
     "params": {}
 } )
@@ -553,7 +553,7 @@ Get the most profitable traders
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "topTraders",
     "params": {}
 } )
@@ -568,7 +568,7 @@ Get top 100 traders by PnL for a token.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "topTradersForToken",
     "params": {
         "token": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump"
@@ -590,7 +590,7 @@ Get the latest trades for a specific token and wallet address.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "tradesByWallet",
     "params": {
         "tokenAddress": "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
@@ -618,7 +618,7 @@ Get the top 100 trending tokens based on transaction volume in the past hour.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "trendingTokens",
     "params": {}
 } )
@@ -633,7 +633,7 @@ Returns trending tokens for a specific time interval.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "trendingTokensByTimeframe",
     "params": {
         "timeframe": "1h"
@@ -655,7 +655,7 @@ Get all tokens in a wallet with current value in USD.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "walletInformation",
     "params": {
         "owner": "95z7osZ7LcAoFkhf1ka3hWdWU8Fk8Fap69ymeeaaMruV"
@@ -677,7 +677,7 @@ Get the latest trades of a wallet.
 
 
 ```js
-await st.request( {
+await data.getData( {
     "route": "walletTrades",
     "params": {
         "owner": "95z7osZ7LcAoFkhf1ka3hWdWU8Fk8Fap69ymeeaaMruV"

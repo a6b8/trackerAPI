@@ -13,7 +13,7 @@ class Validation {
     }
 
 
-    request( { route, params } ) {
+    getData( { route, params } ) {
         const m = []
         const s = []
 
@@ -36,13 +36,19 @@ class Validation {
     }
 
 
-    getTx( params ) {
-        const { messages, status } = this.#validateGetTx( params )
+    getSwapQuote( params ) {
+        const { messages, status } = this.#validateGetSwapQuote( params )
         return { messages, status }
     }
 
 
-    #validateGetTx( params ) {
+    postSwap( { quote, privateKey, skipConfirmation } ) {
+        const { messages, status } = this.#validatePostSwap( { quote, privateKey, skipConfirmation } )
+        return { messages, status }
+    }
+
+
+    #validateGetSwapQuote( params ) {
         const messages = []
 
         if( params === undefined ) {
@@ -76,6 +82,46 @@ class Validation {
             } )
 
         const status = messages.length === 0 ? true : false
+        return { messages, status }
+    }
+
+
+    #validatePostSwap( { quote, privateKey, skipConfirmation } ) {
+        const messages = []
+
+        if( quote === undefined ) {
+            messages.push( `Quote is undefined` )
+        } else if( typeof quote !== 'object' ) {
+            messages.push( `Quote is not an object` )
+        } else {
+            const test = [
+                [ 'status', 'boolean' ],
+                [ 'data',   'object'  ]
+            ]
+                .forEach( ( [ key, type ] ) => { 
+                    if( quote[ key ] === undefined ) {
+                        messages.push( `Quote is missing key: ${key}` )
+                    } else if( typeof quote[ key ] !== type ) {
+                        messages.push( `Quote key: ${key} is not a ${type}` )
+                    }
+                } )
+        }
+
+
+        if( privateKey === undefined ) {
+            messages.push( `Private key is undefined` )
+        } else if( typeof privateKey !== 'string' ) {
+            messages.push( `Private key is not a string` )
+        }
+
+        if( skipConfirmation === undefined ) {
+            messages.push( `skipConfirmation is undefined` )
+        } else if( typeof skipConfirmation !== 'boolean' ) {
+            messages.push( `skipConfirmation is not a boolean` )
+        }
+
+        const status = messages.length === 0 ? true : false
+
         return { messages, status }
     }
 
