@@ -62,11 +62,11 @@ const overview = Object
     .reduce( ( acc, [ k, vs ], index ) => {
         const { description, inserts, query, body, example, requestMethod, route } = vs
         if( index === 0 ) {
-           acc += `| Key | Route | Description | Example | Response |\n`
+           acc += `| Key | Description | Route | Example | Response |\n`
            acc += `| --- | --- | --- |--- |--- |\n`
         }
         const routeStr = `${requestMethod} ${route}`
-        acc += `| ${k} | ${routeStr} | ${description} | [X](./EXAMPLES.md?#${k}) | [X](./examples/${k}.json) |\n`
+        acc += `| ${k} | ${description} | ${routeStr} | [X](./EXAMPLES.md?#${k}) | [X](./examples/${k}.json) |\n`
         return acc
     }, '' )
 
@@ -85,7 +85,7 @@ const swapParams = Object
             acc += `| --- | --- | --- | \n`
         }
         const { description, required, example } = v
-        acc += `| ${k} | ${description} | ${required} |\n`
+        acc += `| ${k} | ${description} | ${required === true ? 'Yes' : 'No' } |\n`
 
         return acc
     }, '' )

@@ -1,4 +1,4 @@
-[![CircleCI](https://img.shields.io/circleci/build/github/a6b8/solanaTracker/main)]() ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+[![CircleCI](https://img.shields.io/circleci/build/github/a6b8/trackerAPI/main)]() ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
 # TrackerAPI
 
@@ -137,16 +137,16 @@ async .getSwapQuote({ ...params })
 
 | Key | Description | Required | 
 | --- | --- | --- | 
-| amount | The amount of the base token to swap. Can be a specific value, "auto" to use full wallet amount, or a percentage (e.g., "50%") to use that portion of the wallet balance | true |
-| from | The base token address | true |
-| payer | Public key of the wallet sending the transaction | true |
-| slippage | Maximum acceptable slippage percentage | true |
-| to | The quote token address | true |
-| fee | Charge a custom fee to your users for each transaction (earn sol for each swap) | false |
-| feeType | Fee application type | false |
-| priorityFee | Amount in SOL to increase transaction processing priority | false |
-| priorityFeeLevel | Required if priorityFee is set to auto | false |
-| txVersion | Transaction version | false |
+| amount | The amount of the base token to swap. Can be a specific value, "auto" to use full wallet amount, or a percentage (e.g., "50%") to use that portion of the wallet balance | Yes |
+| from | The base token address | Yes |
+| payer | Public key of the wallet sending the transaction | Yes |
+| slippage | Maximum acceptable slippage percentage | Yes |
+| to | The quote token address | Yes |
+| fee | Charge a custom fee to your users for each transaction (earn sol for each swap) | No |
+| feeType | Fee application type | No |
+| priorityFee | Amount in SOL to increase transaction processing priority | No |
+| priorityFeeLevel | Required if priorityFee is set to auto | No |
+| txVersion | Transaction version | No |
 
 
 **Example**
@@ -222,39 +222,39 @@ Array of Strings
 
 This overview provides a list of all available methods and their descriptions.
 
-| Key | Route | Description | Example | Response |
+| Key | Description | Route | Example | Response |
 | --- | --- | --- |--- |--- |
-| chartData | GET /chart/{token} |  | [X](./EXAMPLES.md?#chartData) | [X](./examples/chartData.json) |
-| chartDataByPool | GET /chart/{token}/{pool} | Get OLCVH (Open, Low, Close, Volume, High) data for charts. | [X](./EXAMPLES.md?#chartDataByPool) | [X](./examples/chartDataByPool.json) |
-| firstBuyersOfToken | GET /first-buyers/{token} | Retrieve the first 100 buyers of a token (since API started recording data) with Profit and Loss data for each wallet. | [X](./EXAMPLES.md?#firstBuyersOfToken) | [X](./examples/firstBuyersOfToken.json) |
-| graduatedTokens | GET /tokens/multi/graduated | Overview of all graduated pumpfun/moonshot tokens (Pumpvision / Photon Memescope style). | [X](./EXAMPLES.md?#graduatedTokens) | [X](./examples/graduatedTokens.json) |
-| latestTokens | GET /tokens/latest | Retrieve the latest 100 tokens. | [X](./EXAMPLES.md?#latestTokens) | [X](./examples/latestTokens.json) |
-| multiPriceInformation | GET /price/multi | Get price information for multiple tokens (up to 100). | [X](./EXAMPLES.md?#multiPriceInformation) | [X](./examples/multiPriceInformation.json) |
-| multiTokenInformation | GET /tokens/multi/all | Get an overview of latest, graduating, and graduated tokens (Pumpvision / Photon Memescope style). | [X](./EXAMPLES.md?#multiTokenInformation) | [X](./examples/multiTokenInformation.json) |
-| paginatedTopTraders | GET /top-traders/all/{page} | Get the most profitable traders across all tokens, with optional pagination. | [X](./EXAMPLES.md?#paginatedTopTraders) | [X](./examples/paginatedTopTraders.json) |
-| pnlForSpecificToken | GET /pnl/{wallet}/{token} | Get Profit and Loss data for a specific token in a wallet. | [X](./EXAMPLES.md?#pnlForSpecificToken) | [X](./examples/pnlForSpecificToken.json) |
-| postMultiPrice | POST /price/multi | Similar to GET /price/multi, but accepts an array of token addresses in the request body. | [X](./EXAMPLES.md?#postMultiPrice) | [X](./examples/postMultiPrice.json) |
-| postPrice | POST /price | Similar to GET /price, but accepts token address in the request body. | [X](./EXAMPLES.md?#postPrice) | [X](./examples/postPrice.json) |
-| priceHistory | GET /price/history | Get historic price information for a single token. | [X](./EXAMPLES.md?#priceHistory) | [X](./examples/priceHistory.json) |
-| priceInformation | GET /price | Get price information for a single token. | [X](./EXAMPLES.md?#priceInformation) | [X](./examples/priceInformation.json) |
-| profitAndLossData | GET /pnl/{wallet} | Get Profit and Loss data for all positions of a wallet. | [X](./EXAMPLES.md?#profitAndLossData) | [X](./examples/profitAndLossData.json) |
-| search | GET /search | The /search endpoint provides a flexible search interface for pools and tokens with support for multiple filtering criteria and pagination. | [X](./EXAMPLES.md?#search) | [X](./examples/search.json) |
-| tokenAth | GET /tokens/{tokenAddress}/ath | Retrieve the all time high price of a token (since data api started recording) | [X](./EXAMPLES.md?#tokenAth) | [X](./examples/tokenAth.json) |
-| tokenHolders | GET /tokens/{tokenAddress}/holders | Get the top 100 holders for a specific token. | [X](./EXAMPLES.md?#tokenHolders) | [X](./examples/tokenHolders.json) |
-| tokenInformation | GET /tokens/{tokenAddress} | Retrieve all information for a specific token. | [X](./EXAMPLES.md?#tokenInformation) | [X](./examples/tokenInformation.json) |
-| tokenStats | GET /stats/{token} | Get detailed stats for a token over various time intervals. | [X](./EXAMPLES.md?#tokenStats) | [X](./examples/tokenStats.json) |
-| tokenStatsByPool | GET /stats/{token}/{pool} | Get detailed stats for a token-pool pair over various time intervals. | [X](./EXAMPLES.md?#tokenStatsByPool) | [X](./examples/tokenStatsByPool.json) |
-| tokenTrades | GET /trades/{tokenAddress} | Get the latest trades for a token across all pools. | [X](./EXAMPLES.md?#tokenTrades) | [X](./examples/tokenTrades.json) |
-| tokenTradesByPool | GET /trades/{tokenAddress}/{poolAddress} | Get the latest trades for a specific token and pool pair. | [X](./EXAMPLES.md?#tokenTradesByPool) | [X](./examples/tokenTradesByPool.json) |
-| tokenTradesByPoolAndOwner | GET /trades/{tokenAddress}/{poolAddress}/{owner} | Get the latest trades for a specific token, pool, and wallet address. | [X](./EXAMPLES.md?#tokenTradesByPoolAndOwner) | [X](./examples/tokenTradesByPoolAndOwner.json) |
-| tokenVolume | GET /tokens/volume | Retrieve the top 100 tokens sorted by highest volume. | [X](./EXAMPLES.md?#tokenVolume) | [X](./examples/tokenVolume.json) |
-| topTraders | GET /top-traders/all | Get the most profitable traders | [X](./EXAMPLES.md?#topTraders) | [X](./examples/topTraders.json) |
-| topTradersForToken | GET /top-traders/{token} | Get top 100 traders by PnL for a token. | [X](./EXAMPLES.md?#topTradersForToken) | [X](./examples/topTradersForToken.json) |
-| tradesByWallet | GET /trades/{tokenAddress}/by-wallet/{owner} | Get the latest trades for a specific token and wallet address. | [X](./EXAMPLES.md?#tradesByWallet) | [X](./examples/tradesByWallet.json) |
-| trendingTokens | GET /tokens/trending | Get the top 100 trending tokens based on transaction volume in the past hour. | [X](./EXAMPLES.md?#trendingTokens) | [X](./examples/trendingTokens.json) |
-| trendingTokensByTimeframe | GET /tokens/trending/{timeframe} | Returns trending tokens for a specific time interval. | [X](./EXAMPLES.md?#trendingTokensByTimeframe) | [X](./examples/trendingTokensByTimeframe.json) |
-| walletInformation | GET /wallet/{owner} | Get all tokens in a wallet with current value in USD. | [X](./EXAMPLES.md?#walletInformation) | [X](./examples/walletInformation.json) |
-| walletTrades | GET /wallet/{owner}/trades | Get the latest trades of a wallet. | [X](./EXAMPLES.md?#walletTrades) | [X](./examples/walletTrades.json) |
+| chartData |  | GET /chart/{token} | [X](./EXAMPLES.md?#chartData) | [X](./examples/chartData.json) |
+| chartDataByPool | Get OLCVH (Open, Low, Close, Volume, High) data for charts. | GET /chart/{token}/{pool} | [X](./EXAMPLES.md?#chartDataByPool) | [X](./examples/chartDataByPool.json) |
+| firstBuyersOfToken | Retrieve the first 100 buyers of a token (since API started recording data) with Profit and Loss data for each wallet. | GET /first-buyers/{token} | [X](./EXAMPLES.md?#firstBuyersOfToken) | [X](./examples/firstBuyersOfToken.json) |
+| graduatedTokens | Overview of all graduated pumpfun/moonshot tokens (Pumpvision / Photon Memescope style). | GET /tokens/multi/graduated | [X](./EXAMPLES.md?#graduatedTokens) | [X](./examples/graduatedTokens.json) |
+| latestTokens | Retrieve the latest 100 tokens. | GET /tokens/latest | [X](./EXAMPLES.md?#latestTokens) | [X](./examples/latestTokens.json) |
+| multiPriceInformation | Get price information for multiple tokens (up to 100). | GET /price/multi | [X](./EXAMPLES.md?#multiPriceInformation) | [X](./examples/multiPriceInformation.json) |
+| multiTokenInformation | Get an overview of latest, graduating, and graduated tokens (Pumpvision / Photon Memescope style). | GET /tokens/multi/all | [X](./EXAMPLES.md?#multiTokenInformation) | [X](./examples/multiTokenInformation.json) |
+| paginatedTopTraders | Get the most profitable traders across all tokens, with optional pagination. | GET /top-traders/all/{page} | [X](./EXAMPLES.md?#paginatedTopTraders) | [X](./examples/paginatedTopTraders.json) |
+| pnlForSpecificToken | Get Profit and Loss data for a specific token in a wallet. | GET /pnl/{wallet}/{token} | [X](./EXAMPLES.md?#pnlForSpecificToken) | [X](./examples/pnlForSpecificToken.json) |
+| postMultiPrice | Similar to GET /price/multi, but accepts an array of token addresses in the request body. | POST /price/multi | [X](./EXAMPLES.md?#postMultiPrice) | [X](./examples/postMultiPrice.json) |
+| postPrice | Similar to GET /price, but accepts token address in the request body. | POST /price | [X](./EXAMPLES.md?#postPrice) | [X](./examples/postPrice.json) |
+| priceHistory | Get historic price information for a single token. | GET /price/history | [X](./EXAMPLES.md?#priceHistory) | [X](./examples/priceHistory.json) |
+| priceInformation | Get price information for a single token. | GET /price | [X](./EXAMPLES.md?#priceInformation) | [X](./examples/priceInformation.json) |
+| profitAndLossData | Get Profit and Loss data for all positions of a wallet. | GET /pnl/{wallet} | [X](./EXAMPLES.md?#profitAndLossData) | [X](./examples/profitAndLossData.json) |
+| search | The /search endpoint provides a flexible search interface for pools and tokens with support for multiple filtering criteria and pagination. | GET /search | [X](./EXAMPLES.md?#search) | [X](./examples/search.json) |
+| tokenAth | Retrieve the all time high price of a token (since data api started recording) | GET /tokens/{tokenAddress}/ath | [X](./EXAMPLES.md?#tokenAth) | [X](./examples/tokenAth.json) |
+| tokenHolders | Get the top 100 holders for a specific token. | GET /tokens/{tokenAddress}/holders | [X](./EXAMPLES.md?#tokenHolders) | [X](./examples/tokenHolders.json) |
+| tokenInformation | Retrieve all information for a specific token. | GET /tokens/{tokenAddress} | [X](./EXAMPLES.md?#tokenInformation) | [X](./examples/tokenInformation.json) |
+| tokenStats | Get detailed stats for a token over various time intervals. | GET /stats/{token} | [X](./EXAMPLES.md?#tokenStats) | [X](./examples/tokenStats.json) |
+| tokenStatsByPool | Get detailed stats for a token-pool pair over various time intervals. | GET /stats/{token}/{pool} | [X](./EXAMPLES.md?#tokenStatsByPool) | [X](./examples/tokenStatsByPool.json) |
+| tokenTrades | Get the latest trades for a token across all pools. | GET /trades/{tokenAddress} | [X](./EXAMPLES.md?#tokenTrades) | [X](./examples/tokenTrades.json) |
+| tokenTradesByPool | Get the latest trades for a specific token and pool pair. | GET /trades/{tokenAddress}/{poolAddress} | [X](./EXAMPLES.md?#tokenTradesByPool) | [X](./examples/tokenTradesByPool.json) |
+| tokenTradesByPoolAndOwner | Get the latest trades for a specific token, pool, and wallet address. | GET /trades/{tokenAddress}/{poolAddress}/{owner} | [X](./EXAMPLES.md?#tokenTradesByPoolAndOwner) | [X](./examples/tokenTradesByPoolAndOwner.json) |
+| tokenVolume | Retrieve the top 100 tokens sorted by highest volume. | GET /tokens/volume | [X](./EXAMPLES.md?#tokenVolume) | [X](./examples/tokenVolume.json) |
+| topTraders | Get the most profitable traders | GET /top-traders/all | [X](./EXAMPLES.md?#topTraders) | [X](./examples/topTraders.json) |
+| topTradersForToken | Get top 100 traders by PnL for a token. | GET /top-traders/{token} | [X](./EXAMPLES.md?#topTradersForToken) | [X](./examples/topTradersForToken.json) |
+| tradesByWallet | Get the latest trades for a specific token and wallet address. | GET /trades/{tokenAddress}/by-wallet/{owner} | [X](./EXAMPLES.md?#tradesByWallet) | [X](./examples/tradesByWallet.json) |
+| trendingTokens | Get the top 100 trending tokens based on transaction volume in the past hour. | GET /tokens/trending | [X](./EXAMPLES.md?#trendingTokens) | [X](./examples/trendingTokens.json) |
+| trendingTokensByTimeframe | Returns trending tokens for a specific time interval. | GET /tokens/trending/{timeframe} | [X](./EXAMPLES.md?#trendingTokensByTimeframe) | [X](./examples/trendingTokensByTimeframe.json) |
+| walletInformation | Get all tokens in a wallet with current value in USD. | GET /wallet/{owner} | [X](./EXAMPLES.md?#walletInformation) | [X](./examples/walletInformation.json) |
+| walletTrades | Get the latest trades of a wallet. | GET /wallet/{owner}/trades | [X](./EXAMPLES.md?#walletTrades) | [X](./examples/walletTrades.json) |
 
 
 ## License
