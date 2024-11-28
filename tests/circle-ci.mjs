@@ -1,7 +1,7 @@
-import { SolanaTracker } from '../src/index.mjs'
-
+import { TrackerAPI } from '../src/index.mjs'
+ 
 const apiKey = '<<API_KEY>>'
-const st = new SolanaTracker( { apiKey } )
+const st = new TrackerAPI( { apiKey } )
 const status = st.health()
 
 if( status ) {
