@@ -135,18 +135,18 @@ This method retrieves a quote and all necessary data to perform a swap with `Sol
 async .getSwapQuote({ ...params })
 ```
 
-| Key | Description | Required | Example |
-| --- | --- | --- | --- |
-| from | The base token address | true | So11111111111111111111111111111111111111112 (SOL) |
-| to | The quote token address | true | 4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R (RAY) |
-| amount | The amount of the base token to swap. Can be a specific value, "auto" to use full wallet amount, or a percentage (e.g., "50%") to use that portion of the wallet balance | true | undefined |
-| slippage | Maximum acceptable slippage percentage | true | 10 |
-| payer | Public key of the wallet sending the transaction | true | PAYER_ADDRESS |
-| priorityFee | Amount in SOL to increase transaction processing priority | false | undefined |
-| priorityFeeLevel | Required if priorityFee is set to auto | false | undefined |
-| txVersion | Transaction version | false | undefined |
-| fee | Charge a custom fee to your users for each transaction (earn sol for each swap) | false | WALLET_ADDRESS:PERCENTAGE |
-| feeType | Fee application type | false | undefined |
+| Key | Description | Required | 
+| --- | --- | --- | 
+| amount | The amount of the base token to swap. Can be a specific value, "auto" to use full wallet amount, or a percentage (e.g., "50%") to use that portion of the wallet balance | true |
+| from | The base token address | true |
+| payer | Public key of the wallet sending the transaction | true |
+| slippage | Maximum acceptable slippage percentage | true |
+| to | The quote token address | true |
+| fee | Charge a custom fee to your users for each transaction (earn sol for each swap) | false |
+| feeType | Fee application type | false |
+| priorityFee | Amount in SOL to increase transaction processing priority | false |
+| priorityFeeLevel | Required if priorityFee is set to auto | false |
+| txVersion | Transaction version | false |
 
 
 **Example**

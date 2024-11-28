@@ -77,13 +77,15 @@ all += overview
 
 const swapParams = Object
     .entries( swap )
+    .sort( ( [ a, ], [ b, ] ) => a.localeCompare( b ) )
+    .sort( ( [ , a ], [ , b ] ) => b.required - a.required )
     .reduce( ( acc, [ k, v ], i ) => {
         if( i === 0 ) {
-            acc += `| Key | Description | Required | Example |\n`
-            acc += `| --- | --- | --- | --- |\n`
+            acc += `| Key | Description | Required | \n`
+            acc += `| --- | --- | --- | \n`
         }
         const { description, required, example } = v
-        acc += `| ${k} | ${description} | ${required} | ${example} |\n`
+        acc += `| ${k} | ${description} | ${required} |\n`
 
         return acc
     }, '' )
