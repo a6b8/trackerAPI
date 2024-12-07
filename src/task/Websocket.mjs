@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3'
-
+import WebSocket from 'ws'
 
 class DataWebsocket {
     #socket
