@@ -8,9 +8,10 @@ class DataWebsocket extends EventEmitter {
     #state
     #sockets
     #emitter
+    #print
 
 
-    constructor( { wsUrl } ) {
+    constructor( { wsUrl, emitter=null } ) {
         super()
         this.#config = { 
             'reconnectDelay': 2500,
@@ -24,7 +25,8 @@ class DataWebsocket extends EventEmitter {
             'subscribedRooms': new Map(),
             'transactions': new Set(),
             'websocketsReady': [ false, false ],
-            'waiting': []
+            'waiting': [],
+            'useInternalEmitter': ( emitter === null ) ? true : false
         }
 
         this.#sockets = {
@@ -32,7 +34,7 @@ class DataWebsocket extends EventEmitter {
             'transaction': null
         }
 
-        this.#emitter = new EventEmitter()    
+        this.#emitter = emitter
         this.connect( { wsUrl } )
     }
 
@@ -94,38 +96,34 @@ class DataWebsocket extends EventEmitter {
    
 
     updateRoom( { roomId, type='join', params={} } ) {
-        console.log( 'updateRoom', roomId, type, params )
+        const { isTransaction, struct, variables } = rooms['rooms'][ roomId ]
+        const socketKey = isTransaction ? 'transaction' : 'main'
+        const socketIndex = isTransaction ? 1 : 0
 
-        if( this.#state['websocketsReady'].every( ( v ) => !v ) ) {
+        if( !this.#state['websocketsReady'][ socketIndex ] ) {
+            console.log( `.updateRoom():\tSocket "${socketKey}" Room "${roomId}" is waiting for connection` )
             this.#state['waiting'].push( { roomId, type, params } )
             return false
         }
 
-        const { isTransaction, struct, variables } = rooms['rooms'][ roomId ]
-        const room = variables
-            .reduce( ( acc, [ k, ] ) => {
-                acc = acc.replace( `{{${k}}}`, params[ k ] )
-                return acc
-            }, struct )
-
-        if( type === 'join' ) {
-            console.log( 'join', this.#state )
-            this.#state['subscribedRooms'].set( 
-                room, 
-                { roomId, params, 'status': 'waiting' } 
-            )
-        } else if( type === 'leave' ) {
-            this.#state['subscribedRooms'].delete( room )
-        } else {
-            throw new Error( 'Invalid type' )
-        }
-
-        const socketKey = isTransaction ? 'transaction' : 'main'
-        if( this.#sockets[ socketKey ] && 
-            this.#sockets[ socketKey ].readyState === WebSocket.OPEN 
-        ) {
+        try {
+            const room = variables
+                .reduce( ( acc, [ k, ] ) => {
+                    acc = acc.replace( `{{${k}}}`, params[ k ] )
+                    return acc
+                }, struct )
             const payload = { type, room }
             this.#sockets[ socketKey ].send( JSON.stringify( payload ) )
+    
+            if( type === 'join' ) {
+                const obj = { roomId, params, 'status': 'waiting', 'count': 0 }
+                this.#state['subscribedRooms'].set( room, obj )
+            } else if( type === 'leave' ) {
+                this.#state['subscribedRooms'].delete( room )
+            }
+        } catch( e ) {
+            console.error( 'Error updating room:', e )
+            return false
         }
 
         return true
@@ -171,14 +169,16 @@ class DataWebsocket extends EventEmitter {
 
     #setupSocketListeners( socket, type ) {
         socket.onopen = () => {
-            console.log( `Connected to ${type} WebSocket server` )
-            this.#state['reconnectAttempts'] = 0
-            this.#resubscribeToRooms()
+            console.log( `.connect():\tSocket "${type}" establish connection` )
+            // console.log( `Connected to ${type} WebSocket server` )
+            // this.#state['reconnectAttempts'] = 0
+            // this.#resubscribeToRooms()
             return true
         }
    
         socket.onclose = () => {
-            console.log( `Disconnected from ${type} WebSocket server`)
+            console.log( `.connect():\tSocket "${type}" disconnect` )
+            // console.log( `Disconnected from ${type} WebSocket server`)
             if( type === 'main' ) { this.#sockets['main'] = null }
             if( type === 'transaction' ) { this.#sockets['transaction'] = null }
             this.reconnect()
@@ -197,21 +197,20 @@ class DataWebsocket extends EventEmitter {
 
 
     #centralRouter( { message, type } ) {
-        console.log( 'message', message )
+        this.#sendEvent( { 'eventName': 'ready', 'data': { 'data': null } } )
         const { type: _type } = message
         switch( _type ) {
             case 'ping':
                 this.#pingRouter( { type } )
                 break
             case 'joined':
-                this.#joinedRouter( { message } )
+                this.#joinedRouter( { message, type } )
                 break
             case 'message':
-                // console.log( 'message' )
-                this.#messageRouter( { message } )
+                this.#messageRouter( { message, type } )
                 break
             default:
-                console.log( '>>>', message)
+                console.log( '>>>', message )
                 break
         }
 
@@ -223,10 +222,13 @@ class DataWebsocket extends EventEmitter {
         if( !Object.values( this.#state['websocketsReady'] ).every( ( v ) => v ) ) {
             const index = type === 'main' ? 0 : 1
             this.#state['websocketsReady'][ index ] = true
-            console.log( 'pingRouter', this.#state['websocketsReady'] )
+            console.log( `.connect():\tSocket "${type}" is ready` )
         }
 
-        if( this.#state['waiting'].length > 0 ) {
+        if( 
+            Object.values( this.#state['websocketsReady'] ).every( ( v ) => v ) &&
+            this.#state['waiting'].length > 0 
+        ) {
             this.#state['waiting']
                 .forEach( ( { roomId, type, params } ) => {
                     this.updateRoom( { roomId, type, params } )
@@ -238,28 +240,44 @@ class DataWebsocket extends EventEmitter {
     }
 
 
-    #joinedRouter( { message } ) {
-        const { type, room } = message
+    #joinedRouter( { message, type } ) {
+        const { room } = message
         const current = this.#state['subscribedRooms'].get( room )
-        if( !current ) { return false }
-        current.status = 'active'
+        if( !current ) { 
+            console.log( `Room not found: ${room}` )
+            return false 
+        }
+        const { roomId } = current
+        console.log( 'current', current )
+        current['status'] = 'active'
         this.#state['subscribedRooms'].set( room, current )
+        // this.#print[ roomId ][ room ]['status'] = 'active'
 
-        console.log( `Joined room: ${room}` )
+
+        console.log( `.updateRoom():\tSocket "${type}", Room "${room}" is active.` )
         return true
     }
 
 
-    #messageRouter( { message } ) {
+    #messageRouter( { message, type } ) {
         const { data, room } = message
-        console.log( 'messageRouter', message )
         const current = this.#state['subscribedRooms'].get( room )
-        console.log( 'current', current )
 
-        process.exit( 1 )
+        if( !current ) { 
+            console.log( `Room not found: ${room}` )
+            return false 
+        }
+        this.#state['subscribedRooms'].get( room ).count++
+        const { roomId } = current
+        if( !Object.keys( rooms['rooms'] ).includes( roomId ) ) {
+            console.log( `Room ID not found: ${roomId}` )
+            return false
+        }
+        this.#printStatus()
+        return true
     }
     
-
+/*
     #resubscribeToRooms() {
         if (
             this.#sockets['main'] &&
@@ -274,6 +292,32 @@ class DataWebsocket extends EventEmitter {
                 } )
         }
     }
+*/
+
+    #printStatus() {
+        const all = Array
+            .from( this.#state['subscribedRooms'].entries() )
+            .reduce( ( acc, [ room, value ] ) => {
+                const { count } = value
+                acc.push( [ room, count ] )
+                return acc
+            }, [] )
+        // console.log( '>>>', all )
+
+        return true
+    }
+
+
+    #sendEvent( { eventName, data } ) {
+        if( this.#state['useInternalEmitter'] ) {
+            this.emit( eventName, data )
+        } else {
+            this.#emitter.emit( eventName, data )
+        }
+
+        return true
+    }
+
 }
 
 
