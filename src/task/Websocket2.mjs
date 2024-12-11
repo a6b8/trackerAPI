@@ -55,6 +55,9 @@ class DataWebsocket extends EventEmitter {
 
 
     async connect( { wsUrl } ) {
+        const { messages, status } = this.#validation.connect( { wsUrl } )
+        if( !status ) { return { 'status': false, messages, 'data': null } }
+
         if( this.#sockets['main'] && this.#sockets['transaction'] ) { return false }
     
         try {
@@ -148,19 +151,20 @@ class DataWebsocket extends EventEmitter {
     }
 
 
-    addFilter( { funcName, func } ) {
-        this.#filters.set( funcName, func )
+    addFilter( { name, func } ) {
+        if( this.#filters.has( name ) ) { 
+            console.log( `Filter "${name}" already exists` )
+            return false 
+        }
+        this.#filters.set( name, func )
         return true
     }
 
 
-    addModifier( { funcName, func } ) {
-        this.#modifiers.set( funcName, func )
-        return true
-    }
 
 
-    addStrategy( { filters, modifiers } ) {
+
+    addStrategy( { filters=[], modifiers=[] } ) {
 
 
         return true

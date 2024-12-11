@@ -55,6 +55,12 @@ class Validation {
     } 
 
 
+    connect( { wsUrl } ) {
+        const { messages, status } = this.#validateConnect( { wsUrl } )
+        return { messages, status }
+    }
+
+
     #validateGetSwapQuote( params ) {
         const messages = []
 
@@ -175,6 +181,23 @@ class Validation {
                         }
                     }
                 } )
+        }
+
+        const status = messages.length === 0 ? true : false
+
+        return { messages, status }
+    }
+
+
+    #validateConnect( { wsUrl } ) {
+        const messages = []
+
+        if( !wsUrl ) {
+            messages.push( `wsUrl is undefined` )
+        } else if( typeof wsUrl !== 'string' ) {
+            messages.push( `wsUrl is not a string` )
+        } else if( !wsUrl.startsWith( 'ws://' ) && !wsUrl.startsWith( 'wss://' ) ) {
+            messages.push( `wsUrl is not a valid websocket url` )
         }
 
         const status = messages.length === 0 ? true : false
