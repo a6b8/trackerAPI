@@ -1,4 +1,5 @@
 import { endpoints } from '../data/endpoints.mjs'
+import { rooms } from '../data/rooms.mjs'
 import { swap } from '../data/swap.mjs'
 
 
@@ -46,6 +47,12 @@ class Validation {
         const { messages, status } = this.#validatePostSwap( { quote, privateKey, skipConfirmation } )
         return { messages, status }
     }
+
+
+    updateRoom( { roomId, type, params={} } ) {
+        const { message, status } = this.#validateUpdateRoom( { roomId, type, params } )
+        return { message, status }
+    } 
 
 
     #validateGetSwapQuote( params ) {
@@ -118,6 +125,56 @@ class Validation {
             messages.push( `skipConfirmation is undefined` )
         } else if( typeof skipConfirmation !== 'boolean' ) {
             messages.push( `skipConfirmation is not a boolean` )
+        }
+
+        const status = messages.length === 0 ? true : false
+
+        return { messages, status }
+    }
+
+
+    #validateUpdateRoom( { roomId, type, params } ) {
+        const messages = []
+
+        if( !roomId ) {
+            messages.push( `roomId is undefined` )
+        } else if( typeof roomId !== 'string' ) {
+            messages.push( `roomId is not a string` )
+        } else {
+            const validRooms = Object.keys( rooms['rooms'] )
+            if( !validRooms.includes( roomId ) ) {
+                const suggestion = this.#findClosestString( { input: roomId, keys: validRooms } )
+                messages.push( `roomId '${roomId}' is unknown. Did you mean '${suggestion}'?` )
+            }
+        }
+
+        if( !type ) {
+            messages.push( `type is undefined` )
+        } else if( typeof type !== 'string' ) {
+            messages.push( `type is not a string` )
+        } else if( type !== 'join' && type !== 'leave' ) {
+            messages.push( `type is not 'join' or 'leave'` )
+        }
+
+        if( messages.length !== 0 ) { 
+            return { messages, 'status': false } 
+        } else if( params === undefined ) {
+            messages.push( `Params is undefined` )
+        } else if( typeof params !== 'object' ) {
+            messages.push( `Params is not an object` )
+        } else {
+            const validParams = rooms['rooms'][ roomId ]['variables']
+            validParams
+                .forEach( ( [ key, type ] ) => {
+                    if( !params[ key ] ) {
+                        messages.push( `Missing parameter: ${key} (required)` )
+                    } else {
+                        const { regex, description } = rooms['validation'][ type ]
+                        if( !regex.test( params[ key ] ) ) {
+                            messages.push( `Invalid parameter: ${key}. ${description}` )
+                        }
+                    }
+                } )
         }
 
         const status = messages.length === 0 ? true : false
