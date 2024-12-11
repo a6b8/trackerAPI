@@ -89,6 +89,36 @@ const rooms = {
 			'regex': /^[1-9A-HJ-NP-Za-km-z]{32,44}$/,
 			'message': 'Input must be a valid Solana address in Base58 format, 32-44 characters long'
 		}
+	},
+	'default': {
+		'filters': {
+			'isPumpFun': {
+				'func': data => { return data['token']['createdOn'] === 'https://pump.fun' },
+				'description': 'Filter tokens created on pump.fun'
+			},
+			'hasSocialMedia': {
+				'func': data => { return data['risk']['risks'].find( a => a['name'] === 'No social media' ) === undefined },
+				'description': 'Filter tokens with no social media'
+			}
+		},
+		'modifiers': {
+			'essentialData': {
+				'func': data => {
+					const { name, mint, twitter, website } = data['token']
+					const pumpFun = `https://pump.fun/coin/${mint}`
+					const deployer = data['pools'][ 0 ]['deployer']
+					const result = { name, mint, twitter, website, pumpFun, deployer }
+					return result
+				},
+				'description': 'Extract essential data from token'
+			}
+		},
+		'strategies': {
+			'pumpFunTokens': {
+				'filters': [ 'isPumpFun', 'hasSocialMedia' ],
+				'modifiers': [ 'essentialData' ],
+				'description': 'Filter tokens created on pump.fun with social media'
+			}
 	}
 }
 
