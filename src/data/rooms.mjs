@@ -119,6 +119,7 @@ const rooms = {
 				'modifiers': [ 'essentialData' ],
 				'description': 'Filter tokens created on pump.fun with social media'
 			}
+		}
 	}
 }
 

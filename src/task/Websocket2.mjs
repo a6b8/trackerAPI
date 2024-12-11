@@ -12,7 +12,7 @@ class DataWebsocket extends EventEmitter {
     #filters
     #modifiers
     #validation
-
+    #default
 
     constructor( { wsUrl, emitter=null } ) {
         super()
@@ -31,6 +31,13 @@ class DataWebsocket extends EventEmitter {
             'waiting': [],
             'useInternalEmitter': ( emitter === null ) ? true : false
         }
+
+        this.#default = {
+            'filters': new Map( Object.entries( rooms['default']['filters'] ) ),
+            'modifiers': new Map( Object.entries( rooms['default']['modifiers'] ) ),
+            'strategies': new Map( Object.entries( rooms['default']['strategies'] ) )
+        }
+        console.log( '>>>', this.#default )
 
         this.#sockets = {
             'main': null,
@@ -118,13 +125,11 @@ class DataWebsocket extends EventEmitter {
         }
 
         try {
-console.log( 'str', struct )
             const room = variables
                 .reduce( ( acc, [ k, ] ) => {
                     acc = acc.replace( `{{${k}}}`, params[ k ] )
                     return acc
                 }, struct )
-console.log( 'room', room )
             const payload = { type, room }
             this.#sockets[ socketKey ].send( JSON.stringify( payload ) )
     
@@ -153,6 +158,15 @@ console.log( 'room', room )
         this.#modifiers.set( funcName, func )
         return true
     }
+
+
+    addStrategy( { filters, modifiers } ) {
+
+
+        return true
+    }
+
+
 
 
 /*
@@ -286,7 +300,6 @@ console.log( 'room', room )
 
     #messageRouter( { message, type } ) {
         const { data, room } = message
-console.log( message )
         const current = this.#state['subscribedRooms'].get( room )
 
         if( !current ) { 
