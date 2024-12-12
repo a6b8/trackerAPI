@@ -49,9 +49,9 @@ class Validation {
     }
 
 
-    updateRoom( { roomId, type, params={} } ) {
-        const { message, status } = this.#validateUpdateRoom( { roomId, type, params } )
-        return { message, status }
+    updateRoom( { roomId, type, params, strategy, strategies } ) {
+        const { messages, status } = this.#validateUpdateRoom( { roomId, type, params, strategy, strategies } )
+        return { messages, status }
     } 
 
 
@@ -139,7 +139,7 @@ class Validation {
     }
 
 
-    #validateUpdateRoom( { roomId, type, params } ) {
+    #validateUpdateRoom( { roomId, type, params, strategy, strategies } ) {
         const messages = []
 
         if( !roomId ) {
@@ -149,7 +149,7 @@ class Validation {
         } else {
             const validRooms = Object.keys( rooms['rooms'] )
             if( !validRooms.includes( roomId ) ) {
-                const suggestion = this.#findClosestString( { input: roomId, keys: validRooms } )
+                const suggestion = this.#findClosestString( { 'input': roomId, 'keys': validRooms } )
                 messages.push( `roomId '${roomId}' is unknown. Did you mean '${suggestion}'?` )
             }
         }
@@ -181,6 +181,15 @@ class Validation {
                         }
                     }
                 } )
+        }
+
+        if( strategy === null ) {} else if( strategy === undefined ) {
+            messages.push( `Strategy is undefined` )
+        } else if( typeof strategy !== 'string' ) {
+            messages.push( `Strategy is not a string` )
+        } else if( !strategies.includes( strategy ) ) {
+            const suggestion = this.#findClosestString( { 'input': strategy, 'keys': strategies } )
+            messages.push( `Strategy '${strategy}' is unknown. Did you mean '${suggestion}'?` )
         }
 
         const status = messages.length === 0 ? true : false

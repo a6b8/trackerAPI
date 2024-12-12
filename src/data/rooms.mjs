@@ -93,11 +93,11 @@ const rooms = {
 	'default': {
 		'filters': {
 			'isPumpFun': {
-				'func': data => { return data['token']['createdOn'] === 'https://pump.fun' },
+				'func':( data ) => { return data['token']['createdOn'] === 'https://pump.fun' },
 				'description': 'Filter tokens created on pump.fun'
 			},
 			'hasSocialMedia': {
-				'func': data => { return data['risk']['risks'].find( a => a['name'] === 'No social media' ) === undefined },
+				'func': ( data ) => { return data['risk']['risks'].find( a => a['name'] === 'No social media' ) === undefined },
 				'description': 'Filter tokens with no social media'
 			}
 		},
@@ -115,7 +115,7 @@ const rooms = {
 		},
 		'strategies': {
 			'pumpFunTokens': {
-				'filters': [ 'isPumpFun', 'hasSocialMedia' ],
+				'filters': [ 'isPumpFun' ],
 				'modifiers': [ 'essentialData' ],
 				'description': 'Filter tokens created on pump.fun with social media'
 			}

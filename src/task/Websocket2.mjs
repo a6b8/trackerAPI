@@ -37,7 +37,6 @@ class DataWebsocket extends EventEmitter {
             'modifiers': new Map( Object.entries( rooms['default']['modifiers'] ) ),
             'strategies': new Map( Object.entries( rooms['default']['strategies'] ) )
         }
-        console.log( '>>>', this.#default )
 
         this.#sockets = {
             'main': null,
@@ -113,8 +112,10 @@ class DataWebsocket extends EventEmitter {
     }
    
 
-    updateRoom( { roomId, type, params={}, filters=[], modifiers=[] } ) {
-        const { messages, status } = this.#validation.updateRoom( { roomId, type, params } )
+    updateRoom( { roomId, type, params={}, strategy=null } ) {
+        const strategies = [ ...this.#default['strategies'].keys() ]
+
+        const { messages, status } = this.#validation.updateRoom( { roomId, type, params, strategy, strategies } )
         if( !status ) { return { 'status': false, messages, 'data': null } }
 
         const { isTransaction, struct, variables } = rooms['rooms'][ roomId ]
@@ -123,7 +124,7 @@ class DataWebsocket extends EventEmitter {
 
         if( !this.#state['websocketsReady'][ socketIndex ] ) {
             console.log( `.updateRoom():\tSocket "${socketKey}" Room "${roomId}" is waiting for connection` )
-            this.#state['waiting'].push( { roomId, type, params, filters, modifiers } )
+            this.#state['waiting'].push( { roomId, type, params, strategy } )
             return false
         }
 
@@ -137,7 +138,7 @@ class DataWebsocket extends EventEmitter {
             this.#sockets[ socketKey ].send( JSON.stringify( payload ) )
     
             if( type === 'join' ) {
-                const obj = { roomId, params, 'status': 'waiting', 'count': 0, filters, modifiers }
+                const obj = { roomId, params, 'status': 'waiting', 'count': 0, strategy }
                 this.#state['subscribedRooms'].set( room, obj )
             } else if( type === 'leave' ) {
                 this.#state['subscribedRooms'].delete( room )
@@ -161,56 +162,12 @@ class DataWebsocket extends EventEmitter {
     }
 
 
-
-
-
     addStrategy( { filters=[], modifiers=[] } ) {
 
 
         return true
     }
 
-
-
-
-/*
-    joinRoom( room ) {
-      this.#state['subscribedRooms'].add( room )
-      const socket = room.includes( 'transaction' )
-        ? this.#sockets['transaction']
-        : this.#sockets['main']
-      if( socket && socket.readyState === WebSocket.OPEN ) {
-        socket.send( JSON.stringify( { type: 'join', room } ) )
-      }
-    }
-   
-
-    leaveRoom( room ) {
-      this.#state['subscribedRooms'].delete( room )
-      const socket = room.includes( 'transaction' )
-        ? this.#sockets['transaction']
-        : this.#sockets['main']
-      if( socket && socket.readyState === WebSocket.OPEN ) {
-        socket.send( JSON.stringify( { type: 'leave', room } ) )
-      }
-    }
-*/
-
-/*
-    on( room, listener ) {
-        this.#emitter.on( room, listener )
-    }
-   
-
-    off( room, listener ) {
-        this.#emitter.off( room, listener )
-    }
-   
-
-    getSocket() {
-        return this.#sockets['main']
-    }
-*/
 
     #setupSocketListeners( socket, type ) {
         socket.onopen = () => {
@@ -274,8 +231,8 @@ class DataWebsocket extends EventEmitter {
             this.#state['waiting'].length > 0 
         ) {
             this.#state['waiting']
-                .forEach( ( { roomId, type, params, filters, modifiers } ) => {
-                    this.updateRoom( { roomId, type, params, filters, modifiers } )
+                .forEach( ( { roomId, type, params, strategy } ) => {
+                    this.updateRoom( { roomId, type, params, strategy } )
                 } )
             this.#state['waiting'] = []
         }
@@ -311,10 +268,16 @@ class DataWebsocket extends EventEmitter {
             return false 
         }
         this.#state['subscribedRooms'].get( room ).count++
-        const { roomId, filters, modifiers } = current
+        const { roomId, strategy } = current
+        if( strategy === null ) {
+            this.#sendEvent( { 'eventName': roomId, data } )
+            return true
+        }
+
+        const { filters, modifiers } = this.#default['strategies'].get( strategy )
         const isFiltered = filters
             .map( ( funcName ) => {
-                const func = this.#filters.get( funcName )
+                const { func } = this.#default['filters'].get( funcName )
                 return func( data )
             } )
             .every( ( v ) => v )
@@ -322,7 +285,7 @@ class DataWebsocket extends EventEmitter {
 
         const result = modifiers
             .reduce( ( acc, funcName ) => {
-                const func = this.#modifiers.get( funcName )
+                const { func } = this.#default['modifiers'].get( funcName )
                 acc = func( acc )
                 return acc
             }, data )
