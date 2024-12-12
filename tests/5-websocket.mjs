@@ -10,27 +10,41 @@ const { wsUrl } = getEnv( {
 
 const ws = new DataWebsocket( { wsUrl } )
 
-ws.addStrategy( {
+const a = ws.addStrategy( {
     'name': 'newOne',
-    'filters': [ 'isPumpFun', /*'hasSocialMedia'*/ ],
-    'modifiers': [ 'essentialData' ]
+    'struct': {
+        'filters': {
+            'isPumpFun': null,
+            'newToken': {
+                'func': ( data ) => {
+                    return data['pools'][ 0 ]['openTime'] === 0 || data['pools'][ 0 ]['openTime'] === '0'
+                }
+            }
+        },
+        'modifiers': {
+            'essentialData': null
+        }
+    }
 } )
 
-const roomId = `graduatingTokens`
+
+const roomId = 'latestTokensPools'
 const t = ws.updateRoom( { 
-    roomId, //'priceUpdates', 
+    roomId,
     'type': 'join', 
     'params': { 'poolId': '9xxoUCtd9FASN8Xg6UttonrgZcbWfwmFTJoZovbwpump' },
-    'strategy': 'pumpFunTokens'
+    'strategy': 'newOne'
 } )
-ws.on( roomId, ( data ) => { console.log( 'Websocket inside:', JSON.stringify(data, null, 2 ) ) } )
+
+
+ws.on( roomId, ( data ) => { 
+    console.log( data ) 
+} )
 
 
 /*
-const roomId = `priceUpdates`
-const params = { 'poolId': '43ffDBrGRNRePsoVMaG6F3oHke7Rbse4ExYcQVjxpump'} 
-const t = ws.updateRoom( { roomId, 'type': 'join', params } )
-console.log( t )
-
-
+    const roomId = `priceUpdates`
+    const params = { 'poolId': '43ffDBrGRNRePsoVMaG6F3oHke7Rbse4ExYcQVjxpump'} 
+    const t = ws.updateRoom( { roomId, 'type': 'join', params } )
+    console.log( t )
 */

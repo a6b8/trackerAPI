@@ -61,6 +61,12 @@ class Validation {
     }
 
 
+    addStrategy( { name, struct, _default } ) {
+        const { messages, status } = this.#validateAddStrategy( { name, struct, _default } )
+        return { messages, status }
+    }
+
+
     #validateGetSwapQuote( params ) {
         const messages = []
 
@@ -209,6 +215,60 @@ class Validation {
             messages.push( `wsUrl is not a valid websocket url` )
         }
 
+        const status = messages.length === 0 ? true : false
+
+        return { messages, status }
+    }
+
+
+    #validateAddStrategy( { name, struct, _default } ) {
+        const messages = []
+
+        if( !name ) {
+            messages.push( `name is undefined` )
+        } else if( typeof name !== 'string' ) {
+            messages.push( `name is not a string` )
+        }
+
+        if( !struct ) {
+            messages.push( `struct is undefined` )
+        } else if( typeof struct !== 'object' ) {
+            messages.push( `struct is not an object` )
+        }
+
+        if( messages.length !== 0 ) { return { messages, 'status': false } }
+
+        if( Object.keys( struct ).length !== 2 ) {
+            messages.push( `Struct must have 2 keys: 'filters' and 'modifiers'` )
+        }
+
+        if( messages.length !== 0 ) { return { messages, 'status': false } }
+
+        const { filters, modifiers } = struct
+        const all = [ 
+            [ filters,   'filters'   ],
+            [ modifiers, 'modifiers' ]
+        ]
+            .forEach( ( [ obj, name ] ) => {
+                if( obj === undefined ) {
+                    messages.push( `Struct "${name}" is undefined.` )
+                } else if( typeof obj !== 'object' ) {
+                    messages.push( `Struct "${name}" is not an object.` )
+                }
+
+                const keys = [ ..._default[ name ].keys() ]
+                Object
+                    .entries( obj )
+                    .forEach( ( [ key, value ] ) => {
+                        if( value === null ) {
+                            if( !keys.includes( key ) ) {
+                                messages.push( `Struct "${name}" key "${key}" is not found in "default".` )
+                            }
+                        } else if( !Object.hasOwn( value, 'func' ) ) {
+                            messages.push( `Struct "${name}" key "${key}" is missing key "func". For a default func set value to "null".` )
+                        }
+                    } )
+            } )
         const status = messages.length === 0 ? true : false
 
         return { messages, status }

@@ -114,7 +114,6 @@ class DataWebsocket extends EventEmitter {
 
     updateRoom( { roomId, type, params={}, strategy=null } ) {
         const strategies = [ ...this.#default['strategies'].keys() ]
-
         const { messages, status } = this.#validation.updateRoom( { roomId, type, params, strategy, strategies } )
         if( !status ) { return { 'status': false, messages, 'data': null } }
 
@@ -123,7 +122,7 @@ class DataWebsocket extends EventEmitter {
         const socketIndex = isTransaction ? 1 : 0
 
         if( !this.#state['websocketsReady'][ socketIndex ] ) {
-            console.log( `.updateRoom():\tSocket "${socketKey}" Room "${roomId}" is waiting for connection` )
+            console.log( `.updateRoom()\t Socket "${socketKey}" Room "${roomId}" is waiting for connection` )
             this.#state['waiting'].push( { roomId, type, params, strategy } )
             return false
         }
@@ -152,26 +151,73 @@ class DataWebsocket extends EventEmitter {
     }
 
 
-    addFilter( { name, func } ) {
-        if( this.#filters.has( name ) ) { 
-            console.log( `Filter "${name}" already exists` )
-            return false 
+    addStrategy( { name, struct } ) {
+        const { messages, status } = this.#validation.addStrategy( { name, struct, '_default': this.#default } )
+        if( !status ) { return { 'status': false, messages, 'data': null } }
+
+        if( this.#default['strategies'].has( name ) ) {
+            console.log( `.addStrategy()\t Strategy "${name}" already exists` )
+            return false
         }
-        this.#filters.set( name, func )
+
+        Object
+            .entries( struct )
+            .forEach( ( [ key, values ] ) => {   
+                Object
+                    .entries( values )
+                    .forEach( ( [ k, v ] ) => {
+                        if( v === null ) { return true }
+                        if( this.#default[ key ].has( v ) ) {
+                            console.log( `.addStrategy()\t ${key} "${v}" not found` )
+                            return false
+                        }
+                        this.#default[ key ].set( k, v )
+                        return true
+                    } )
+            } )
+
+        const values = Object
+            .entries( struct )
+            .reduce( ( acc, [ k, v ], index ) => {
+                acc[ k ] = Object.keys( v )
+                return acc
+            }, {} )
+        this.#default['strategies'].set( name, values )
+
         return true
     }
 
 
-    addStrategy( { filters=[], modifiers=[] } ) {
-
+/*
+    #addFilter( { name, func } ) {
+        if( this.#filters.has( name ) ) { 
+            console.log( `.addFilter()\t Function "${name}" already exists` )
+            return false 
+        } else {
+            console.log( `.addFilter()\t Function "${name}" added` )
+            this.#filters.set( name, func )
+        }
 
         return true
     }
 
+
+    #addModifier( { name, func } ) {
+        if( this.#modifiers.has( name ) ) { 
+            console.log( `.addModifier()\t Function "${name}" already exists` )
+            return false 
+        } else {
+            console.log( `.addModifier()\t Function "${name}" added` )
+            this.#modifiers.set( name, func )
+        }
+
+        return true
+    }
+*/
 
     #setupSocketListeners( socket, type ) {
         socket.onopen = () => {
-            console.log( `.connect():\tSocket "${type}" establish connection` )
+            console.log( `.connect()\tSocket "${type}" establish connection` )
             // console.log( `Connected to ${type} WebSocket server` )
             // this.#state['reconnectAttempts'] = 0
             // this.#resubscribeToRooms()
@@ -179,7 +225,7 @@ class DataWebsocket extends EventEmitter {
         }
    
         socket.onclose = () => {
-            console.log( `.connect():\tSocket "${type}" disconnect` )
+            console.log( `.connect()\tSocket "${type}" disconnect` )
             // console.log( `Disconnected from ${type} WebSocket server`)
             if( type === 'main' ) { this.#sockets['main'] = null }
             if( type === 'transaction' ) { this.#sockets['transaction'] = null }
@@ -223,7 +269,7 @@ class DataWebsocket extends EventEmitter {
         if( !Object.values( this.#state['websocketsReady'] ).every( ( v ) => v ) ) {
             const index = type === 'main' ? 0 : 1
             this.#state['websocketsReady'][ index ] = true
-            console.log( `.connect():\tSocket "${type}" is ready` )
+            console.log( `.connect()\tSocket "${type}" is ready` )
         }
 
         if( 
@@ -254,7 +300,7 @@ class DataWebsocket extends EventEmitter {
         // this.#print[ roomId ][ room ]['status'] = 'active'
 
 
-        console.log( `.updateRoom():\tSocket "${type}", Room "${room}" is active.` )
+        console.log( `.updateRoom()\tSocket "${type}", Room "${room}" is active.` )
         return true
     }
 
@@ -276,16 +322,16 @@ class DataWebsocket extends EventEmitter {
 
         const { filters, modifiers } = this.#default['strategies'].get( strategy )
         const isFiltered = filters
-            .map( ( funcName ) => {
-                const { func } = this.#default['filters'].get( funcName )
+            .map( ( name ) => {
+                const { func } = this.#default['filters'].get( name )
                 return func( data )
             } )
             .every( ( v ) => v )
         if( !isFiltered ) { return false }
 
         const result = modifiers
-            .reduce( ( acc, funcName ) => {
-                const { func } = this.#default['modifiers'].get( funcName )
+            .reduce( ( acc, name ) => {
+                const { func } = this.#default['modifiers'].get( name )
                 acc = func( acc )
                 return acc
             }, data )
