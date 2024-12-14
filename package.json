@@ -1,8 +1,8 @@
 {
-  "name": "solanatracker",
-  "version": "1.0.0",
+  "name": "Tracker API",
+  "version": "0.1.1",
   "description": "",
-  "main": "index.js",
+  "main": "./src/Interface.mjs",
   "directories": {
     "test": "tests"
   },

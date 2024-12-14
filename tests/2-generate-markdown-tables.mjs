@@ -1,4 +1,4 @@
-import { Data, examples } from '../src/index.mjs'
+import { Data, examples } from '../src/Interface.mjs'
 import { endpoints } from '../src/data/endpoints.mjs'
 import { paramMetadata } from '../src/data/paramMetadata.mjs'
 import { swap } from '../src/data/swap.mjs'

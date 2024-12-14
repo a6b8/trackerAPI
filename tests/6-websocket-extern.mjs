@@ -1,4 +1,4 @@
-import { TrackerAPI } from '../src/index.mjs'
+import { TrackerAPI } from '../src/Interface.mjs'
 import { getEnv } from './helpers/utils.mjs'
 
 
@@ -52,7 +52,7 @@ const roomId = 'latestTokensPools'
 const t = ws.updateWebsocketRoom( { 
     roomId,
     'type': 'join', 
-    'params': { 'poolId': '9xxoUCtd9FASN8Xg6UttonrgZcbWfwmFTJoZovbwpump' },
+    //'params': { 'poolId': '9xxoUCtd9FASN8Xg6UttonrgZcbWfwmFTJoZovbwpump' },
     'strategy': 'newOne'
 } )
 
@@ -69,13 +69,20 @@ ws.on( roomId, ( data ) => {
         const t = ws.updateWebsocketRoom( { roomId, 'type': 'leave' } )
         count = 0
         const { mint, name } = data
-        watchlist[ mint ] = { name, 'transactions': 0, 'price': { start: null, 'current': null } }
+        watchlist[ mint ] = { name, 'transactions': [ 0, 0 ], 'price': { start: null, 'current': null } }
 
         ws.updateWebsocketRoom( {
             'roomId': 'transactions', // 'priceUpdates'
             'type': 'join',
             'params': { 'tokenAddress': mint },
             'strategy': 'minimalTransactionInformation'
+        } )
+
+        ws.updateWebsocketRoom( {
+            'roomId': 'priceUpdates', // 'priceUpdates'
+            'type': 'join',
+            'params': { 'poolId': mint },
+            // 'strategy': 'minimalTransactionInformation'
         } )
         console.log( t )
     }
@@ -87,6 +94,11 @@ ws.on( 'transactions', ( data ) => {
     console.log( data )
 } )
 
+
+ws.on( 'priceUpdates', ( data ) => { 
+    // console.log( JSON.stringify( data, null, 2 ) )
+    console.log( data )
+} )
 
 
 /*

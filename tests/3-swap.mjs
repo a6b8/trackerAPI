@@ -1,4 +1,4 @@
-import { TrackerAPI } from '../src/index.mjs'
+import { TrackerAPI } from '../src/Interface.mjs'
 import { getEnv } from './helpers/utils.mjs'
 
 
