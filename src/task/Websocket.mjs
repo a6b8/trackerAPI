@@ -1,172 +1,361 @@
-import EventEmitter from 'eventemitter3'
+import { Validation } from './Validation.mjs'
+import EventEmitter from 'events'
 import WebSocket from 'ws'
+import { rooms } from '../data/rooms.mjs'
+import { config } from '../data/config.mjs'
 
-class DataWebsocket {
-    #socket
+
+class TrackerWebsocket extends EventEmitter {
+    #config
+    #state
+    #sockets
+    #emitter
+    #validation
+    #default
 
 
-    constructor( { wsUrl } ) {
-        this.wsUrl = wsUrl
-        this.#socket = null
-        this.transactionSocket = null
-        this.reconnectAttempts = 0
-        this.reconnectDelay = 2500
-        this.reconnectDelayMax = 4500
-        this.randomizationFactor = 0.5
-        this.emitter = new EventEmitter()
-        this.subscribedRooms = new Set()
-        this.transactions = new Set()
-    
-        this.connect()
-    
-/*
-        if( typeof window !== 'undefined' ) {
-            window.addEventListener( 'beforeunload', this.disconnect.bind( this ) )
+    constructor( { wsUrl, emitter=null } ) {
+        super()
+        this.#config = config
+
+        this.#state = {
+            wsUrl,
+            'reconnectAttempts': 0,
+            'subscribedRooms': new Map(),
+            'transactions': new Set(),
+            'websocketsReady': [ false, false ],
+            'waiting': [],
+            'useInternalEmitter': ( emitter === null ) ? true : false
         }
-*/
+
+        this.#default = {
+            'filters': new Map( Object.entries( rooms['default']['filters'] ) ),
+            'modifiers': new Map( Object.entries( rooms['default']['modifiers'] ) ),
+            'strategies': new Map( Object.entries( rooms['default']['strategies'] ) )
+        }
+
+        this.#sockets = {
+            'main': null,
+            'transaction': null
+        }
+
+        //emitter.emit( 'TEST', 'A2')
+        this.#emitter = emitter
+        //this.#emitter.emit( 'TEST', 'A3')
+        this.#validation = new Validation()
+    }
+
+
+    connect() {
+        const { wsUrl } = this.#state
+        const { messages, status } = this.#validation.connect( { wsUrl } )
+        if( !status ) { return { status, messages, 'data': null } }
+
+        if( this.#sockets['main'] && this.#sockets['transaction'] ) { return false }
+    
+        try {
+            this.#sockets['main'] = new WebSocket( wsUrl )
+            this.#sockets['transaction'] = new WebSocket( wsUrl )
+    
+            this.#setupSocketListeners( this.#sockets['main'], 'main' )
+            this.#setupSocketListeners( this.#sockets['transaction'], 'transaction' )
+        } catch( e ) {
+            messages.push( 'Error connecting to WebSocket' )
+            console.error( messages.at( -1 ), e )
+            this.reconnect()
+        }
+
+        return { 'status': true, messages, 'data': { wsUrl } }
+    }
+   
+
+    disconnect() {
+        if( this.#sockets['main'] ) {
+            this.#sockets['main'].close()
+            this.#sockets['main'] = null
+        }
+        if( this.#sockets['transaction'] ) {
+            this.#sockets['transaction'].close()
+            this.#sockets['transaction'] = null
+        }
+
+        this.#state['subscribedRooms'].clear()
+        this.#state['transactions'].clear()
+
+        return true
+    }
+
+
+    reconnect() {
+        console.log( 'Reconnecting to WebSocket server' )
+        const { reconnectAttempts, wsUrl } = this.#state
+        const { reconnectDelay, reconnectDelayMax, randomizationFactor } = this.#config['websocket']
+
+        const delay = Math.min(
+            reconnectDelay * Math.pow( 2, reconnectAttempts ),
+            reconnectDelayMax
+        )
+        const jitter = delay * randomizationFactor
+        const _reconnectDelay = delay + Math.random() * jitter
+    
+        setTimeout( () => {
+            this.#state['reconnectAttempts']++
+            this.connect( { wsUrl } )
+        }, _reconnectDelay )
 
         return true
     }
    
-    async connect() {
-        if( this.#socket && this.transactionSocket ) { return false }
-    
+
+    updateRoom( { roomId, type, params={}, strategy=null } ) {
+        const strategies = [ ...this.#default['strategies'].keys() ]
+        const { messages, status } = this.#validation.updateRoom( { roomId, type, params, strategy, strategies } )
+        if( !status ) { return { 'status': false, messages, 'data': null } }
+
+        const { isTransaction, struct, variables } = rooms['rooms'][ roomId ]
+        const socketKey = isTransaction ? 'transaction' : 'main'
+        const socketIndex = isTransaction ? 1 : 0
+
+        if( !this.#state['websocketsReady'][ socketIndex ] ) {
+            console.log( `.updateRoom()\t Socket "${socketKey}" Room "${roomId}" is waiting for connection` )
+            this.#state['waiting'].push( { roomId, type, params, strategy } )
+            return { 'status': true, messages, 'data': null }
+        }
+
         try {
-            this.#socket = new WebSocket( this.wsUrl )
-            this.transactionSocket = new WebSocket( this.wsUrl )
+            const room = variables
+                .reduce( ( acc, [ k, ] ) => {
+                    acc = acc.replace( `{{${k}}}`, params[ k ] )
+                    return acc
+                }, struct )
+            const payload = { type, room }
+            this.#sockets[ socketKey ].send( JSON.stringify( payload ) )
     
-            this.setupSocketListeners( this.#socket, 'main' )
-            this.setupSocketListeners( this.transactionSocket, 'transaction' )
+            if( type === 'join' ) {
+                const obj = { roomId, params, 'status': 'waiting', 'count': 0, strategy }
+                this.#state['subscribedRooms'].set( room, obj )
+            } else if( type === 'leave' ) {
+                this.#state['subscribedRooms'].delete( room )
+            }
         } catch( e ) {
-            console.error( 'Error connecting to WebSocket:', e )
-            this.reconnect()
+            console.error( 'Error updating room:', e )
+            return { 'status': false, messages: [ 'Error updating room' ], 'data': null }
         }
+
+        return { status, messages, 'data': null }
+    }
+
+
+    addStrategy( { name, filters={}, modifiers={} } ) {
+        const { messages, status } = this.#validation.addStrategy( { name, filters, modifiers, '_default': this.#default } )
+        if( !status ) { return { status, messages, 'data': null } }
+
+        if( this.#default['strategies'].has( name ) ) {
+            console.log( `.addStrategy()\t Strategy "${name}" already exists` )
+            return false
         }
-   
-    setupSocketListeners( socket, type ) {
+
+        const keys =  [
+            [ 'filters', filters ],
+            [ 'modifiers', modifiers ]
+        ]
+
+        keys
+            .forEach( ( [ key, values ] ) => {   
+                Object
+                    .entries( values )
+                    .forEach( ( [ k, v ] ) => {
+                        if( v === null ) { return true }
+                        if( this.#default[ key ].has( v ) ) {
+                            console.log( `.addStrategy()\t ${key} "${v}" not found` )
+                            return false
+                        }
+                        this.#default[ key ].set( k, v )
+                        return true
+                    } )
+            } )
+
+        const values = keys
+            .reduce( ( acc, [ k, v ], index ) => {
+                acc[ k ] = Object.keys( v )
+                return acc
+            }, {} )
+        this.#default['strategies'].set( name, values )
+
+        return { status, messages, 'data': null }
+    }
+
+
+    #setupSocketListeners( socket, type ) {
         socket.onopen = () => {
-            console.log( `Connected to ${type} WebSocket server` )
-            this.reconnectAttempts = 0
-            this.resubscribeToRooms()
+            console.log( `.connect()\tSocket "${type}" establish connection` )
+            // console.log( `Connected to ${type} WebSocket server` )
+            // this.#state['reconnectAttempts'] = 0
+            // this.#resubscribeToRooms()
             return true
         }
    
         socket.onclose = () => {
-            console.log( `Disconnected from ${type} WebSocket server`)
-            if( type === 'main' ) { this.#socket = null }
-            if( type === 'transaction' ) { this.transactionSocket = null }
+            console.log( `.connect()\tSocket "${type}" disconnect` )
+            // console.log( `Disconnected from ${type} WebSocket server`)
+            if( type === 'main' ) { this.#sockets['main'] = null }
+            if( type === 'transaction' ) { this.#sockets['transaction'] = null }
             this.reconnect()
             return false
         }
    
         socket.onmessage = ( event ) => {
             try {
-                const message = JSON.parse(event.data);
-            if( message.type === 'message' ) {
-                if( message.data?.tx && this.transactions.has( message.data.tx ) ) {
-                    return true
-                } else if( message.data?.tx ) {
-                    this.transactions.add(message.data.tx);
-                }
-                if( message.room.includes( 'price:' ) ) {
-                    this.emitter.emit( `price-by-token:${message.data.token}`, message.data )
-                }
-                this.emitter.emit(message.room, message.data);
-            }
+                const message = JSON.parse( event.data )
+                this.#centralRouter( { message, type } )
             } catch( error ) {
-                console.error("Error processing message:", error);
+                console.error( 'Error processing message:', error )
             }
         }
     }
 
 
-    disconnect() {
-        if (this.#socket) {
-            this.#socket.close()
-            this.#socket = null
+    #centralRouter( { message, type } ) {
+        const { type: _type } = message
+        switch( _type ) {
+            case 'ping':
+                this.#pingRouter( { type } )
+                break
+            case 'joined':
+                this.#joinedRouter( { message, type } )
+                break
+            case 'left':
+                break
+            case 'message':
+                this.#messageRouter( { message, type } )
+                break
+            default:
+                console.log( '>>>', message )
+                break
         }
-        if (this.transactionSocket) {
-            this.transactionSocket.close()
-            this.transactionSocket = null
+
+        return true
+    }
+
+
+    #pingRouter( { type } ) {
+        if( !Object.values( this.#state['websocketsReady'] ).every( ( v ) => v ) ) {
+            const index = type === 'main' ? 0 : 1
+            this.#state['websocketsReady'][ index ] = true
+            console.log( `.connect()\tSocket "${type}" is ready` )
         }
 
-        this.subscribedRooms.clear()
-        this.transactions.clear()
-    }
-
-
-    reconnect() {
-        console.log( 'Reconnecting to WebSocket server' )
-        const delay = Math.min(
-            this.reconnectDelay * Math.pow( 2, this.reconnectAttempts ),
-            this.reconnectDelayMax
-        );
-        const jitter = delay * this.randomizationFactor
-        const reconnectDelay = delay + Math.random() * jitter
-    
-        setTimeout( () => {
-            this.reconnectAttempts++
-            this.connect()
-        }, reconnectDelay )
-    }
-   
-
-    joinRoom( room ) {
-      this.subscribedRooms.add( room )
-      const socket = room.includes( 'transaction' )
-        ? this.transactionSocket
-        : this.#socket
-      if( socket && socket.readyState === WebSocket.OPEN ) {
-        socket.send( JSON.stringify( { type: 'join', room } ) )
-      }
-    }
-   
-
-    leaveRoom( room ) {
-      this.subscribedRooms.delete( room )
-      const socket = room.includes( 'transaction' )
-        ? this.transactionSocket
-        : this.#socket
-      if( socket && socket.readyState === WebSocket.OPEN ) {
-        socket.send( JSON.stringify( { type: 'leave', room } ) )
-      }
-    }
-
-
-    on( room, listener ) {
-        this.emitter.on( room, listener )
-    }
-   
-
-    off( room, listener ) {
-        this.emitter.off( room, listener )
-    }
-   
-
-    getSocket() {
-        return this.#socket
-    }
-   
-
-    resubscribeToRooms() {
-        if (
-            this.#socket &&
-            this.#socket.readyState === WebSocket.OPEN &&
-            this.transactionSocket &&
-            this.transactionSocket.readyState === WebSocket.OPEN
+        if( 
+            Object.values( this.#state['websocketsReady'] ).every( ( v ) => v ) &&
+            this.#state['waiting'].length > 0 
         ) {
-            for( const room of this.subscribedRooms ) {
-            const socket = room.includes( 'transaction' )
-                ? this.transactionSocket
-                : this.#socket;
-            socket.send( JSON.stringify( { type: 'join', room } ) )
-            }
+            this.#state['waiting']
+                .forEach( ( { roomId, type, params, strategy } ) => {
+                    this.updateRoom( { roomId, type, params, strategy } )
+                } )
+            this.#state['waiting'] = []
+        }
+
+        return true
+    }
+
+
+    #joinedRouter( { message, type } ) {
+        const { room } = message
+        const current = this.#state['subscribedRooms'].get( room )
+        if( !current ) { 
+            console.log( `Room not found: ${room} 2` )
+            return false 
+        }
+        const { roomId } = current
+        current['status'] = 'active'
+        this.#state['subscribedRooms'].set( room, current )
+        // this.#print[ roomId ][ room ]['status'] = 'active'
+
+
+        console.log( `.updateRoom()\tSocket "${type}", Room "${room}" is active.` )
+        return true
+    }
+
+
+    #messageRouter( { message, type } ) {
+        const { data, room } = message
+        const current = this.#state['subscribedRooms'].get( room )
+
+        if( !current ) { 
+            console.log( `Room not found: ${room} 1` )
+            return false 
+        }
+        this.#state['subscribedRooms'].get( room ).count++
+        const { roomId, strategy } = current
+        if( strategy === null ) {
+            this.#sendEvent( { 'eventName': roomId, data } )
+            return true
+        }
+
+        const { filters, modifiers } = this.#default['strategies'].get( strategy )
+        const isFiltered = filters
+            .map( ( name ) => {
+                const { func } = this.#default['filters'].get( name )
+                return func( data )
+            } )
+            .every( ( v ) => v )
+        if( !isFiltered ) { return false }
+
+        const result = modifiers
+            .reduce( ( acc, name ) => {
+                const { func } = this.#default['modifiers'].get( name )
+                acc = func( acc )
+                return acc
+            }, data )
+        this.#sendEvent( { 'eventName': roomId, 'data': result } )
+        
+        // this.#printStatus()
+        return true
+    }
+    
+/*
+    #resubscribeToRooms() {
+        if (
+            this.#sockets['main'] &&
+            this.#sockets['main'].readyState === WebSocket.OPEN &&
+            this.#sockets['transaction'] &&
+            this.#sockets['transaction'].readyState === WebSocket.OPEN
+        ) {
+            this.#state['subscribedRooms']
+                .entries( ( [ room, value ] ) => { 
+                    const { roomId, params } = value
+                    this.updateRoom( { roomId, type: 'join', params } ) 
+                } )
         }
     }
+*/
+
+    #printStatus() {
+        const all = Array
+            .from( this.#state['subscribedRooms'].entries() )
+            .reduce( ( acc, [ room, value ] ) => {
+                const { count } = value
+                acc.push( [ room, count ] )
+                return acc
+            }, [] )
+        // console.log( '>>>', all )
+
+        return true
+    }
+
+
+    #sendEvent( { eventName, data } ) {
+        if( this.#state['useInternalEmitter'] ) {
+            this.emit( eventName, data )
+        } else {
+            this.#emitter( eventName, data )
+        }
+
+        return true
+    }
+
 }
 
 
-export { DataWebsocket }
-
-
-
+export { TrackerWebsocket }

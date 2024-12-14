@@ -61,8 +61,8 @@ class Validation {
     }
 
 
-    addStrategy( { name, struct, _default } ) {
-        const { messages, status } = this.#validateAddStrategy( { name, struct, _default } )
+    addStrategy( { name, filters, modifiers, _default } ) {
+        const { messages, status } = this.#validateAddStrategy( { name, filters, modifiers, _default } )
         return { messages, status }
     }
 
@@ -221,7 +221,7 @@ class Validation {
     }
 
 
-    #validateAddStrategy( { name, struct, _default } ) {
+    #validateAddStrategy( { name, filters, modifiers, _default } ) {
         const messages = []
 
         if( !name ) {
@@ -230,26 +230,25 @@ class Validation {
             messages.push( `name is not a string` )
         }
 
-        if( !struct ) {
-            messages.push( `struct is undefined` )
-        } else if( typeof struct !== 'object' ) {
-            messages.push( `struct is not an object` )
-        }
-
-        if( messages.length !== 0 ) { return { messages, 'status': false } }
-
-        if( Object.keys( struct ).length !== 2 ) {
-            messages.push( `Struct must have 2 keys: 'filters' and 'modifiers'` )
-        }
-
-        if( messages.length !== 0 ) { return { messages, 'status': false } }
-
-        const { filters, modifiers } = struct
-        const all = [ 
-            [ filters,   'filters'   ],
-            [ modifiers, 'modifiers' ]
+        const keys = [ 
+            [ 'filters', filters ],
+            [ 'modifiers', modifiers ]
         ]
-            .forEach( ( [ obj, name ] ) => {
+
+        keys
+            .forEach( ( [ key, obj ] ) => {
+                if( !obj ) {
+                    messages.push( `Key "${key}" is undefined` )
+                } else if( typeof obj !== 'object' ) {
+                    messages.push( `Key "${key}" is not an object` )
+                }
+            } )
+
+
+        if( messages.length !== 0 ) { return { messages, 'status': false } }
+
+        const all = keys
+            .forEach( ( [ name, obj ] ) => {
                 if( obj === undefined ) {
                     messages.push( `Struct "${name}" is undefined.` )
                 } else if( typeof obj !== 'object' ) {

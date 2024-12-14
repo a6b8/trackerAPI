@@ -1,4 +1,4 @@
-import { DataWebsocket } from '../src/task/Websocket2.mjs'
+import { DataWebsocket } from '../src/task/Websocket.mjs'
 import { getEnv } from './helpers/utils.mjs'
 
 

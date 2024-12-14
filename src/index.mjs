@@ -1,5 +1,8 @@
 import { Data } from './task/Data.mjs'
 import { Swap } from './task/Swap.mjs'
+import { TrackerWebsocket } from './task/Websocket.mjs'
+
+
 import { endpoints } from './data/endpoints.mjs '
 
 import EventEmitter from 'events'
@@ -17,15 +20,18 @@ class TrackerAPI extends EventEmitter {
     #state
     #data
     #swap
+    #websocket
 
 
-    constructor( { apiKey, nodeUrl } ) {
+    constructor( { apiKey, nodeUrl, wsUrl, strictMode=true } ) {
         super()
 
         this.#state = {
             'id': -1,
             apiKey,
-            nodeUrl
+            nodeUrl,
+            wsUrl,
+            strictMode
         }
 
         if( apiKey !== undefined ) {
@@ -33,6 +39,11 @@ class TrackerAPI extends EventEmitter {
         }
         if( nodeUrl !== undefined ) { 
             this.#swap = new Swap( { nodeUrl } ) 
+        }
+
+        if( wsUrl !== undefined ) {
+            this.emit( 'TEST', 'A1')
+            this.#websocket = new TrackerWebsocket( { wsUrl, 'emitter': this.emit.bind( this ) } )
         }
     }
 
@@ -93,6 +104,30 @@ class TrackerAPI extends EventEmitter {
     }
 
 
+    connectWebsocket() {
+        this.#validateModule( { 'key': 'websocket' } )
+        const { status, messages, data } = this.#websocket.connect()
+        this.#strictMode( { status, messages, data } )
+        return true
+    }
+
+
+    updateWebsocketRoom( { roomId, type, params={}, strategy=null } ) {
+        this.#validateModule( { 'key': 'websocket' } )
+        const { status, messages, data } = this.#websocket.updateRoom( { roomId, type, params, strategy } )
+        this.#strictMode( { status, messages, data } )
+        return data
+    }
+
+
+    addWebsocketStrategy( { name, filters={}, modifiers={} } ) {
+        this.#validateModule( { 'key': 'websocket' } )
+        const { status, messages, data } = this.#websocket.addStrategy( { name, filters, modifiers } )
+        this.#strictMode( { status, messages, data } )
+        return { status, messages, data }
+    }
+
+
     health() {
         return true
     }
@@ -114,14 +149,24 @@ class TrackerAPI extends EventEmitter {
 
     #validateModule( { key } ) {
         const [ , value, initKey ] = [
-            [ 'data', this.#data, 'apiKey' ],
-            [ 'swap', this.#swap, 'nodeUrl' ]
+            [ 'data',      this.#data,      'apiKey'  ],
+            [ 'swap',      this.#swap,      'nodeUrl' ],
+            [ 'websocket', this.#websocket, 'wsUrl'   ]
         ]
             .find( ( [ k, ] ) => k === key )
 
         if( value === undefined ) {
             throw new Error( `Key ${initKey} is not defined` )
         } 
+
+        return true
+    }
+
+
+    #strictMode( { status, messages, data } ) {
+        if( this.#state['strictMode'] && !status ) {
+            throw new Error( messages.join( '\n' ) )
+        }
 
         return true
     }
