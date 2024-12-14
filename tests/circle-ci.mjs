@@ -1,4 +1,4 @@
-import { TrackerAPI } from '../src/index.mjs'
+import { TrackerAPI } from '../src/Interface.mjs'
  
 const apiKey = '<<API_KEY>>'
 const st = new TrackerAPI( { apiKey } )
