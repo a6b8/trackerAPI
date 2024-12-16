@@ -51,7 +51,7 @@ const a = [
 const roomId = 'latestTokensPools'
 const t = ws.updateWebsocketRoom( { 
     roomId,
-    'type': 'join', 
+    'cmd': 'join', 
     //'params': { 'poolId': '9xxoUCtd9FASN8Xg6UttonrgZcbWfwmFTJoZovbwpump' },
     'strategy': 'newOne'
 } )
@@ -66,21 +66,21 @@ ws.on( roomId, ( data ) => {
 
     count += 1
     if( count === 1 ) {
-        const t = ws.updateWebsocketRoom( { roomId, 'type': 'leave' } )
+        const t = ws.updateWebsocketRoom( { roomId, 'cmd': 'leave' } )
         count = 0
         const { mint, name } = data
         watchlist[ mint ] = { name, 'transactions': [ 0, 0 ], 'price': { start: null, 'current': null } }
 
         ws.updateWebsocketRoom( {
             'roomId': 'transactions', // 'priceUpdates'
-            'type': 'join',
+            'cmd': 'join',
             'params': { 'tokenAddress': mint },
             'strategy': 'minimalTransactionInformation'
         } )
 
         ws.updateWebsocketRoom( {
             'roomId': 'priceUpdates', // 'priceUpdates'
-            'type': 'join',
+            'cmd': 'join',
             'params': { 'poolId': mint },
             // 'strategy': 'minimalTransactionInformation'
         } )
@@ -104,6 +104,6 @@ ws.on( 'priceUpdates', ( data ) => {
 /*
     const roomId = `priceUpdates`
     const params = { 'poolId': '43ffDBrGRNRePsoVMaG6F3oHke7Rbse4ExYcQVjxpump'} 
-    const t = ws.updateRoom( { roomId, 'type': 'join', params } )
+    const t = ws.updateRoom( { roomId, 'cmd': 'join', params } )
     console.log( t )
 */

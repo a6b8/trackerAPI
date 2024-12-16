@@ -4,7 +4,8 @@ const config = {
     'websocket': { 
         'reconnectDelay': 2500,
         'reconnectDelayMax': 4500,
-        'randomizationFactor': 0.5
+        'randomizationFactor': 0.5,
+        'socketNames': [ 'main', 'transaction' ]
     }
 }
 

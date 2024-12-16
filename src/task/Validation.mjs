@@ -49,8 +49,8 @@ class Validation {
     }
 
 
-    updateRoom( { roomId, type, params, strategy, strategies } ) {
-        const { messages, status } = this.#validateUpdateRoom( { roomId, type, params, strategy, strategies } )
+    updateRoom( { roomId, cmd, params, strategy, strategies } ) {
+        const { messages, status } = this.#validateUpdateRoom( { roomId, cmd, params, strategy, strategies } )
         return { messages, status }
     } 
 
@@ -145,7 +145,7 @@ class Validation {
     }
 
 
-    #validateUpdateRoom( { roomId, type, params, strategy, strategies } ) {
+    #validateUpdateRoom( { roomId, cmd, params, strategy, strategies } ) {
         const messages = []
 
         if( !roomId ) {
@@ -160,11 +160,11 @@ class Validation {
             }
         }
 
-        if( !type ) {
+        if( !cmd ) {
             messages.push( `type is undefined` )
-        } else if( typeof type !== 'string' ) {
+        } else if( typeof cmd !== 'string' ) {
             messages.push( `type is not a string` )
-        } else if( type !== 'join' && type !== 'leave' ) {
+        } else if( cmd !== 'join' && cmd !== 'leave' ) {
             messages.push( `type is not 'join' or 'leave'` )
         }
 

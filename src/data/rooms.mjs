@@ -1,19 +1,19 @@
 const rooms = {
 	'rooms': {
 		'latestTokensPools': {
-			'isTransaction': false,
+			'socketName': 'main',
 			'struct': 'latest',
 			'variables': []
 		},
 		'poolChanges': {
-			'isTransaction': false,
+			'socketName': 'main',
 			'struct': 'pool:{{poolId}}',
 			'variables': [
 				['poolId', 'string']
 			]
 		},
 		'pairTransactions': {
-			'isTransaction': true,
+			'socketName': 'transaction',
 			'struct': 'transaction:{{tokenAddress}}:{{poolId}}',
 			'variables': [
 				['tokenAddress', 'solanaAddress'],
@@ -21,14 +21,14 @@ const rooms = {
 			]
 		},
 		'transactions': {
-			'isTransaction': true,
+			'socketName': 'transaction',
 			'struct': 'transaction:{{tokenAddress}}',
 			'variables': [
 				['tokenAddress', 'solanaAddress']
 			]
 		},
 		'pairAndWalletTransactions': {
-			'isTransaction': true,
+			'socketName': 'transaction',
 			'struct': 'transaction:{{tokenAddress}}:{{poolId}}:{{walletAddress}}',
 			'variables': [
 				['tokenAddress', 'solanaAddress'],
@@ -37,33 +37,33 @@ const rooms = {
 			]
 		},
 		'priceUpdates': {
-			'isTransaction': false,
+			'socketName': 'main',
 			'struct': 'price:{{poolId}}',
 			'variables': [
 				['poolId', 'string']
 			]
 		},
 		'priceByToken': {
-			'isTransaction': false,
+			'socketName': 'main',
 			'struct': 'price-by-token:{{tokenId}}',
 			'variables': [
 				['tokenId', 'string']
 			]
 		},
 		'walletTransactions': {
-			'isTransaction': false,
+			'socketName': 'main',
 			'struct': 'wallet:{{walletAddress}}',
 			'variables': [
 				['walletAddress', 'solanaAddress']
 			]
 		},
 		'graduatingTokens': {
-			'isTransaction': false,
+			'socketName': 'main',
 			'struct': 'graduating',
 			'variables': []
 		},
 		'graduatingTokensWithCap': {
-			'isTransaction': false,
+			'socketName': 'main',
 			'struct': 'graduating:{{token}}:{{marketCap}}',
 			'variables': [
 				['token', 'string'],
@@ -71,7 +71,7 @@ const rooms = {
 			]
 		},
 		'graduatedTokens': {
-			'isTransaction': false,
+			'socketName': 'main',
 			'struct': 'graduated',
 			'variables': []
 		}

@@ -53,7 +53,7 @@ const a = [
 const roomId = 'latestTokensPools'
 const t = ws.updateRoom( { 
     roomId,
-    'type': 'join', 
+    'cmd': 'join', 
     'params': { 'poolId': '9xxoUCtd9FASN8Xg6UttonrgZcbWfwmFTJoZovbwpump' },
     'strategy': 'newOne'
 } )
@@ -68,14 +68,14 @@ ws.on( roomId, ( data ) => {
 
     count += 1
     if( count === 1 ) {
-        const t = ws.updateRoom( { roomId, 'type': 'leave' } )
+        const t = ws.updateRoom( { roomId, 'cmd': 'leave' } )
         count = 0
         const { mint, name } = data
         watchlist[ mint ] = { name, 'transactions': 0, 'price': { start: null, 'current': null } }
 
         ws.updateRoom( {
             'roomId': 'transactions', // 'priceUpdates'
-            'type': 'join',
+            'cmd': 'join',
             'params': { 'tokenAddress': mint },
             'strategy': 'minimalTransactionInformation'
         } )

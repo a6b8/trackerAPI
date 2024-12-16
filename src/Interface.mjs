@@ -112,9 +112,9 @@ class TrackerAPI extends EventEmitter {
     }
 
 
-    updateWebsocketRoom( { roomId, type, params={}, strategy=null } ) {
+    updateWebsocketRoom( { roomId, cmd, params={}, strategy=null } ) {
         this.#validateModule( { 'key': 'websocket' } )
-        const { status, messages, data } = this.#websocket.updateRoom( { roomId, type, params, strategy } )
+        const { status, messages, data } = this.#websocket.updateRoom( { roomId, cmd, params, strategy } )
         this.#strictMode( { status, messages, data } )
         return data
     }
