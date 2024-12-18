@@ -107,11 +107,9 @@ class TrackerAPI extends EventEmitter {
     }
 
 
-    createSwap( { params, privateKey, skipConfirmation=false } ) {
+    performSwap( { params, privateKey, skipConfirmation=false } ) {
         this.#validateModule( { 'key': 'swap' } )
         const { id } = this.#getId()
-
-        // this.emit( 'swap', { 'status': 'function started', id, 'data': null } )
         this.#swap.getSwapQuote( params, id )
             .then( async( quote ) => {
                 const data = await this.#swap.postSwapTransaction( { quote, privateKey, skipConfirmation } )
@@ -121,16 +119,21 @@ class TrackerAPI extends EventEmitter {
                 console.log( 'FINISHED' )
                 this.emit( 'swap', { id, 'eventStatus': 'getQuote', quote } )
                 return true
-                // this.emit( 'swap', { 'status': 'function finished', id, data } )
             } )
 
-/*
-        this.getSwapQuote( params, id  )
-            .then( ( quote ) => {
-                return this.postSwapTransaction( { quote, privateKey, skipConfirmation } )
-            } )
-            .catch( ( e ) => { return { 'status': false, 'messages': [ e ] } } )
-*/
+        return id
+    }
+
+
+    performBatchData( { batch } ) {
+        const a = Promise.all(
+            batch
+                .map( async( { route, params } ) => {
+                    const data = await this.getData( { route, params } )
+                    return data
+                } )
+        )
+
         return true
     }
 

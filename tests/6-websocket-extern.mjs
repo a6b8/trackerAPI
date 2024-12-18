@@ -6,7 +6,6 @@ const { wsUrl } = getEnv( {
     'path': '../../../.env',
     'selection': [ [ 'wsUrl', 'SOLANA_TRACKER_DATASTREAM' ] ]
 } )
- 
 
 const ws = new TrackerAPI( { wsUrl } )
 const a = [
