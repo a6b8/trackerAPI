@@ -1,11 +1,9 @@
 import { Data } from './task/Data.mjs'
 import { Swap } from './task/Swap.mjs'
 import { TrackerWebsocket } from './task/Websocket.mjs'
-
-
 import { endpoints } from './data/endpoints.mjs '
-
 import EventEmitter from 'events'
+import { config } from './data/config.mjs'
 
 
 const examples = Object
@@ -21,30 +19,56 @@ class TrackerAPI extends EventEmitter {
     #data
     #swap
     #websocket
+    #config
 
 
-    constructor( { apiKey, nodeUrl, wsUrl, strictMode=true } ) {
+    constructor( { apiKey, nodeHttp, nodeWs, wsUrl, strictMode=true } ) {
         super()
 
+        const { status, messages } = this.#validateConstructor( { apiKey, nodeHttp, nodeWs, wsUrl, strictMode } )
+        if( status === false ) { throw new Error( messages.join( '\n' ) ) }
+
         this.#state = {
-            'id': -1,
+            'id': 0,
             apiKey,
-            nodeUrl,
+            nodeHttp,
+            nodeWs,
             wsUrl,
             strictMode
         }
 
+        this.setConfig( { config } )
+    }
+
+
+    getConfig() {
+        return this.#config
+    }
+
+
+    setConfig( { config } ) {
+        const { status, messages } = this.#validateSetCursor( { config } )
+        if( !status ) { throw new Error( messages.join( '\n' ) ) }
+
+        const { data, swap, websocket } = config
+        const { apiKey, nodeHttp, nodeWs, wsUrl } = this.#state
+
         if( apiKey !== undefined ) {
-            this.#data = new Data( { apiKey } ) 
+            this.#data = new Data( { apiKey, data } ) 
         }
-        if( nodeUrl !== undefined ) { 
-            this.#swap = new Swap( { nodeUrl } ) 
+        if( nodeHttp !== undefined ) { 
+            const emitter = this.emit.bind( this )
+            this.#swap = new Swap( { nodeHttp, nodeWs, swap, emitter } ) 
         }
 
         if( wsUrl !== undefined ) {
-            this.emit( 'TEST', 'A1')
-            this.#websocket = new TrackerWebsocket( { wsUrl, 'emitter': this.emit.bind( this ) } )
+            const emitter = this.emit.bind( this )
+            this.#websocket = new TrackerWebsocket( { wsUrl, websocket, emitter } )
         }
+
+        this.#config = { ...config }
+
+        return true
     }
 
 /*
@@ -73,7 +97,6 @@ class TrackerAPI extends EventEmitter {
         const event = 'request'
         const { id } = this.#getId()
         const data = await this.#data.getData( { route, params } )
-        // this.#sendEvent( { event, id, data } )
         return { ...data, id }
     }
 
@@ -84,31 +107,55 @@ class TrackerAPI extends EventEmitter {
     }
 
 
-    async getSwapQuote( params ) {
+    createSwap( { params, privateKey, skipConfirmation=false } ) {
         this.#validateModule( { 'key': 'swap' } )
-        const event = 'getTx'
         const { id } = this.#getId()
+
+        // this.emit( 'swap', { 'status': 'function started', id, 'data': null } )
+        this.#swap.getSwapQuote( params, id )
+            .then( async( quote ) => {
+                const data = await this.#swap.postSwapTransaction( { quote, privateKey, skipConfirmation } )
+                return data
+            } )
+            .then( ( quote ) => {
+                console.log( 'FINISHED' )
+                this.emit( 'swap', { id, 'eventStatus': 'getQuote', quote } )
+                return true
+                // this.emit( 'swap', { 'status': 'function finished', id, data } )
+            } )
+
+/*
+        this.getSwapQuote( params, id  )
+            .then( ( quote ) => {
+                return this.postSwapTransaction( { quote, privateKey, skipConfirmation } )
+            } )
+            .catch( ( e ) => { return { 'status': false, 'messages': [ e ] } } )
+*/
+        return true
+    }
+
+
+/*
+    async getSwapQuote( params, id='n/a' ) {
+        this.#validateModule( { 'key': 'swap' } )
         const data = await this.#swap.getSwapQuote( params )
-        // this.#sendEvent( { event, id, data } )
         return { ...data, id }
     }
 
 
-    async postSwap( { quote, privateKey, skipConfirmation=false } ) {
+    async postSwapTransaction( { quote, privateKey, skipConfirmation=false } ) {
         this.#validateModule( { 'key': 'swap' } )
-        const event = 'sendTx'
-        const { id } = this.#getId()
-        const data = await this.#swap.postSwap( { quote, privateKey, skipConfirmation } )
-        this.#sendEvent( { event, id, data } )
-        return { ...data, id }
+        const data = await this.#swap.postSwapTransaction( { quote, privateKey, skipConfirmation } )
+        return { data }
     }
+*/
 
 
     connectWebsocket() {
         this.#validateModule( { 'key': 'websocket' } )
         const { status, messages, data } = this.#websocket.connect()
         this.#strictMode( { status, messages, data } )
-        return true
+        return { status, messages, data }
     }
 
 
@@ -116,7 +163,7 @@ class TrackerAPI extends EventEmitter {
         this.#validateModule( { 'key': 'websocket' } )
         const { status, messages, data } = this.#websocket.updateRoom( { roomId, cmd, params, strategy } )
         this.#strictMode( { status, messages, data } )
-        return data
+        return { status, messages, data }
     }
 
 
@@ -134,17 +181,19 @@ class TrackerAPI extends EventEmitter {
 
 
     #getId() { 
-        this.#state['id'] += 1
         const { id } = this.#state
-        return { id }
+        this.#state['id'] += 1
+        return { 'id': `${id}` }
     }
 
 
+/*
     #sendEvent( { event, id, data } ) {
         const payload = { id, ...data }
         this.emit( event, payload )
         return true
     }
+*/
 
 
     #validateModule( { key } ) {
@@ -163,6 +212,54 @@ class TrackerAPI extends EventEmitter {
     }
 
 
+    #validateConstructor( { apiKey, nodeHttp, nodeWs, wsUrl, strictMode } ) {
+        const messages = []
+
+        if( apiKey === undefined ) {
+            messages.push( 'apiKey is required' )
+        } else if( typeof apiKey !== 'string' ) {
+            messages.push( 'apiKey must be a string' )
+        }
+
+        if( nodeHttp !== undefined && typeof nodeHttp !== 'string' ) {
+            messages.push( 'nodeHttp must be a string' )
+        }
+
+        if( nodeWs !== undefined && typeof nodeWs !== 'string' ) {
+            messages.push( 'nodeWs must be a string' )
+        }
+
+        if( wsUrl !== undefined && typeof wsUrl !== 'string' ) {
+            messages.push( 'wsUrl must be a string' )
+        }
+
+        if( strictMode === undefined ) {
+            messages.push( 'strictMode is required' )
+        } else if( typeof strictMode !== 'boolean' ) {
+            messages.push( 'strictMode must be a boolean' )
+        }
+
+        const status = messages.length === 0
+
+        return { status, messages }
+    }
+
+
+    #validateSetCursor( { config } ) {
+        const messages = []
+
+        if( config === undefined ) {
+            messages.push( 'config is required' )
+        } else if( typeof config !== 'object' ) {
+            messages.push( 'config must be an object' )
+        }
+
+        const status = messages.length === 0
+        
+        return { status, messages }
+    }
+
+
     #strictMode( { status, messages, data } ) {
         if( this.#state['strictMode'] && !status ) {
             throw new Error( messages.join( '\n' ) )
@@ -173,4 +270,4 @@ class TrackerAPI extends EventEmitter {
 }
 
 
-export { TrackerAPI, Data, Swap, examples }
+export { TrackerAPI, Data, Swap, TrackerWebsocket, examples }

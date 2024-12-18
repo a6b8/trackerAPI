@@ -13,11 +13,11 @@ class Data {
     #validation
 
 
-    constructor( { apiKey } ) {
+    constructor( { apiKey, data } ) {
         this.#state = {}
         this.setApiKey( { apiKey } )
 
-        this.#config = config
+        this.#config = { ...data }
         this.#endpoints = endpoints
         this.#validation = new Validation( {} )
     }
@@ -56,7 +56,7 @@ class Data {
         }
 
         const endpoint = this.#endpoints[ route ]
-        const { dataUrl } = this.#config
+        const { rootUrl } = this.#config
         const { route: r, query, requestMethod, body } = endpoint
 
         let queryStr = ''
@@ -79,7 +79,7 @@ class Data {
             .reduce( ( acc, key ) => {
                 acc = acc.replace( `{${key}}`, params[ key ] )
                 return acc
-            }, `${dataUrl}${r}${queryStr}` )
+            }, `${rootUrl}${r}${queryStr}` )
         const headers = { 'x-api-key': apiKey }
 
         try {

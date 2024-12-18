@@ -2,7 +2,7 @@ import { Validation } from './Validation.mjs'
 import EventEmitter from 'events'
 import WebSocket from 'ws'
 import { rooms } from '../data/rooms.mjs'
-import { config } from '../data/config.mjs'
+// import { config } from '../data/config.mjs'
 
 
 class TrackerWebsocket extends EventEmitter {
@@ -14,10 +14,10 @@ class TrackerWebsocket extends EventEmitter {
     #default
 
 
-    constructor( { wsUrl, emitter=null } ) {
+    constructor( { wsUrl, websocket, emitter=null } ) {
         super()
-        this.#config = config
 
+        this.#config = { ...websocket }
         this.#state = {
             wsUrl,
             'reconnectAttempts': 0,
@@ -28,12 +28,18 @@ class TrackerWebsocket extends EventEmitter {
             'useInternalEmitter': ( emitter === null ) ? true : false
         }
 
-        this.#state['websocketsReady'] = this.#config['websocket']['socketNames']
+        const { socketNames } = this.#config['websocket']
+        this.#state['websocketsReady'] = socketNames
             .reduce( ( acc, socketName ) => {
                 acc[ socketName ] = false
                 return acc
             }, {} )
 
+        this.#sockets = socketNames
+            .reduce( ( acc, socketName ) => {
+                acc[ socketName ] = null
+                return acc
+            }, {} )
 
         this.#default = {
             'filters': new Map( Object.entries( rooms['default']['filters'] ) ),
@@ -41,14 +47,7 @@ class TrackerWebsocket extends EventEmitter {
             'strategies': new Map( Object.entries( rooms['default']['strategies'] ) )
         }
 
-        this.#sockets = {
-            'main': null,
-            'transaction': null
-        }
-
-        //emitter.emit( 'TEST', 'A2')
         this.#emitter = emitter
-        //this.#emitter.emit( 'TEST', 'A3')
         this.#validation = new Validation()
     }
 
@@ -363,7 +362,6 @@ class TrackerWebsocket extends EventEmitter {
 
         return true
     }
-
 }
 
 

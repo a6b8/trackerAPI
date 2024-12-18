@@ -37,14 +37,14 @@ class Validation {
     }
 
 
-    getSwapQuote( params ) {
-        const { messages, status } = this.#validateGetSwapQuote( params )
+    getSwapQuote( params, id ) {
+        const { messages, status } = this.#validateGetSwapQuote( { params, id } )
         return { messages, status }
     }
 
 
-    postSwap( { quote, privateKey, skipConfirmation } ) {
-        const { messages, status } = this.#validatePostSwap( { quote, privateKey, skipConfirmation } )
+    postSwapTransaction( { quote, privateKey, skipConfirmation, receiveChainStatus } ) {
+        const { messages, status } = this.#validatePostSwapTransaction( { quote, privateKey, skipConfirmation, receiveChainStatus } )
         return { messages, status }
     }
 
@@ -67,7 +67,7 @@ class Validation {
     }
 
 
-    #validateGetSwapQuote( params ) {
+    #validateGetSwapQuote( { params } ) {
         const messages = []
 
         if( params === undefined ) {
@@ -100,12 +100,18 @@ class Validation {
                 }
             } )
 
+        if( id === undefined ) {
+            messages.push( `id is undefined` )
+        } else if( typeof id !== 'string' ) {
+            messages.push( `id is not a string` )
+        }
+
         const status = messages.length === 0 ? true : false
         return { messages, status }
     }
 
 
-    #validatePostSwap( { quote, privateKey, skipConfirmation } ) {
+    #validatePostSwapTransaction( { quote, privateKey, skipConfirmation, receiveChainStatus } ) {
         const messages = []
 
         if( quote === undefined ) {
@@ -137,6 +143,12 @@ class Validation {
             messages.push( `skipConfirmation is undefined` )
         } else if( typeof skipConfirmation !== 'boolean' ) {
             messages.push( `skipConfirmation is not a boolean` )
+        }
+
+        if( receiveChainStatus === undefined ) {
+            messages.push( `receiveChainStatus is undefined` )
+        } else if( typeof receiveChainStatus !== 'boolean' ) {
+            messages.push( `receiveChainStatus is not a boolean` )
         }
 
         const status = messages.length === 0 ? true : false
