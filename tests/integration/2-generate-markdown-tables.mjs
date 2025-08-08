@@ -1,4 +1,4 @@
-import { Data, examples } from '../src/Interface.mjs'
+import { TrackerAPI, examples } from '../src/Interface.mjs'
 import { endpoints } from '../src/data/endpoints.mjs'
 import { paramMetadata } from '../src/data/paramMetadata.mjs'
 import { swap } from '../src/data/swap.mjs'
@@ -13,8 +13,8 @@ const { apiKey } = getEnv( {
     ]
 } )
 
-const data = new Data( { apiKey } )
-const exampleKeys = Object.keys( examples )
+// const tracker = new TrackerAPI( { apiKey } )
+// const exampleKeys = Object.keys( examples )
 
 const routes = Object
     .entries( endpoints )
@@ -33,7 +33,7 @@ const routes = Object
         const p = { route: k, params: example }
         acc += "\n"
         acc += "```js\n"
-        acc += `await data.getData( ${JSON.stringify( p, null, 4)} )\n`
+        acc += `await tracker.getData( ${JSON.stringify( p, null, 4)} )\n`
         acc += "```\n\n"
         acc += vars
             .sort( ( [ ,a ], [ ,b ] ) => b - a )

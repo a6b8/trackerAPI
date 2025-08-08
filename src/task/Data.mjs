@@ -3,7 +3,6 @@ import { endpoints } from '../data/endpoints.mjs'
 // import { findClosestString } from './helpers.mjs'
 
 import { Validation } from './Validation.mjs'
-import axios from 'axios'
 
 
 class Data {
@@ -13,8 +12,8 @@ class Data {
     #validation
 
 
-    constructor( { apiKey, data } ) {
-        this.#state = {}
+    constructor( { apiKey, data, silent=false } ) {
+        this.#state = { silent }
         this.setApiKey( { apiKey } )
 
         this.#config = { ...data }
@@ -85,7 +84,10 @@ class Data {
         try {
             let response = null
             if( requestMethod === 'GET' ) {
-                response = await axios.get( url, { headers } )
+                response = await fetch( url, { 
+                    method: 'GET',
+                    headers 
+                } )
             } else if( requestMethod === 'POST' ) {
                 const data = Object
                     .entries( body )
@@ -97,11 +99,19 @@ class Data {
                         return acc
                     }, {} )
 
-                response = await axios.post( url, data, { headers } )
+                response = await fetch( url, {
+                    method: 'POST',
+                    headers: { ...headers, 'Content-Type': 'application/json' },
+                    body: JSON.stringify( data )
+                } )
+            }
+
+            if( !response.ok ) {
+                throw new Error( `HTTP error! status: ${response.status}` )
             }
 
             result['status'] = true
-            result['data'] = response['data']
+            result['data'] = await response.json()
         } catch( error ) {
             result['messages'].push( `Request: ${error['message']}` )
             result['status'] = false

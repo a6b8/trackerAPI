@@ -1,22 +1,31 @@
 {
-  "name": "Tracker API",
+  "name": "@a6b8/tracker-api",
   "version": "0.1.1",
   "description": "",
   "main": "./src/Interface.mjs",
+  "type": "module",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' npx jest --detectOpenHandles",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' npx jest --watch --detectOpenHandles",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' npx jest --coverage --detectOpenHandles",
+    "test:unit": "NODE_OPTIONS='--experimental-vm-modules' npx jest tests/unit --detectOpenHandles",
+    "test:integration": "node tests/integration/1-all-example-requests.mjs",
+    "test:ci": "NODE_OPTIONS='--experimental-vm-modules' npx jest --ci --coverage --watchAll=false --detectOpenHandles"
   },
   "keywords": [],
   "author": "a6b8",
   "license": "MIT",
   "dependencies": {
     "@solana/web3.js": "^1.95.5",
-    "axios": "^1.7.7",
     "bs58": "^6.0.0",
     "inquirer": "^12.1.0",
     "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.0.5",
+    "jest": "^30.0.5"
   }
 }

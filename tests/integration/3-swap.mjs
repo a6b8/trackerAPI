@@ -8,8 +8,8 @@ const { privateKey, publicKey, apiKey, nodeHttp, nodeWs } = getEnv( {
         [ 'privateKey', 'SOLANA_PRIVATE_KEY'     ],
         [ 'publicKey',  'SOLANA_PUBLIC_KEY'      ],
         [ 'apiKey',     'SOLANA_TRACKER_API_KEY' ],
-        [ 'nodeHttp',    'SOLANA_MAINNET_HTTPS'  ],
-        [ 'nodeWs',    'SOLANA_MAINNET_WSS'      ]
+        [ 'nodeHttp',   'SOLANA_MAINNET_HTTPS'   ],
+        [ 'nodeWs',     'SOLANA_MAINNET_WSS'     ]
     ]
 } )
 
@@ -31,7 +31,7 @@ st.on( 'swap', ( data ) => {
     console.log( data )
 } )
 
-st.createSwap( { params, privateKey, skipConfirmation: false } )
+st.performSwap( { params, privateKey, skipConfirmation: false } )
 
 
 /*

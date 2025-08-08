@@ -2,7 +2,6 @@ import { Validation } from './Validation.mjs'
 // import { config } from '../data/config.mjs'
 
 import inquirer from 'inquirer'
-import axios from 'axios'
 import bs58 from 'bs58'
 import { 
     Transaction, 
@@ -20,11 +19,12 @@ class Swap {
     #state
 
 
-    constructor( { nodeHttp, nodeWs, swap, emitter=null } ) {
+    constructor( { nodeHttp, nodeWs, swap, emitter=null, silent=false } ) {
         this.#config = { ...swap }
         this.#validation = new Validation()
 
         this.#state = {
+            silent,
             'emitterAvailable': ( emitter === null ) ? false : true,
             'websocketAvailable':  typeof nodeWs === 'string' && nodeWs.length > 0
         }
@@ -90,9 +90,18 @@ class Swap {
         }
 
         try {
-            const response = await axios.post( rootUrl, params, { headers } )
+            const response = await fetch( rootUrl, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify( params )
+            } )
+
+            if( !response.ok ) {
+                throw new Error( `HTTP error! status: ${response.status}` )
+            }
+
             result['status'] = true
-            result['data']['quote'] = response['data']
+            result['data']['quote'] = await response.json()
         } catch( error ) {
             result['messages'].push( `Request: ${error['message']}` )
             result['status'] = false
@@ -140,14 +149,13 @@ class Swap {
 
         const { websocketAvailable, emitterAvailable } = this.#state
         if( !websocketAvailable ) { 
-            console.log( `Websocket not available. Skipping confirmation.` )
+            if( !this.#state.silent ) console.log( `Websocket not available. Skipping confirmation.` )
             return response 
         }
         if( !emitterAvailable ) {
-            console.log( `Emitter not available. Skipping confirmation.` )
+            if( !this.#state.silent ) console.log( `Emitter not available. Skipping confirmation.` )
             return response
         }
-// console.log( 'response', JSON.stringify( response, null, 4 ) )
         const signature = response['data']['swap']['id']
         this.#confirmationSignature( { signature, id } )
 
@@ -249,8 +257,8 @@ class Swap {
                 Value: padLeft( typeof value === "object" ? JSON.stringify( value ) : value, 60 )
             }));
           
-        console.log( 'Request' )
-        console.table( formattedRate )
+        if( !this.#state.silent ) console.log( 'Request' )
+        if( !this.#state.silent ) console.table( formattedRate )
 
         return true
     }

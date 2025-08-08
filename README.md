@@ -2,28 +2,74 @@
 
 # TrackerAPI
 
+**Package Name:** `@a6b8/tracker-api`
+
 This module enables efficient and easy use of the `SolanaTracker API`.
 
 ## Features
 
 **The following features are available:**
-- Unified API querying.
-- Preparing and performing swaps with the `SolanaTracker API`.
-- *(In Progress)* Establishing and updating WebSocket connections.
+- **Data Methods:** Unified API querying with queryData() and route discovery
+- **Trading Methods:** Preparing and performing swaps with the SolanaTracker API  
+- **WebSocket Methods:** Real-time connections with filtering and room management
+- **Event-Driven Methods:** Asynchronous operations with progress events and flexible error handling
+- **Core Methods:** Configuration management and health monitoring
+
+## Installation
+
+```bash
+npm install @a6b8/tracker-api
+```
 
 ## Quickstart
 
 1. Create an account on `https://www.solanatracker.io` and generate an API key.
-2. Download the repository.
+2. Install the package using npm.
 
+### Basic Data Query
 ```js
-import { TrackerAPI, examples } from '../src/index.mjs'
+import { TrackerAPI, examples } from '@a6b8/tracker-api'
 const st = new TrackerAPI({ 
   'apiKey': `{{your_api_key}}`
 })
 const { route, params } = examples[0]
-const response = await st.request({ route, params })
+const response = await st.queryData({ route, params })
 console.log(response)
+```
+
+### Event-Driven Operations  
+```js
+// Listen for events
+st.on('collection', (data) => {
+  console.log(`Status: ${data.status}`)
+})
+
+// Execute multiple API calls with progress tracking
+st.performDataCollection({
+  batch: [
+    { route: 'tokenInformation', params: { tokenAddress: 'SOL-address' }},
+    { route: 'priceInformation', params: { token: 'USDC-address' }}
+  ],
+  onError: 'continue'  // Continue on validation errors
+})
+```
+
+### WebSocket Real-time Data
+```js
+const st = new TrackerAPI({ wsUrl: '{{websocket_url}}' })
+
+// Connect and subscribe to token events
+st.connectWebsocket()
+st.updateWebsocketRoom({
+  roomId: 'graduatingTokens', 
+  type: 'join',
+  params: { poolId: 'your-pool-id' }
+})
+
+// Listen for real-time events
+st.on('graduatingTokens', (tokenData) => {
+  console.log('New token graduated:', tokenData)
+})
 ```
 
 ## Table of Contents
@@ -31,16 +77,29 @@ console.log(response)
   - [Features](#features)
   - [Quickstart](#quickstart)
   - [Table of Contents](#table-of-contents)
-  - [Methods](#methods)
+  - [Core API Methods](#core-api-methods)
     - [constructor()](#constructor)
-    - [.getData()](#getdata)
-    - [.getRoutes()](#getroutes)
+    - [.health()](#health)
+    - [.getConfig()](#getconfig)
+    - [.setConfig()](#setconfig)
+  - [Data Methods](#data-methods)
+    - [.queryData()](#querydata)
+    - [.getDataRoutes()](#getdataroutes)
+  - [Trading Methods](#trading-methods)
     - [.getSwapQuote()](#getswapquote)
-    - [.postSwap()](#postswap)
+    - [.postSwapTransaction()](#postswaptransaction)
+  - [WebSocket Methods](#websocket-methods)
+    - [.connectWebsocket()](#connectwebsocket)
+    - [.addWebsocketFilter()](#addwebsocketfilter)
+    - [.addWebsocketModifier()](#addwebsocketmodifier)
+    - [.updateWebsocketRoom()](#updatewebsocketroom)
+  - [Event-Driven Methods](#event-driven-methods)
+    - [.performDataCollection()](#performdatacollection)
+    - [.performSwap()](#performswap)
   - [Routes](#routes)
   - [License](#license)
 
-## Methods
+## Core API Methods
 
 ### constructor()
 
@@ -48,20 +107,24 @@ This method initializes the class.
 
 **Method**
 ```js
-.constructor({ apiKey, nodeUrl })
+.constructor({ apiKey, nodeHttp, nodeWs, wsUrl })
 ```
 
 | Key       | Type   | Description                                                                                                                             | Required |
 |-----------|--------|-----------------------------------------------------------------------------------------------------------------------------------------|----------|
-| apiKey    | string | Sets the `apiKey` for the SolanaTracker API. If not provided, the `.getData()` method will not be available.                             | No (recommended) |
-| nodeUrl   | string | Required, for example, to send transactions. If no `nodeUrl` is set, `.getSwapQuote` and `.postSwap` cannot be used.                     | No (recommended) |
+| apiKey    | string | Sets the `apiKey` for the SolanaTracker API. If not provided, data methods will not be available.                                      | No (recommended) |
+| nodeHttp  | string | Solana RPC HTTP endpoint. Required for swap transactions.                                                                                 | No (recommended) |
+| nodeWs    | string | Solana RPC WebSocket endpoint. Required for swap transaction confirmations.                                                               | No |
+| wsUrl     | string | SolanaTracker WebSocket URL. Required for WebSocket functionality.                                                                        | No |
 
 **Example**
 ```js
-import { TrackerAPI } from './src/index.mjs'
+import { TrackerAPI } from '@a6b8/tracker-api'
 const st = new TrackerAPI({ 
   'apiKey': '{{your_api_key}}',
-  'nodeUrl': '{{my_solana_node}}'  
+  'nodeHttp': '{{my_solana_http_node}}',
+  'nodeWs': '{{my_solana_ws_node}}',
+  'wsUrl': '{{tracker_websocket_url}}'
 })
 ```
 
@@ -70,13 +133,83 @@ const st = new TrackerAPI({
 true
 ```
 
-### .getData()
+### .health()
+
+This method returns the health status of the TrackerAPI instance.
+
+**Method**
+```js
+.health()
+```
+
+**Example**
+```js
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 'apiKey': '{{your_api_key}}' })
+console.log(st.health())
+```
+
+**Returns**
+```js
+true
+```
+
+### .getConfig()
+
+This method returns the current configuration of the TrackerAPI instance.
+
+**Method**
+```js
+.getConfig()
+```
+
+**Example**
+```js
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 'apiKey': '{{your_api_key}}' })
+const config = st.getConfig()
+console.log(config)
+```
+
+**Returns**
+```js
+Object // Current configuration object
+```
+
+### .setConfig()
+
+This method updates the configuration of the TrackerAPI instance.
+
+**Method**
+```js
+.setConfig({ config })
+```
+
+| Key    | Type   | Description                    | Required |
+|--------|--------|--------------------------------|----------|
+| config | object | New configuration object       | Yes      |
+
+**Example**
+```js
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 'apiKey': '{{your_api_key}}' })
+st.setConfig({ config: newConfigObject })
+```
+
+**Returns**
+```js
+true
+```
+
+## Data Methods
+
+### .queryData()
 
 This method creates, sends, and evaluates requests to the SolanaTracker API.
 
 **Method**
 ```js
-async .getData({ route, params })
+async .queryData({ route, params })
 ```
 
 | Key     | Type   | Description                                                                                                           | Required |
@@ -86,11 +219,11 @@ async .getData({ route, params })
 
 **Example**
 ```js
-import { TrackerAPI } from './src/index.mjs'
+import { TrackerAPI } from '@a6b8/tracker-api'
 const st = new TrackerAPI({ 
   'apiKey': '{{your_api_key}}' 
 })
-await st.getData({
+await st.queryData({
   'route': 'search',
   'params': {
     'query': 'GOAT'
@@ -103,120 +236,421 @@ await st.getData({
 Object
 ```
 
-### .getRoutes()
+### .getDataRoutes()
 
-This helper function displays all available routes. A list is also available under [routes](#routes).
+This helper function displays all available routes for queryData(). A list is also available under [routes](#routes).
 
 **Method**
 ```js
-.getRoutes()
+.getDataRoutes()
 ```
 
 **Example**
 ```js
-import { TrackerAPI } from './src/index.mjs'
+import { TrackerAPI } from '@a6b8/tracker-api'
 const st = new TrackerAPI({ 
   'apiKey': '{{your_api_key}}' 
 })
-console.log(st.getRoutes())
+console.log(st.getDataRoutes())
 ```
 
 **Returns**
 ```js
 Array of Strings
 ```
+
+## Trading Methods
+
 
 ### .getSwapQuote()
 
-This method retrieves a quote and all necessary data to perform a swap with `Solana Tracker`. The actual swap is triggered using `.postSwap()`.
+This method retrieves a quote for a swap transaction without executing it. Use with `.postSwapTransaction()` for more control.
 
 **Method**
 ```js
-async .getSwapQuote({ ...params })
+async .getSwapQuote( params, id )
 ```
 
-| Key | Description | Required | 
-| --- | --- | --- | 
-| amount | The amount of the base token to swap. Can be a specific value, "auto" to use full wallet amount, or a percentage (e.g., "50%") to use that portion of the wallet balance | Yes |
-| from | The base token address | Yes |
-| payer | Public key of the wallet sending the transaction | Yes |
-| slippage | Maximum acceptable slippage percentage | Yes |
-| to | The quote token address | Yes |
-| fee | Charge a custom fee to your users for each transaction (earn sol for each swap) | No |
-| feeType | Fee application type | No |
-| priorityFee | Amount in SOL to increase transaction processing priority | No |
-| priorityFeeLevel | Required if priorityFee is set to auto | No |
-| txVersion | Transaction version | No |
-
+| Key    | Type   | Description                                               | Required |
+|--------|--------|-----------------------------------------------------------|----------|
+| params | object | Swap parameters (same as performSwap params object)      | Yes      |
+| id     | string | Optional identifier for tracking (default: 'n/a')       | No       |
 
 **Example**
 ```js
-import { TrackerAPI } from './src/index.mjs'
+import { TrackerAPI } from '@a6b8/tracker-api'
 const st = new TrackerAPI({ 
-  'nodeUrl': '{{my_solana_node}}'  
+  'nodeHttp': '{{my_solana_http_node}}',
+  'nodeWs': '{{my_solana_ws_node}}'
 })
-const publicKey = '{{my_public_key}}'
+
 const quote = await st.getSwapQuote({
-  'from': 'So11111111111111111111111111111111111111112', // Solana Address
+  'from': 'So11111111111111111111111111111111111111112', // SOL
   'to': 'UEPp8H46WkPiBmi7nw35nyfFDNpxp9LWRPxSMHXpump',
   'amount': 0.0001,
   'slippage': 15,
-  'payer': publicKey,
-  'priorityFee': 0.0005,
-  'feeType': 'add',
-  'fee': `${publicKey}:0.0001`
+  'payer': '{{my_public_key}}',
+  'priorityFee': 0.0005
+})
+
+console.log('Quote:', quote)
+```
+
+**Returns**
+```js
+{ 
+  status: boolean, 
+  messages: Array, 
+  data: Object, // Quote data with transaction details
+  id: string 
+}
+```
+
+### .postSwapTransaction()
+
+This method executes a previously obtained swap quote. Must be used after `.getSwapQuote()`.
+
+**Method**
+```js
+async .postSwapTransaction({ quote, privateKey, skipConfirmation })
+```
+
+| Key              | Type    | Description                                               | Required |
+|------------------|---------|-----------------------------------------------------------|----------|
+| quote            | object  | Quote object returned from getSwapQuote()               | Yes      |
+| privateKey       | string  | Private key for transaction signing                      | Yes      |
+| skipConfirmation | boolean | Skip user confirmation prompt (default: false)          | No       |
+
+**Example**
+```js
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 
+  'nodeHttp': '{{my_solana_http_node}}',
+  'nodeWs': '{{my_solana_ws_node}}'
+})
+
+// First get quote
+const quote = await st.getSwapQuote({
+  'from': 'So11111111111111111111111111111111111111112',
+  'to': 'UEPp8H46WkPiBmi7nw35nyfFDNpxp9LWRPxSMHXpump',
+  'amount': 0.0001,
+  'slippage': 15,
+  'payer': '{{my_public_key}}'
+})
+
+// Review quote, then execute
+if (quote.status) {
+  const result = await st.postSwapTransaction({
+    quote,
+    'privateKey': '{{my_private_key}}',
+    'skipConfirmation': false
+  })
+  
+  console.log('Swap result:', result)
+}
+```
+
+**Returns**
+```js
+{ 
+  data: {
+    status: boolean,
+    messages: Array,
+    data: {
+      request: Object,
+      quote: Object,
+      swap: {
+        id: string,    // Transaction ID
+        tx: Object     // Transaction object
+      }
+    },
+    id: string
+  }
+}
+```
+
+## WebSocket Methods
+
+### .connectWebsocket()
+
+This method establishes a connection to the SolanaTracker WebSocket server.
+
+**Method**
+```js
+.connectWebsocket()
+```
+
+**Example**
+```js
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 
+  'wsUrl': '{{tracker_websocket_url}}'
+})
+const result = st.connectWebsocket()
+console.log(result)
+```
+
+**Returns**
+```js
+{ status: boolean, messages: Array, data: Object }
+```
+
+### .addWebsocketFilter()
+
+This method creates a filter function that can be used to filter WebSocket messages.
+
+**Method**
+```js
+.addWebsocketFilter({ funcName, func })
+```
+
+| Key      | Type     | Description                                    | Required |
+|----------|----------|------------------------------------------------|----------|
+| funcName | string   | Name identifier for the filter function       | Yes      |
+| func     | function | Filter function that returns true/false       | Yes      |
+
+**Example**
+```js
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 'wsUrl': '{{tracker_websocket_url}}' })
+
+const pumpFilter = st.addWebsocketFilter({
+  'funcName': 'isPumpFun',
+  'func': (data) => data.token.createdOn === 'https://pump.fun'
 })
 ```
 
 **Returns**
 ```js
-Object
+{ funcName: string, func: function, type: 'filter' }
 ```
 
-### .postSwap()
+### .addWebsocketModifier()
 
-This method triggers the actual swap after retrieving a quote with the `.getSwapQuote()` method.
+This method creates a modifier function that transforms WebSocket message data.
 
 **Method**
 ```js
-async .postSwap({ quote, privateKey, skipConfirmation })
+.addWebsocketModifier({ funcName, func })
 ```
 
-| Key            | Type   | Description                                                                                                                         | Required |
-|----------------|--------|-------------------------------------------------------------------------------------------------------------------------------------|----------|
-| quote          | object | Pass the response from the `.getSwapQuote` method here.                                                                             | Yes      |
-| privateKey     | string | Provide the `privateKey`. This must match the `public key` provided in the `.getSwapQuote()` method.                                 | Yes      |
-| skipConfirmation | boolean | Before executing the swap, the user is asked to confirm. Setting `skipConfirmation` to `true` disables this prompt.                 | No       |
+| Key      | Type     | Description                                    | Required |
+|----------|----------|------------------------------------------------|----------|
+| funcName | string   | Name identifier for the modifier function     | Yes      |
+| func     | function | Modifier function that transforms data        | Yes      |
 
 **Example**
 ```js
-import { TrackerAPI } from './src/index.mjs'
-const st = new TrackerAPI({ 
-  'nodeUrl': '{{my_solana_node}}'  
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 'wsUrl': '{{tracker_websocket_url}}' })
+
+const dataModifier = st.addWebsocketModifier({
+  'funcName': 'extractEssentials',
+  'func': (data) => ({
+    name: data.token.name,
+    mint: data.token.mint,
+    price: data.price
+  })
 })
-const publicKey = '{{my_public_key}}'
-const quote = await st.getSwapQuote({
-  'from': 'So11111111111111111111111111111111111111112', // Solana Address
-  'to': 'UEPp8H46WkPiBmi7nw35nyfFDNpxp9LWRPxSMHXpump',
-  'amount': 0.0001,
-  'slippage': 15,
-  'payer': publicKey,
-  'priorityFee': 0.0005,
-  'feeType': 'add',
-  'fee': `${publicKey}:0.0001`
-})
-const swap = await st.postSwap({
-  quote,
-  'privateKey': '{{my_private_key}}',
-  'skipConfirmation': false
-})
-console.log(swap['swap']['id'])
 ```
 
 **Returns**
 ```js
-Array of Strings
+{ funcName: string, func: function, type: 'modifier' }
 ```
+
+### .updateWebsocketRoom()
+
+This method joins or leaves WebSocket rooms with optional filtering and data modification.
+
+**Method**
+```js
+.updateWebsocketRoom({ roomId, type, params, filters, modifiers })
+```
+
+| Key       | Type   | Description                                         | Required |
+|-----------|--------|-----------------------------------------------------|----------|
+| roomId    | string | The room to join/leave                             | Yes      |
+| type      | string | Action type: 'join' or 'leave'                    | Yes      |
+| params    | object | Parameters for the room (e.g., tokenId, poolId)   | No       |
+| filters   | array  | Array of filter objects from addWebsocketFilter() | No       |
+| modifiers | array  | Array of modifier objects from addWebsocketModifier() | No   |
+
+**Example**
+```js
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 'wsUrl': '{{tracker_websocket_url}}' })
+
+// Create filters and modifiers
+const filter1 = st.addWebsocketFilter({
+  'funcName': 'isPumpFun',
+  'func': (data) => data.token.createdOn === 'https://pump.fun'
+})
+
+const modifier1 = st.addWebsocketModifier({
+  'funcName': 'extractEssentials',
+  'func': (data) => ({ name: data.token.name, mint: data.token.mint })
+})
+
+// Join room with filters and modifiers
+st.updateWebsocketRoom({
+  'roomId': 'graduatingTokens',
+  'type': 'join',
+  'params': { poolId: 'GmJaZvdNptvofC4qe3tvuBNgqLm65p1of5pk6JFHpump' },
+  'filters': [filter1],
+  'modifiers': [modifier1]
+})
+
+// Listen for events
+st.on('graduatingTokens', (data) => {
+  console.log('Filtered and modified data:', data)
+})
+```
+
+**Returns**
+```js
+{ status: boolean, messages: Array, data: Object }
+```
+
+## Event-Driven Methods
+
+These methods perform asynchronous operations and emit events through the EventEmitter pattern. Listen for events using `.on(eventName, callback)`.
+
+### .performDataCollection()
+
+Executes multiple API requests in parallel and emits progress events throughout the process.
+
+**Method**
+```js
+.performDataCollection({ batch, onError })
+```
+
+| Key     | Type   | Description                                    | Required |
+|---------|--------|------------------------------------------------|----------|
+| batch   | array  | Array of request objects with route and params | Yes      |
+| onError | string | Error handling mode: 'throw' or 'continue' (default: 'throw') | No |
+
+**Events Emitted:**
+- `collection` - Emitted during different stages of the collection process
+
+**Event Data Structure:**
+```js
+{
+  id: string,           // Unique operation ID
+  status: string,       // 'started', 'progress', 'completed', 'error'
+  total?: number,       // Total number of requests (on 'started')
+  completed?: number,   // Number completed so far (on 'progress')
+  result?: object,      // Individual result (on 'progress')
+  results?: array,      // All results (on 'completed')
+  error?: string        // Error message (on 'error')
+}
+```
+
+**Example**
+```js
+import { TrackerAPI } from '@a6b8/tracker-api'
+const st = new TrackerAPI({ 
+  'apiKey': '{{your_api_key}}' 
+})
+
+// Listen for collection events
+st.on('collection', (data) => {
+  console.log(`Operation ${data.id} - Status: ${data.status}`)
+  
+  if (data.status === 'started') {
+    console.log(`Starting collection of ${data.total} requests`)
+  } else if (data.status === 'progress') {
+    console.log(`Progress: ${data.completed}/${data.total} completed`)
+    console.log('Latest result:', data.result)
+  } else if (data.status === 'completed') {
+    console.log('All requests completed:', data.results)
+  } else if (data.status === 'error') {
+    console.error('Collection failed:', data.error)
+  }
+})
+
+// Start data collection (throw on error - default)
+st.performDataCollection({
+  batch: [
+    { route: 'tokenInformation', params: { tokenAddress: 'So11111111111111111111111111111111111111112' }},
+    { route: 'priceInformation', params: { token: 'So11111111111111111111111111111111111111112' }},
+    { route: 'tokenHolders', params: { tokenAddress: 'So11111111111111111111111111111111111111112' }}
+  ],
+  onError: 'throw'  // Will throw error on invalid batch data
+})
+
+// Alternative: Continue on validation errors (for event-driven systems)
+st.performDataCollection({
+  batch: eventData,  // Data from external source - might be invalid
+  onError: 'continue'  // Will emit error event but continue program execution
+})
+```
+
+**Returns**
+```js
+{ status: boolean, data: Array, id: string }
+```
+
+### .performSwap()
+
+Performs a complete swap transaction asynchronously and emits events during the process. This is the event-driven version of the synchronous swap methods.
+
+**Method**
+```js
+.performSwap({ params, privateKey, skipConfirmation, onError })
+```
+
+| Key              | Type    | Description                                               | Required |
+|------------------|---------|-----------------------------------------------------------|----------|
+| params           | object  | Swap parameters (from, to, amount, slippage, payer, etc.) | Yes      |
+| privateKey       | string  | Private key for transaction signing                       | Yes      |
+| skipConfirmation | boolean | Skip user confirmation prompt (default: false)           | No       |
+| onError          | string  | Error handling mode: 'throw' or 'continue' (default: 'throw') | No |
+
+**Events Emitted:**
+- `swap` - Emitted when swap quote is retrieved and transaction is executed, or on validation errors
+
+**Event Data Structure:**
+```js
+{
+  id: string,           // Unique operation ID
+  eventStatus: string,  // 'getQuote' or 'error'
+  quote?: object,       // Quote data and transaction result (on success)
+  error?: Array         // Error messages (on validation failure)
+}
+```
+
+**Example**
+```js
+st.on('swap', (data) => {
+  if (data.eventStatus === 'getQuote') {
+    console.log('Swap completed:', data.quote)
+  } else if (data.eventStatus === 'error') {
+    console.error('Swap validation failed:', data.error)
+  }
+})
+
+// Default behavior - throw on validation errors
+const swapId = st.performSwap({
+  params: {
+    from: 'So11111111111111111111111111111111111111112',
+    to: 'UEPp8H46WkPiBmi7nw35nyfFDNpxp9LWRPxSMHXpump',
+    amount: 0.001,
+    slippage: 15,
+    payer: '{{your_public_key}}'
+  },
+  privateKey: '{{private_key}}',
+  onError: 'throw'  // Will throw error on invalid params
+})
+
+// Event-driven behavior - continue on validation errors
+const swapId = st.performSwap({
+  params: eventTradeData,  // Data from copy-trading event - might be invalid
+  privateKey: '{{private_key}}',
+  onError: 'continue'  // Will emit error event but continue program
+})
+```
+
 
 ## Routes
 

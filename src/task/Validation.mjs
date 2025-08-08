@@ -1,6 +1,7 @@
 import { endpoints } from '../data/endpoints.mjs'
 import { rooms } from '../data/rooms.mjs'
 import { swap } from '../data/swap.mjs'
+import { findClosestString } from './helpers.mjs'
 
 
 class Validation {
@@ -67,21 +68,20 @@ class Validation {
     }
 
 
-    #validateGetSwapQuote( { params } ) {
+    #validateGetSwapQuote( { params, id } ) {
         const messages = []
 
         if( params === undefined ) {
             messages.push( `Params is undefined` )
+            return { messages, 'status': false }
         }
 
         if( typeof params !== 'object' ) {
             messages.push( `Params is not an object` )
+            return { messages, 'status': false }
         }
 
-        if( messages.length === 0 ) {
-            return { messages, status: true }
-        }
-
+        // Validate required parameters
         Object
             .entries( this.#config['swap'] )
             .forEach( ( [ key, values ] ) => {
@@ -91,19 +91,19 @@ class Validation {
                 }
             } )
 
+        // Validate parameter keys
         Object
             .entries( params )
             .forEach( ( [ key, value ] ) => {
                 if( !this.#config['swap'][ key ] ) {
-                    const suggestion = this.#findClosestString( { input: key, keys: Object.keys( this.#config['swap'] ) } )
+                    const suggestion = findClosestString( { input: key, keys: Object.keys( this.#config['swap'] ) } )
                     messages.push( `Invalid parameter: ${key}. Did you mean '${suggestion}'?` )
                 }
             } )
 
-        if( id === undefined ) {
-            messages.push( `id is undefined` )
-        } else if( typeof id !== 'string' ) {
-            messages.push( `id is not a string` )
+        // Validate id parameter if provided
+        if( id !== undefined && typeof id !== 'string' ) {
+            messages.push( `id must be a string if provided` )
         }
 
         const status = messages.length === 0 ? true : false
@@ -167,7 +167,7 @@ class Validation {
         } else {
             const validRooms = Object.keys( rooms['rooms'] )
             if( !validRooms.includes( roomId ) ) {
-                const suggestion = this.#findClosestString( { 'input': roomId, 'keys': validRooms } )
+                const suggestion = findClosestString( { 'input': roomId, 'keys': validRooms } )
                 messages.push( `roomId '${roomId}' is unknown. Did you mean '${suggestion}'?` )
             }
         }
@@ -206,7 +206,7 @@ class Validation {
         } else if( typeof strategy !== 'string' ) {
             messages.push( `Strategy is not a string` )
         } else if( !strategies.includes( strategy ) ) {
-            const suggestion = this.#findClosestString( { 'input': strategy, 'keys': strategies } )
+            const suggestion = findClosestString( { 'input': strategy, 'keys': strategies } )
             messages.push( `Strategy '${strategy}' is unknown. Did you mean '${suggestion}'?` )
         }
 
@@ -293,7 +293,7 @@ class Validation {
         } else if( typeof route !== 'string' ) {
             messages.push( `route '${route}' is not a string.` )
         } else if( !this.#validMethods.includes( route ) ) {
-            const suggestion = this.#findClosestString( { input: route, keys: this.#validMethods } )
+            const suggestion = findClosestString( { input: route, keys: this.#validMethods } )
             messages.push( `route '${route}' is unknown. Do you mean '${suggestion}'?` )
         }
 
@@ -334,7 +334,7 @@ class Validation {
                 .keys( params )
                 .forEach( key => {
                     if( !validParamsKeys.includes( key ) ) {
-                        const suggestion = this.#findClosestString( { input: key, keys: validParamsKeys } )
+                        const suggestion = findClosestString( { input: key, keys: validParamsKeys } )
                         messages.push( `Invalid parameter: ${key}. Did you mean '${suggestion}'?` )
                     }
                 } )
@@ -359,62 +359,6 @@ class Validation {
     }
 
 
-    #findClosestString( { input, keys } ) {
-        function distance( a, b ) {
-            let dp = Array( a.length + 1 )
-                    .fill( null )
-                    .map( () => Array( b.length + 1 )
-                    .fill( 0 )
-                )
-                .map( ( z, index, all ) => {
-                    index === 0 ? z = z.map( ( y, rindex ) => rindex ) : ''
-                    z[ 0 ] = index 
-                    return z
-                } )
-    
-            dp = dp
-                .map( ( z, i ) => {
-                    return z.map( ( y, j ) => {
-                        if( i > 0 && j > 0 ) {
-                            if( a[ i - 1 ] === b[ j - 1 ] ) {
-                                y = dp[ i - 1 ][ j - 1 ]
-                            } else {
-                                const min = Math.min(
-                                    dp[ i - 1 ][ j ], 
-                                    dp[ i ][ j - 1 ], 
-                                    dp[ i - 1 ][ j - 1 ]
-                                )
-                                y = 1 + min
-                            }
-                        }
-                        return y
-                    } )
-                } )
-    
-            return dp[ a.length ][ b.length ]
-        }
-    
-    
-        const result = keys
-            .reduce( ( acc, key, index ) => {
-                const currentDistance = distance( input, key )
-                if( index === 0 ) {
-                    acc = {
-                        'closestKey': key,
-                        'closestDistance': currentDistance
-                    }
-                }
-                
-                if( currentDistance < acc['closestDistance'] ) {
-                    acc['closestKey'] = key;
-                    acc['closestDistance'] = currentDistance;
-                }
-    
-                return acc
-            }, {} )
-    
-        return result['closestKey']
-    }
 }
 
 

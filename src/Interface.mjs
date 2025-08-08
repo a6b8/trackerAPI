@@ -1,7 +1,8 @@
 import { Data } from './task/Data.mjs'
 import { Swap } from './task/Swap.mjs'
 import { TrackerWebsocket } from './task/Websocket.mjs'
-import { endpoints } from './data/endpoints.mjs '
+import { endpoints } from './data/endpoints.mjs'
+import { rooms } from './data/rooms.mjs'
 import EventEmitter from 'events'
 import { config } from './data/config.mjs'
 
@@ -22,10 +23,10 @@ class TrackerAPI extends EventEmitter {
     #config
 
 
-    constructor( { apiKey, nodeHttp, nodeWs, wsUrl, strictMode=true } ) {
+    constructor( { apiKey, nodeHttp, nodeWs, wsUrl, silent = false } ) {
         super()
 
-        const { status, messages } = this.#validateConstructor( { apiKey, nodeHttp, nodeWs, wsUrl, strictMode } )
+        const { status, messages } = this.#validateConstructor( { apiKey, nodeHttp, nodeWs, wsUrl, silent } )
         if( status === false ) { throw new Error( messages.join( '\n' ) ) }
 
         this.#state = {
@@ -34,10 +35,15 @@ class TrackerAPI extends EventEmitter {
             nodeHttp,
             nodeWs,
             wsUrl,
-            strictMode
+            silent
         }
 
         this.setConfig( { config } )
+        
+        // Display initialization overview if not silent
+        if( !silent ) {
+            this.#displayInitialization()
+        }
     }
 
 
@@ -51,19 +57,19 @@ class TrackerAPI extends EventEmitter {
         if( !status ) { throw new Error( messages.join( '\n' ) ) }
 
         const { data, swap, websocket } = config
-        const { apiKey, nodeHttp, nodeWs, wsUrl } = this.#state
+        const { apiKey, nodeHttp, nodeWs, wsUrl, silent } = this.#state
 
         if( apiKey !== undefined ) {
-            this.#data = new Data( { apiKey, data } ) 
+            this.#data = new Data( { apiKey, data, silent } ) 
         }
         if( nodeHttp !== undefined ) { 
             const emitter = this.emit.bind( this )
-            this.#swap = new Swap( { nodeHttp, nodeWs, swap, emitter } ) 
+            this.#swap = new Swap( { nodeHttp, nodeWs, swap, emitter, silent } ) 
         }
 
         if( wsUrl !== undefined ) {
             const emitter = this.emit.bind( this )
-            this.#websocket = new TrackerWebsocket( { wsUrl, websocket, emitter } )
+            this.#websocket = new TrackerWebsocket( { wsUrl, websocket, emitter, silent } )
         }
 
         this.#config = { ...config }
@@ -92,31 +98,83 @@ class TrackerAPI extends EventEmitter {
     }
 */
 
-    async getData( { route, params={}} ) {
+    async queryData( { route, params={}} ) {
         this.#validateModule( { 'key': 'data' } )
-        const event = 'request'
         const { id } = this.#getId()
         const data = await this.#data.getData( { route, params } )
         return { ...data, id }
     }
 
 
-    getRoutes() {
-        this.#validateModule( { 'key': 'data' } )
-        return this.#data.getRoutes()
+    async performDataCollection( { batch, onError = 'throw' } ) {
+        const { id } = this.#getId()
+        
+        // Input Validation
+        const validation = this.#validateBatch( { batch } )
+        if( !validation.status ) {
+            if( onError === 'throw' ) {
+                throw new Error( validation.messages.join( '\n' ) )
+            }
+            // onError === 'continue'
+            this.#sendEvent( { 'event': 'collection', id, 'data': { 'status': 'error', 'error': validation.messages } } )
+            return { 'status': false, 'messages': validation.messages, id }
+        }
+        
+        this.#sendEvent( { 'event': 'collection', id, 'data': { 'status': 'started', 'total': batch.length } } )
+        
+        try {
+            const results = await Promise.all(
+                batch
+                    .map( async( { route, params }, index ) => {
+                        const data = await this.queryData( { route, params } )
+                        this.#sendEvent( { 'event': 'collection', id, 'data': { 'status': 'progress', 'completed': index + 1, 'total': batch.length, 'result': data } } )
+                        return data
+                    } )
+            )
+            
+            this.#sendEvent( { 'event': 'collection', id, 'data': { 'status': 'completed', 'results': results } } )
+            return { 'status': true, 'data': results, id }
+            
+        } catch( error ) {
+            this.#sendEvent( { 'event': 'collection', id, 'data': { 'status': 'error', 'error': error.message } } )
+            return { 'status': false, 'error': error.message, id }
+        }
     }
 
 
-    performSwap( { params, privateKey, skipConfirmation=false } ) {
+    getDataRoutes() {
+        this.#validateModule( { 'key': 'data' } )
+        return this.#data.getEndpoints()
+    }
+
+
+    getWebsocketRooms() {
+        this.#validateModule( { 'key': 'websocket' } )
+        return Object.keys( rooms.rooms )
+    }
+
+
+    performSwap( { params, privateKey, skipConfirmation=false, onError = 'throw' } ) {
         this.#validateModule( { 'key': 'swap' } )
         const { id } = this.#getId()
+        
+        // Input Validation
+        const validation = this.#validateSwapParams( { params } )
+        if( !validation.status ) {
+            if( onError === 'throw' ) {
+                throw new Error( validation.messages.join( '\n' ) )
+            }
+            // onError === 'continue'
+            this.emit( 'swap', { id, 'eventStatus': 'error', 'error': validation.messages } )
+            return id
+        }
+        
         this.#swap.getSwapQuote( params, id )
             .then( async( quote ) => {
                 const data = await this.#swap.postSwapTransaction( { quote, privateKey, skipConfirmation } )
                 return data
             } )
             .then( ( quote ) => {
-                console.log( 'FINISHED' )
                 this.emit( 'swap', { id, 'eventStatus': 'getQuote', quote } )
                 return true
             } )
@@ -125,20 +183,6 @@ class TrackerAPI extends EventEmitter {
     }
 
 
-    performBatchData( { batch } ) {
-        const a = Promise.all(
-            batch
-                .map( async( { route, params } ) => {
-                    const data = await this.getData( { route, params } )
-                    return data
-                } )
-        )
-
-        return true
-    }
-
-
-/*
     async getSwapQuote( params, id='n/a' ) {
         this.#validateModule( { 'key': 'swap' } )
         const data = await this.#swap.getSwapQuote( params )
@@ -151,32 +195,47 @@ class TrackerAPI extends EventEmitter {
         const data = await this.#swap.postSwapTransaction( { quote, privateKey, skipConfirmation } )
         return { data }
     }
-*/
 
 
     connectWebsocket() {
         this.#validateModule( { 'key': 'websocket' } )
         const { status, messages, data } = this.#websocket.connect()
-        this.#strictMode( { status, messages, data } )
         return { status, messages, data }
     }
 
 
-    updateWebsocketRoom( { roomId, cmd, params={}, strategy=null } ) {
+
+    updateWebsocketRoom( { roomId, cmd, type, params={}, strategy=null, filters=[], modifiers=[] } ) {
         this.#validateModule( { 'key': 'websocket' } )
-        const { status, messages, data } = this.#websocket.updateRoom( { roomId, cmd, params, strategy } )
-        this.#strictMode( { status, messages, data } )
+        const { status, messages, data } = this.#websocket.updateRoom( { roomId, cmd, type, params, strategy, filters, modifiers } )
         return { status, messages, data }
     }
 
 
+
+
+    addWebsocketFilter( { funcName, func } ) {
+        this.#validateModule( { 'key': 'websocket' } )
+        return this.#websocket.addFilter( { funcName, func } )
+    }
+
+
+    addWebsocketModifier( { funcName, func } ) {
+        this.#validateModule( { 'key': 'websocket' } )
+        return this.#websocket.addModifier( { funcName, func } )
+    }
+
+/*
+    // Deprecated: Use addWebsocketFilter/addWebsocketModifier with updateWebsocketRoom instead
     addWebsocketStrategy( { name, filters={}, modifiers={} } ) {
+        console.warn( 'addWebsocketStrategy is deprecated. Use addWebsocketFilter/addWebsocketModifier with updateWebsocketRoom instead.' )
         this.#validateModule( { 'key': 'websocket' } )
-        const { status, messages, data } = this.#websocket.addStrategy( { name, filters, modifiers } )
-        this.#strictMode( { status, messages, data } )
-        return { status, messages, data }
+        // addStrategy is commented out in Websocket.mjs, so this won't work anymore
+        // const { status, messages, data } = this.#websocket.addStrategy( { name, filters, modifiers } )
+        // this.#strictMode( { status, messages, data } )
+        return { 'status': false, 'messages': [ 'addStrategy is deprecated - use addFilter/addModifier instead' ], 'data': null }
     }
-
+*/
 
     health() {
         return true
@@ -190,13 +249,41 @@ class TrackerAPI extends EventEmitter {
     }
 
 
-/*
+    #displayInitialization() {
+        const { apiKey, nodeHttp, nodeWs, wsUrl, silent } = this.#state
+        
+        // Only display if silent mode is disabled
+        if( !silent ) {
+            const version = '0.1.1'
+            
+            console.log('┌─ TrackerAPI v' + version + ' ─────────────────────────────────────┐')
+            
+            // Data Module
+            const dataStatus = apiKey !== undefined ? '✅ Data Module      : Active (API Key configured)       ' : '❌ Data Module      : Inactive (No API Key)             '
+            console.log('│ ' + dataStatus + '│')
+            
+            // Swap Module  
+            const swapStatus = (nodeHttp !== undefined) ? '✅ Swap Module      : Active (HTTP + WS nodes set)      ' : '❌ Swap Module      : Inactive (No RPC nodes)           '
+            console.log('│ ' + swapStatus + '│')
+            
+            // WebSocket Module
+            const wsStatus = wsUrl !== undefined ? '✅ WebSocket Module : Active (WS URL configured)        ' : '❌ WebSocket Module : Inactive (No WS URL)              '
+            console.log('│ ' + wsStatus + '│')
+            
+            // Silent Mode
+            const silentStatus = silent ? '✅ Silent Mode      : Enabled                           ' : '⚠️ Silent Mode      : Disabled (set silent: true)       '
+            console.log('│ ' + silentStatus + '│')
+            
+            console.log('└─────────────────────────────────────────────────────────────┘')
+        }
+    }
+
+
     #sendEvent( { event, id, data } ) {
         const payload = { id, ...data }
         this.emit( event, payload )
         return true
     }
-*/
 
 
     #validateModule( { key } ) {
@@ -208,14 +295,14 @@ class TrackerAPI extends EventEmitter {
             .find( ( [ k, ] ) => k === key )
 
         if( value === undefined ) {
-            throw new Error( `Key ${initKey} is not defined` )
+            throw new Error( `Module ${key} is not initialized. Missing required parameter: ${initKey}` )
         } 
 
         return true
     }
 
 
-    #validateConstructor( { apiKey, nodeHttp, nodeWs, wsUrl, strictMode } ) {
+    #validateConstructor( { apiKey, nodeHttp, nodeWs, wsUrl, silent } ) {
         const messages = []
 
         if( apiKey === undefined ) {
@@ -236,10 +323,8 @@ class TrackerAPI extends EventEmitter {
             messages.push( 'wsUrl must be a string' )
         }
 
-        if( strictMode === undefined ) {
-            messages.push( 'strictMode is required' )
-        } else if( typeof strictMode !== 'boolean' ) {
-            messages.push( 'strictMode must be a boolean' )
+        if( silent !== undefined && typeof silent !== 'boolean' ) {
+            messages.push( 'silent must be a boolean' )
         }
 
         const status = messages.length === 0
@@ -263,14 +348,44 @@ class TrackerAPI extends EventEmitter {
     }
 
 
-    #strictMode( { status, messages, data } ) {
-        if( this.#state['strictMode'] && !status ) {
-            throw new Error( messages.join( '\n' ) )
+    #validateBatch( { batch } ) {
+        const messages = []
+        
+        if( !Array.isArray( batch ) ) {
+            messages.push( 'batch must be an array' )
+        } else if( batch.length === 0 ) {
+            messages.push( 'batch cannot be empty' )
+        } else {
+            batch.forEach( ( item, index ) => {
+                if( !item.route ) messages.push( `batch[${index}] missing route` )
+                if( !item.params || typeof item.params !== 'object' ) {
+                    messages.push( `batch[${index}] params must be an object` )
+                }
+            } )
         }
-
-        return true
+        
+        return { 'status': messages.length === 0, messages }
     }
+
+
+    #validateSwapParams( { params } ) {
+        const messages = []
+        
+        if( !params || typeof params !== 'object' ) {
+            messages.push( 'params must be an object' )
+        } else {
+            if( !params.from ) messages.push( 'params.from is required' )
+            if( !params.to ) messages.push( 'params.to is required' )  
+            if( !params.amount ) messages.push( 'params.amount is required' )
+            if( !params.slippage ) messages.push( 'params.slippage is required' )
+            if( !params.payer ) messages.push( 'params.payer is required' )
+        }
+        
+        return { 'status': messages.length === 0, messages }
+    }
+
+
 }
 
 
-export { TrackerAPI, Data, Swap, TrackerWebsocket, examples }
+export { TrackerAPI, TrackerWebsocket, examples }

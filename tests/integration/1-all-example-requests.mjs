@@ -15,7 +15,7 @@ const delay = ms => new Promise( resolve => setTimeout( resolve, ms ) )
 
 for( let i = 0; i < exampleKeys.length; i++ ) {
     const { route, params } = examples[ exampleKeys[ i ] ]
-    const response = await data.getData( { route, params } )
+    const response = await data.queryData( { route, params } )
 
     const d = {
         'request': { route, params },
