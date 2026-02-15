@@ -9,11 +9,8 @@
   },
   "scripts": {
     "test": "NODE_OPTIONS='--experimental-vm-modules' npx jest --detectOpenHandles",
-    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' npx jest --watch --detectOpenHandles",
-    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' npx jest --coverage --detectOpenHandles",
-    "test:unit": "NODE_OPTIONS='--experimental-vm-modules' npx jest tests/unit --detectOpenHandles",
-    "test:integration": "node tests/integration/1-all-example-requests.mjs",
-    "test:ci": "NODE_OPTIONS='--experimental-vm-modules' npx jest --ci --coverage --watchAll=false --detectOpenHandles"
+    "test:coverage:src": "NODE_OPTIONS='--experimental-vm-modules' npx jest --coverage --detectOpenHandles",
+    "test:file": "NODE_OPTIONS='--experimental-vm-modules' npx jest --detectOpenHandles"
   },
   "keywords": [],
   "author": "a6b8",
